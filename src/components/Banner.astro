@@ -145,74 +145,72 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 
 <style define:vars={{ carouselAnimationTime }}>
   .banner {
-    @apply relative h-[calc(var(--banner-height)*3/4)] opacity-100 lg:h-[var(--banner-height)];
-    
-  }
-  .banner-inner {
+  @apply relative h-[calc(var(--banner-height)*3/4)] opacity-100 lg:h-[var(--banner-height)];
+}
+
+.banner-inner {
   overflow: hidden;
   position: relative;
 }
 
-  .carousel {
-    @apply absolute left-0 top-0 -z-10 block h-[calc(var(--banner-height)*3/4)] w-full overflow-hidden bg-white lg:h-[var(--banner-height)];
-    animation-fill-mode: forwards;
-  }
+.carousel {
+  @apply absolute left-0 top-0 -z-10 block h-[calc(var(--banner-height)*3/4)] w-full overflow-hidden bg-white lg:h-[var(--banner-height)];
+  animation-fill-mode: forwards;
+}
 
-  .carousel::before {
-    @apply absolute left-0 top-0 z-10 block h-full w-full bg-black/25 transition-all content-[''];
-    @apply dark:bg-black/30;
-  }
+.carousel::before {
+  @apply absolute left-0 top-0 z-10 block h-full w-full bg-black/25 transition-all content-[''];
+  @apply dark:bg-black/30;
+}
 
-  .carousel .item {
-    @apply absolute left-0 top-0 z-0 h-full w-full origin-center bg-cover bg-center bg-no-repeat opacity-0;
-    animation: carousel-animation var(--carouselAnimationTime) linear infinite
-      0s;
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
-  }
+.carousel .item {
+  @apply absolute left-0 top-0 z-0 h-full w-full origin-center bg-cover bg-center bg-no-repeat opacity-0;
+  animation: carousel-animation var(--carouselAnimationTime) linear infinite 0s;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
 
-  .cover {
-    @apply absolute left-0 top-0 z-0 block h-[var(--banner-height)] w-full overflow-hidden bg-white;
-  }
+.cover {
+  @apply absolute left-0 top-0 z-0 block h-[var(--banner-height)] w-full overflow-hidden bg-white;
+}
 
-  .cover::before {
-    @apply absolute left-0 top-0 z-10 block h-full w-full bg-black/25 transition-all content-[''];
-    @apply dark:bg-black/30;
-  }
+.cover::before {
+  @apply absolute left-0 top-0 z-10 block h-full w-full bg-black/25 transition-all content-[''];
+  @apply dark:bg-black/30;
+}
 
-  .cover .item {
+.cover .item {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Para imagens <img> */
-  background-size: cover; /* Para background-images */
+  object-fit: cover;
+  background-size: cover;
   background-position: center;
 }
 
+.title {
+  @apply mt-8 text-center font-bold text-[var(--title-color)] drop-shadow-lg lg:mt-4; /* Ajuste da margem superior para telas grandes */
+  font-family: var(--title-font);
+}
 
-  .title {
-    @apply mt-8 text-center font-bold text-[var(--title-color)] drop-shadow-lg lg:mt-1;
-    font-family: var(--title-font);
-  }
+.title-index {
+  @apply mb-0 text-6xl leading-[4rem] lg:text-6xl;
+}
 
-  .title-index {
-    @apply mb-0 text-6xl leading-[5rem] lg:mb-1 lg:text-8xl;
-  }
+.title-normal {
+  @apply mb-1 text-4xl lg:text-2xl;
+}
 
-  .title-normal {
-    @apply mb-1 text-3xl lg:text-5xl;
-  }
+.subtitle {
+  @apply text-center text-xl text-[var(--subtitle-color)] drop-shadow-md lg:text-3xl;
+  font-family: var(--subtitle-font);
+}
 
-  .subtitle {
-    @apply text-center text-xl text-[var(--subtitle-color)] drop-shadow-md lg:text-3xl;
-    font-family: var(--subtitle-font);
-  }
-
-  .waves {
+.waves {
   @apply absolute left-0 right-0 bottom-0 w-full;
-  height: 15vh; /* Definir a altura fixa em 15vh para uma animação consistente */
-  max-height: 9.375rem; /* Limitar a altura máxima para telas grandes */
-  min-height: 3.125rem; /* Definir uma altura mínima */
-  @apply lg:h-[20vh]; /* Ajuste para telas grandes, aumentando um pouco mais */
+  height: 15vh;
+  max-height: 9.375rem;
+  min-height: 3.125rem;
+  @apply lg:h-[18vh]; /* Ajuste para telas grandes, reduzir um pouco o tamanho das ondas */
 }
 
 .waves > .parallax use {
@@ -222,33 +220,42 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 
 @keyframes wave {
   0% {
-    transform: translate3d(-90px, 0, 0); /* Inicia mais à esquerda */
+    transform: translate3d(-90px, 0, 0);
   }
   100% {
-    transform: translate3d(85px, 0, 0); /* Move para a direita com um pequeno ajuste */
+    transform: translate3d(85px, 0, 0);
   }
 }
 
 @media (min-width: 1024px) {
-  /* Ajustar a animação para telas grandes, suavizando o movimento */
   .waves {
-    height: 20vh; /* Maior altura para telas grandes */
+    height: 18vh; /* Menor altura para ondas em telas grandes */
   }
 
   .waves > .parallax use {
-    animation: wave 25s cubic-bezier(0.5, 0.5, 0.45, 0.5) infinite; /* Aumentar a duração da animação para uma transição mais suave */
+    animation: wave 25s cubic-bezier(0.5, 0.5, 0.45, 0.5) infinite; /* Transição mais suave */
+  }
+
+  .title-normal {
+    @apply mb-1 text-4xl lg:text-6xl; /* Maior título em telas grandes */
+  }
+
+  .title-index {
+    @apply mb-1 text-6xl leading-[5rem] lg:text-8xl; /* Ajuste do título */
+  }
+
+  .subtitle {
+    @apply text-2xl lg:text-3xl; /* Aumenta a fonte do subtítulo em telas grandes */
   }
 }
 
-
-  @keyframes banner-onload-animation {
-    0% {
-      opacity: 0;
-      height: calc(var(--banner-height) + 4rem);
-    }
-    100% {
-      opacity: 1;
-      height: var(--banner-height);
-    }
+@keyframes banner-onload-animation {
+  0% {
+    opacity: 0;
+    height: calc(var(--banner-height) + 4rem);
   }
-</style>
+  100% {
+    opacity: 1;
+    height: var(--banner-height);
+  }
+}

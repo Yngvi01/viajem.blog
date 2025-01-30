@@ -1,5 +1,31 @@
-# Special thanks to:
+---
+title: "Sobre o Viajem.Blog"
+slug: "about"
+date: "2025-01-29"
+---
 
-- [Hexo Shoka theme](https://github.com/amehime/hexo-theme-shoka) for providing design inspiration
+# Bem-vindo ao Viajem.Blog!
 
-- [Astro Fuwari template](https://github.com/saicaca/fuwari) for providing the main design concept and part of the implementation
+O **Viajem.Blog** é um espaço dedicado a compartilhar conteúdos sobre os destinos turísticos mais fascinantes ao redor do mundo. Nosso objetivo é proporcionar uma experiência única, guiando você pelas cidades mais incríveis, seus pontos turísticos, atrações imperdíveis e segredos locais.
+
+## O que você encontrará por aqui
+
+Em nosso blog, você encontrará uma rica variedade de conteúdos relacionados a:
+
+- **Cidades e destinos turísticos**: Explore as melhores opções para suas próximas viagens, conhecendo cada cidade em detalhes.
+- **Pontos turísticos**: Informações sobre atrações populares e escondidas, além de dicas para aproveitar ao máximo cada visita.
+- **Experiências e dicas de viagem**: Desde roteiros completos até pequenos truques para tornar sua viagem mais agradável.
+
+## Como usamos as categorias
+
+Nossas postagens são organizadas por categorias, geralmente baseadas em **cidades** ou **destinos** turísticos. Cada categoria apresenta uma seleção de **artigos** e **atrações**, com descrições detalhadas para ajudá-lo a planejar sua jornada.
+
+## Contribua com sua experiência
+
+Queremos que o **Viajem.Blog** seja um ponto de encontro para viajantes, e sua experiência também é importante para nós. Caso tenha dicas de lugares especiais, atrações pouco conhecidas ou recomendações para outras pessoas, fique à vontade para compartilhar conosco!
+
+Fique atento às novas postagens e não deixe de explorar todo o nosso conteudo.
+
+---
+
+Agradecemos sua visita e esperamos que o Viajem.Blog seja uma fonte de inspiração para suas próximas aventuras!

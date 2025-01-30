@@ -20,7 +20,14 @@ enum I18nKeys {
 
   pages_categories_archive = "pages_categories_archive",
   pages_archive_archive = "pages_archive_archive",
-  pages_tags_archive = "pages_tags_archive"
+  pages_tags_archive = "pages_tags_archive",
+
+  // Adicionando a chave para a categoria
+  category_archive_title = "category_archive_title",
+  category_archive_subtitle = "category_archive_subtitle",
+
+  // Adicionando a chave para erro de categoria não encontrada
+  errors_category_not_found = "errors_category_not_found",
 }
 
 export default I18nKeys;

@@ -1,13 +1,127 @@
 ---
-import PostArchiveLayout from "../layouts/PostArchiveLayout.astro";
+import { GetCategories } from "../utils/content";
 import I18nKeys from "../locales/keys";
 import { i18n } from "../locales/translation";
-import { GetArchives } from "../utils/content";
+import Link from "../components/Link.astro";
+import MainLayout from "../layouts/MainLayout.astro";
 
-const archiveMap = await GetArchives();
+const categories = await GetCategories();
 ---
 
-<PostArchiveLayout
-  archiveMap={archiveMap}
-  title={i18n(I18nKeys.pages_archive_archive)}
-/>
+<MainLayout title={i18n(I18nKeys.pages_archive_archive)}>
+  <div class="cities-grid">
+    {Array.from(categories.values()).map((category) => (
+      <div class="city-card" style={`background-image: url('${category.image}')`}>
+        <Link href={`/categories/${category.slug}`} class="city-link">
+          <div class="city-content">
+            <h3 class="city-title">{category.name}</h3>
+            <p class="city-attractions">{category.posts.length} Artigos</p>
+          </div>
+        </Link>
+      </div>
+    ))}
+  </div>
+</MainLayout>
+
+<style>
+  .cities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .city-card {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .city-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .city-card:hover::before {
+    opacity: 0.2;
+  }
+
+  .city-link {
+    position: relative;
+    z-index: 2;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    text-align: center;
+  }
+
+  .city-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+  }
+
+  .city-title {
+    font-size: 1.6rem;
+    margin: 0 0 8px 0;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.95);
+    position: relative;
+  }
+
+  .city-title::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.7);
+    transition: width 0.3s ease;
+  }
+
+  .city-card:hover .city-title::after {
+    width: 60px;
+  }
+
+  .city-attractions {
+    font-size: 0.95rem;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.5;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    font-weight: 500;
+  }
+
+  .city-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+</style>

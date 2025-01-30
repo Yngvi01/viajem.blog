@@ -40,7 +40,7 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
           <img
             class="item lozad"
             data-src={bannerImage ?? GetCoverURLForUnspecifiedEntry(slug ?? "")}
-            alt="PostCoverr"
+            alt="PostCover"
           />
         </div>
       )
@@ -146,7 +146,12 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 <style define:vars={{ carouselAnimationTime }}>
   .banner {
     @apply relative h-[calc(var(--banner-height)*3/4)] opacity-100 lg:h-[var(--banner-height)];
+    
   }
+  .banner-inner {
+  overflow: hidden;
+  position: relative;
+}
 
   .carousel {
     @apply absolute left-0 top-0 -z-10 block h-[calc(var(--banner-height)*3/4)] w-full overflow-hidden bg-white lg:h-[var(--banner-height)];
@@ -176,8 +181,13 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
   }
 
   .cover .item {
-    @apply h-full w-full object-cover;
-  }
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Para imagens <img> */
+  background-size: cover; /* Para background-images */
+  background-position: center;
+}
+
 
   .title {
     @apply mt-8 text-center font-bold text-[var(--title-color)] drop-shadow-lg lg:mt-1;

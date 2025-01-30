@@ -1,0 +1,25 @@
+---
+export interface Props {
+  href: string; // O link de destino
+  class?: string; // Classes CSS opcionais para estilização
+}
+
+const { href, class: className } = Astro.props;
+---
+
+<a href={href} class={className}>
+  <slot />
+</a>
+
+<style>
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease, transform 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--primary-color, #0070f3);
+    transform: scale(1.05);
+  }
+</style>

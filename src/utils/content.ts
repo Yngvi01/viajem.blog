@@ -5,10 +5,15 @@ import { IdToSlug } from "./hash";
  * Represents an archive item with a title, slug, date, and optional tags.
  */
 export interface Archive {
-  title: string;
   id: string;
   date: Date;
-  tags?: string[];
+  data: {
+    title: string;
+    image?: string;
+    attraction_image?: string;
+    description?: string;
+    excerpt?: string;
+  };
 }
 
 /**
@@ -26,15 +31,18 @@ export interface Tag {
 export interface Category {
   name: string;
   slug: string;
+  image: string;
+    // Adiciona a propriedade de imagem da categoria
   posts: Archive[];
+  description:string;
 }
 
 /**
  * Retrieves and sorts blog posts by their published date.
  *
  * This function fetches all blog posts from the "posts" collection, filters out drafts if in production mode,
- * and sorts them in descending order by their published date. It also adds `nextSlug`, `nextTitle`, `prevSlug`,
- * and `prevTitle` properties to each post for navigation purposes.
+ * and sorts them in descending order by their published date. It also adds `nextSlug`, `nextTitle`, `prevSlug` and `prevTitle`
+ * properties to each post for navigation purposes.
  *
  * @returns A promise that resolves to an array of sorted blog posts with navigation properties.
  */
@@ -58,6 +66,55 @@ export async function GetSortedPosts() {
   }
 
   return sorted;
+}
+
+/**
+ * Retrieves all blog post categories (cities) and their associated posts.
+ *
+ * This function fetches all blog posts from the "posts" collection and filters them based on the environment.
+ * In production, it excludes drafts. It then organizes the posts into categories (grouped by city)
+ * and returns a map of categories.
+ *
+ * @returns A promise that resolves to a map of categories, where each category contains its name, slug, image, and associated posts.
+ */
+export async function GetCategories() {
+  const allBlogPosts = await getCollection("posts", ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+
+  const categories = new Map<string, Category>();
+
+  allBlogPosts.forEach((post) => {
+    if (!post.data.category) return;
+
+    const categorySlug = IdToSlug(post.data.category); // Gera o slug corretamente
+
+    // Verifica se a categoria já existe, se não, cria com imagem associada
+    if (!categories.has(categorySlug)) {
+      categories.set(categorySlug, {
+        name: post.data.category,
+        slug: categorySlug, // Remove duplicação de `/categories`
+        image: post.data.image || `/images/default-category.jpg`,  // Usa a imagem do campo 'image' no MD
+        posts: [],
+      });
+    }
+
+    // Adiciona o post à categoria
+    categories.get(categorySlug)!.posts.push({
+      title: post.data.title,
+      id: `/posts/${IdToSlug(post.id)}`,
+      date: new Date(post.data.published),
+      data: { // Adicione toda a estrutura data
+        title: post.data.title,
+        description: post.data.description || "", // Campo crítico
+        image: post.data.attraction_image || `/images/default-attraction.jpg`,
+        attraction_image: post.data.attraction_image,
+        excerpt: post.data.excerpt
+      }
+    });
+  });
+
+  return categories;
 }
 
 /**
@@ -88,14 +145,15 @@ export async function GetArchives() {
       id: `/posts/${IdToSlug(post.id)}`,
       date: date,
       tags: post.data.tags,
+      image: post.data.attraction_image || `/images/default-attraction.jpg`, // A imagem da atração
     });
   }
 
   const sortedArchives = new Map(
-    [...archives.entries()].sort((a, b) => b[0] - a[0]),
+    [...archives.entries()].sort((a, b) => b[0] - a[0]), // Ordenar por ano em ordem decrescente
   );
   sortedArchives.forEach((value) => {
-    value.sort((a, b) => (a.date > b.date ? -1 : 1));
+    value.sort((a, b) => (a.date > b.date ? -1 : 1)); // Ordenar por data dentro do ano
   });
 
   return sortedArchives;
@@ -130,46 +188,10 @@ export async function GetTags() {
         id: `/posts/${IdToSlug(post.id)}`,
         date: new Date(post.data.published),
         tags: post.data.tags,
+        image: post.data.attraction_image || `/images/default-attraction.jpg`, // A imagem da atração
       });
     });
   });
 
   return tags;
-}
-
-/**
- * Retrieves all blog post categories and their associated posts.
- *
- * This function fetches all blog posts from the "posts" collection and filters them based on the environment.
- * In production, it excludes drafts. It then organizes the posts into categories and returns a map of categories.
- *
- * @returns A promise that resolves to a map of categories, where each category contains its name, slug, and associated posts.
- */
-export async function GetCategories() {
-  const allBlogPosts = await getCollection("posts", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
-
-  const categories = new Map<string, Category>();
-
-  allBlogPosts.forEach((post) => {
-    if (!post.data.category) return;
-    const categorySlug = IdToSlug(post.data.category);
-
-    if (!categories.has(categorySlug)) {
-      categories.set(categorySlug, {
-        name: post.data.category,
-        slug: `/categories/${categorySlug}`,
-        posts: [],
-      });
-    }
-    categories.get(categorySlug)!.posts.push({
-      title: post.data.title,
-      id: `/posts/${IdToSlug(post.id)}`,
-      date: new Date(post.data.published),
-      tags: post.data.tags,
-    });
-  });
-
-  return categories;
 }

@@ -14,53 +14,56 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+
+// Configurações padrão
+const DEFAULT_BANNER = "/images/default-banner.jpg";
+const DEFAULT_IMAGE = "/images/default-image.jpg";
+
+// Extrair metadados condicionais
+const licenseData = entry.data.licenseName && {
+  license: {
+    name: entry.data.licenseName,
+    url: entry.data.licenseUrl
+  },
+  author: entry.data.author,
+  sourceLink: entry.data.sourceLink
+};
+
+// Determinar a imagem do banner
+const bannerImage = entry.data.licenseName 
+  ? entry.data.cover || DEFAULT_BANNER
+  : entry.data.attraction_image || DEFAULT_BANNER;
 ---
 
-{
-  !entry.data.licenseName && (
-    <PostLayout
-      title={entry.data.title}
-      subTitle={entry.data.description}
-      bannerImage={entry.data.cover}
-      published={entry.data.published}
-    >
-      <div
-        class="hidden"
-        data-pagefind-body
-        data-pagefind-weight="10"
-        data-pagefind-meta="title"
-      >
-        {entry.data.title}
-      </div>
-      <div data-pagefind-body>
-        <Content />
-      </div>
-    </PostLayout>
-  )
-}
-{
-  entry.data.licenseName && (
-    <PostLayout
-      title={entry.data.title}
-      subTitle={entry.data.description}
-      bannerImage={entry.data.cover}
-      published={entry.data.published}
-      license={{ name: entry.data.licenseName, url: entry.data.licenseUrl }}
-      author={entry.data.author}
-      sourceLink={entry.data.sourceLink}
-    >
-      <div
-        class="hidden"
-        data-pagefind-body
-        data-pagefind-weight="10"
-        data-pagefind-meta="title"
-      >
-        {entry.data.title}
-      </div>
-      <div data-pagefind-body>
-        <Content />
-      </div>
-    </PostLayout>
-  )
-}
-<!-- <Fragment set:html={tocHTMLString} /> -->
+<PostLayout
+  title={entry.data.title}
+  subTitle={entry.data.description || "Sua próxima aventura começa aqui!"}
+  bannerImage={bannerImage}
+  published={entry.data.published}
+  slug={IdToSlug(entry.id)}
+  {...licenseData}
+>
+  <div
+    class="hidden"
+    data-pagefind-body
+    data-pagefind-weight="10"
+    data-pagefind-meta="title"
+  >
+    {entry.data.title}
+  </div>
+  
+  <div data-pagefind-body>
+    <Content />
+    
+    
+  
+  </div>
+</PostLayout>
+
+<style>
+  .attraction-image {
+    @apply mt-8 w-full rounded-lg shadow-xl;
+    max-height: 60vh;
+    object-fit: cover;
+  }
+</style>

@@ -22,12 +22,14 @@ const props = Astro.props;
 
   {
     YukinaConfig.bannerStyle == "LOOP" && (
-      <Banner
-        title={props.title}
-        subTitle={props.subTitle}
-        bannerImage={props.bannerImage}
-        slug={props.slug}
-      />
+      <div class="banner-container">
+        <Banner
+          title={props.title}
+          subTitle={props.subTitle}
+          bannerImage={props.bannerImage}
+          slug={props.slug}
+        />
+      </div>
     )
   }
 
@@ -58,5 +60,22 @@ const props = Astro.props;
 
   .content {
     @apply xl:w-[calc(var(--page-width-xl)-264px)];
+  }
+
+  /* Ajuste para o container do Banner */
+  .banner-container {
+    position: relative;
+    width: 100%;
+    height: 300px;  /* Ajuste conforme necessário */
+    overflow: hidden;  /* Garantir que a imagem de fundo não ultrapasse a div */
+  }
+
+  /* Ajuste da imagem de fundo no Banner */
+  .banner-container .banner-image {
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    background-attachment: fixed;
   }
 </style>

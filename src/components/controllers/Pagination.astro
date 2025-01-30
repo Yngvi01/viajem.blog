@@ -1,18 +1,11 @@
 ---
-export interface Props {
-  lastPage: number;
-  current: number;
-  prevURL?: string;
-  nextURL?: string;
-  style?: string;
-  class?: string;
-}
-
+// Recebe as propriedades
 const props = Astro.props;
 
 const maxVisiblePages = 4;
 let pages: (string | number)[] = [];
 
+// Se o número de páginas for menor ou igual ao limite de páginas visíveis
 if (props.lastPage <= maxVisiblePages) {
   pages = Array.from({ length: props.lastPage }, (_, i) => i + 1);
 } else {
@@ -39,13 +32,15 @@ if (props.lastPage <= maxVisiblePages) {
   style={props.style}
   class:list={[props.class]}
 >
+  <!-- Link para a página anterior -->
   <a
-    href={props.prevURL}
+    href={props.prevURL ? props.prevURL : undefined}
     class:list={[props.prevURL ? "button" : "button-disabled"]}
   >
     <span>＜</span>
   </a>
 
+  <!-- Exibição das páginas -->
   <div class="flex flex-row space-x-2">
     {
       pages.map((page) =>
@@ -53,7 +48,7 @@ if (props.lastPage <= maxVisiblePages) {
           <span class="text-md text-[var(--primary-color)]">...</span>
         ) : (
           <a
-            href={page === 1 ? "/" : `/${page}`}
+            href={page === 1 ? "/" : `/categories/${props.category}/page/${page}`}
             class:list={[page === props.current ? "button-selected" : "button"]}
           >
             <span>{page}</span>
@@ -63,13 +58,15 @@ if (props.lastPage <= maxVisiblePages) {
     }
   </div>
 
+  <!-- Link para a página seguinte -->
   <a
-    href={props.nextURL}
+    href={props.nextURL ? props.nextURL : undefined}
     class:list={[props.nextURL ? "button" : "button-disabled"]}
   >
     <span>＞</span>
   </a>
 </div>
+
 <style>
   .button {
     @apply flex h-10 w-10 flex-row items-center rounded-lg bg-[var(--card-color)] p-1 transition-all hover:brightness-90;

@@ -208,23 +208,38 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
   }
 
   .waves {
-    @apply absolute -bottom-[1px] h-[10vh] max-h-[9.375rem] min-h-[3.125rem] w-full;
-    @apply md:h-[15vh];
+  @apply absolute left-0 right-0 bottom-0 w-full;
+  height: 15vh; /* Definir a altura fixa em 15vh para uma animação consistente */
+  max-height: 9.375rem; /* Limitar a altura máxima para telas grandes */
+  min-height: 3.125rem; /* Definir uma altura mínima */
+  @apply lg:h-[20vh]; /* Ajuste para telas grandes, aumentando um pouco mais */
+}
+
+.waves > .parallax use {
+  @apply fill-[var(--background-color)];
+  animation: wave 25s cubic-bezier(0.5, 0.5, 0.45, 0.5) infinite;
+}
+
+@keyframes wave {
+  0% {
+    transform: translate3d(-90px, 0, 0); /* Inicia mais à esquerda */
+  }
+  100% {
+    transform: translate3d(85px, 0, 0); /* Move para a direita com um pequeno ajuste */
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Ajustar a animação para telas grandes, suavizando o movimento */
+  .waves {
+    height: 20vh; /* Maior altura para telas grandes */
   }
 
   .waves > .parallax use {
-    @apply fill-[var(--background-color)];
-    animation: wave 25s cubic-bezier(0.5, 0.5, 0.45, 0.5) infinite;
+    animation: wave 25s cubic-bezier(0.5, 0.5, 0.45, 0.5) infinite; /* Aumentar a duração da animação para uma transição mais suave */
   }
+}
 
-  @keyframes wave {
-    0% {
-      transform: translate3d(-90px, 0, 0);
-    }
-    100% {
-      transform: translate3d(85px, 0, 0);
-    }
-  }
 
   @keyframes banner-onload-animation {
     0% {

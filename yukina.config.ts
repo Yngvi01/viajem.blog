@@ -29,7 +29,7 @@ const YukinaConfig: Configuration = {
   ],
 
   username: "Viajem.blog",
-  sign: "viajando",
+  sign: "A bussola para seguir os seus sonhos!",
   avatarUrl: "/images/logo.jpg",
   socialLinks: [
     {

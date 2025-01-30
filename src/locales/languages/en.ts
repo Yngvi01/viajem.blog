@@ -13,13 +13,13 @@ export const en: Translation = {
   [key.nav_bar_search_placeholder]: "Pesquisa",
 
   [key.post_card_words]: "Palavras",
-  [key.post_card_minutes]: "Minutos",
+  [key.post_card_minutes]: "Minuto(s)",
 
   [key.side_bar_categories]: "Categorias",
   [key.side_bar_tags]: "Tags",
 
-  [key.archive_year_title_count]: "{{}} Artigos",
-  [key.archive_year_title_count_single]: "{{}} Artigos",
+  [key.archive_year_title_count]: "{{}} Artigo(s)",
+  [key.archive_year_title_count_single]: "{{}} Artigo(s)",
 
   [key.pages_categories_archive]: "Artigos Destino",
   [key.pages_tags_archive]: "Tags",

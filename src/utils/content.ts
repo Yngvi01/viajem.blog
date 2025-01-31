@@ -6,6 +6,8 @@ import { IdToSlug } from "./hash";
  */
 export interface Archive {
   id: string;
+  title: string;
+  tags: string[];
   date: Date;
   data: {
     title: string;

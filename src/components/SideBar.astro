@@ -53,7 +53,7 @@ const categories = await GetCategories();
       </div>
       <div class="flex flex-col">
         {
-          categories.keys().map((category) => (
+          Array.from(categories.keys()).map((category) => (
             <a
               href={`/categories/${category}`}
               class="category flex flex-row items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-[var(--primary-color-lighten)]"
@@ -82,7 +82,7 @@ const categories = await GetCategories();
       </div>
       <div class="flex max-w-[224px] flex-row flex-wrap">
         {
-          tags.keys().map((tag) => (
+          Array.from(tags.keys()).map((tag) => (
             <a
               href={`/tags/${tag}`}
               class="tag m-1 rounded-md bg-[var(--primary-color-lighten)] px-2 py-1 transition-all hover:brightness-95"

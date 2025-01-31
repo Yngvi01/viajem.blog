@@ -21,6 +21,8 @@ const posts = defineCollection({
     licenseUrl: z.string().optional(), // URL da licença (se houver)
     attraction_image: z.string().optional(), // Imagem da atração
     image: z.string().optional(), // Imagem geral do post
+    meta_image: z.string().optional(), // Imagem para redes sociais e SEO
+    keywords: z.array(z.string()).optional(), // Palavras-chave para SEO
   }),
 });
 

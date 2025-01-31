@@ -2,11 +2,11 @@ import I18nKeys from "./src/locales/keys";
 import type { Configuration } from "./src/types/config";
 
 const YukinaConfig: Configuration = {
-  title: "Viagem.Blog",
-  subTitle: "a bussola para seguir os seus sonhos!",
-  brandTitle: "Viagem.Blog",
+  title: "Guia de Viagem",
+  subTitle: "Roteiros e dicas para uma viagem inesquecível",
+  brandTitle: "Guia de Viagem",
 
-  description: "Sua viajem legal!",
+  description: "Sua viagem legal!",
 
   site: "https://Viagem.blog",
 
@@ -28,7 +28,7 @@ const YukinaConfig: Configuration = {
     
   ],
 
-  username: "Viajem.blog",
+  username: "Viagem.blog",
   sign: "A bussola para seguir os seus sonhos!",
   avatarUrl: "/images/logo.jpg",
   socialLinks: [

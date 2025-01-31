@@ -188,7 +188,7 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
   }
 
   .title-index {
-    @apply mb-0 text-6xl leading-[4rem] lg:text-6xl;
+    @apply mb-0  text-5xl leading-[4rem] lg:text-6xl;
   }
 
   .title-normal {
@@ -196,7 +196,7 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
   }
 
   .subtitle {
-    @apply text-center text-xl text-[var(--subtitle-color)] drop-shadow-md lg:text-3xl;
+    @apply text-center text-2xl text-[var(--subtitle-color)] drop-shadow-md lg:text-3xl;
     font-family: var(--subtitle-font);
   }
 
@@ -236,11 +236,11 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
     }
 
     .title-normal {
-      @apply mb-1 text-4xl lg:text-6xl;
+      @apply  text-4xl lg:text-6xl;
     }
 
     .title-index {
-      @apply mb-1 text-6xl leading-[5rem] lg:text-8xl;
+      @apply  text-6xl leading-[5rem] lg:text-8xl;
     }
 
     .subtitle {
@@ -258,4 +258,18 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
       height: var(--banner-height);
     }
   }
+  @media (max-width: 640px) {
+  .title-index {
+    font-size: 2.5rem;
+    line-height: 3rem;
+  }
+  .title-normal {
+    font-size: 1.75rem;
+    line-height: 2.4rem;
+  }
+  .subtitle {
+    font-size: 1.3rem;
+    line-height: 1.2rem;
+  }
+}
 </style>

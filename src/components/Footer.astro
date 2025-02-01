@@ -51,9 +51,9 @@ const tags = await GetTags();
           {
             YukinaConfig.socialLinks.map((item) => (
               <li>
-                <a href={item.link} class="text-[var(--primary-color)]">
+                <a href={item.link} class="text-[var(--primary-color)]" aria-label={item.label}>
                   <Icon name={item.icon} size={24} />
-                </a>
+                </a>  
               </li>
             ))
           }

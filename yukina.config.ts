@@ -3,10 +3,10 @@ import type { Configuration } from "./src/types/config";
 
 const YukinaConfig: Configuration = {
   title: "Guia de Viagem",
-  subTitle: "Roteiros e dicas para uma viagem inesquecível",
+  subTitle: "A direção para sua viagem inesquecível! ",
   brandTitle: "Guia de Viagem",
 
-  description: "Sua viagem legal!",
+  description: "A direção para sua viagem inesquecível!",
 
   site: "https://guiadeviagem.blog",
 

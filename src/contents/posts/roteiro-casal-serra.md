@@ -15,7 +15,7 @@ tags:
   - serra gaúcha
   - gramado
   - canela
-category: Roteiro
+category: Roteiros
 author: emn178
 sourceLink: "https://www.visitcanela.com/roteiro-romantico"
 image: /images/roteiro.jpg  

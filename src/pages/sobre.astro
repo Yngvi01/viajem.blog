@@ -4,7 +4,7 @@ import Main from "../layouts/MainLayout.astro";
 import Markdown from "../components/Markdown.astro";
 import CopyRight from "../components/misc/CopyRight.astro";
 
-const aboutPost = await getEntry("specs", "about");
+const aboutPost = await getEntry("specs", "sobre");
 const { Content } = await render(aboutPost!);
 interface Props {
   title?: string;

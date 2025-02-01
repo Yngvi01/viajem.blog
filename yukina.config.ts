@@ -23,7 +23,7 @@ const YukinaConfig: Configuration = {
     },
     {
       nameKey: I18nKeys.nav_bar_about,
-      href: "/about",
+      href: "/sobre",
     },
     
   ],

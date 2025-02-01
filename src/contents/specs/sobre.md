@@ -1,12 +1,12 @@
 ---
 title: "Sobre o Guia de Viagem"
-slug: "about"
+slug: "sobre"
 date: "2025-01-29"
 ---
 
 # Bem-vindo ao Guia de Viagem!
 
-O **Guia de Viagem** é um espaço dedicado a compartilhar conteúdos sobre os destinos turísticos mais fascinantes ao redor do mundo. Nosso objetivo é proporcionar uma experiência única, guiando você pelas cidades mais incríveis, seus pontos turísticos, atrações imperdíveis e segredos locais.
+O nosso blog é um espaço dedicado a compartilhar conteúdos sobre os destinos turísticos mais fascinantes do Brasil. Nosso objetivo é proporcionar uma experiência única, guiando você pelas cidades mais incríveis, seus pontos turísticos, atrações imperdíveis e segredos locais.
 
 ## O que você encontrará por aqui
 

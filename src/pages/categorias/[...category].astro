@@ -91,8 +91,10 @@ const posts = categoryData?.posts || [];
     text-decoration: none;
     color: inherit;
     z-index: 2;
-    padding: 20px;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+    padding: 15px;
+    bottom: 15px;
+    box-sizing: border-box;
+    background: linear-gradient(to top, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
     border-radius: 15px; /* Bordas mais arredondadas */
     backdrop-filter: blur(1px);
     margin: auto; /* Centraliza o bloco */
@@ -101,7 +103,7 @@ const posts = categoryData?.posts || [];
     text-align: center; /* Alinhamento centralizado */
     position: absolute;
     left: 50%;
-    bottom: 35px;
+    bottom: 38px;
     transform: translateX(-50%); /* Centralização precisa */
     display: flex;
     flex-direction: column;
@@ -111,14 +113,20 @@ const posts = categoryData?.posts || [];
 
 
   .city-title {
-    font-size: 1.5rem;
-    margin: 0 0 10px 0;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
-    font-weight: 700;
-    line-height: 1.2;
-    width: 100%;
-  }
-
+  font-size: 1.5rem;
+  margin: 0 0 10px 0;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  font-weight: 700;
+  line-height: 1.2;
+  width: 100%;
+  /* Novas regras */
+  max-width: 100%; /* Impede overflow horizontal */
+  overflow: hidden;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limita a 2 linhas */
+  -webkit-box-orient: vertical;
+}
   .city-title::after {
     content: '';
     position: absolute;
@@ -143,13 +151,14 @@ const posts = categoryData?.posts || [];
     overflow: hidden;
   }
 
+
   .city-card:hover .city-title::after {
     width: 60px;
   }
 
   .city-card:hover .city-description {
     opacity: 0.95;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   }
 
   .space-y-8 {
@@ -159,4 +168,20 @@ const posts = categoryData?.posts || [];
     background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%);
     transform: translateX(-50%) scale(1.05); /* Efeito de zoom suave */
   }
+  @media (max-width: 480px) {
+  .city-title {
+    font-size: 1.2rem;
+    -webkit-line-clamp: 2;
+  }
+  
+  .city-description {
+    font-size: 0.8rem;
+    -webkit-line-clamp: 2;
+  }
+  
+  .city-link {
+    padding: 10px;
+    width: 95%;
+  }
+}
 </style>

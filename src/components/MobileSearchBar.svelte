@@ -89,6 +89,7 @@
     type="button"
     bind:this={searchButton}
     on:click={toggleSearchBar}
+    aria-label="Pesquisar",
     class="flex w-11 justify-center rounded-lg py-2 text-[var(--text-color)] transition-all hover:bg-[var(--primary-color-hover)] hover:text-[var(--primary-color)]"
   >
     <Icon icon="mingcute:search-line" height={24} width={24} />

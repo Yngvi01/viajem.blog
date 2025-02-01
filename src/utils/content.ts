@@ -33,20 +33,18 @@ export interface Tag {
 export interface Category {
   name: string;
   slug: string;
-  image: string;
-    // Adiciona a propriedade de imagem da categoria
+  image: string; // Imagem associada à categoria
   posts: Archive[];
-  description:string;
+  description: string;
 }
 
 /**
  * Retrieves and sorts blog posts by their published date.
  *
  * This function fetches all blog posts from the "posts" collection, filters out drafts if in production mode,
- * and sorts them in descending order by their published date. It also adds `nextSlug`, `nextTitle`, `prevSlug` and `prevTitle`
- * properties to each post for navigation purposes.
+ * and sorts them in descending order by their published date. It also adds navigation properties to each post.
  *
- * @returns A promise that resolves to an array of sorted blog posts with navigation properties.
+ * @returns A promise that resolves to an array of sorted blog posts.
  */
 export async function GetSortedPosts() {
   const allBlogPosts = await getCollection("posts", ({ data }) => {
@@ -71,13 +69,12 @@ export async function GetSortedPosts() {
 }
 
 /**
- * Retrieves all blog post categories (cities) and their associated posts.
+ * Retrieves all blog post categories and their associated posts.
  *
- * This function fetches all blog posts from the "posts" collection and filters them based on the environment.
- * In production, it excludes drafts. It then organizes the posts into categories (grouped by city)
- * and returns a map of categories.
+ * This function fetches all blog posts from the "posts" collection and organizes them em um Map de categorias.
+ * Cada categoria é identificada por um slug gerado a partir do nome (utilizando IdToSlug) e inclui a imagem e descrição.
  *
- * @returns A promise that resolves to a map of categories, where each category contains its name, slug, image, and associated posts.
+ * @returns A promise that resolves to a Map of categories.
  */
 export async function GetCategories() {
   const allBlogPosts = await getCollection("posts", ({ data }) => {
@@ -89,15 +86,17 @@ export async function GetCategories() {
   allBlogPosts.forEach((post) => {
     if (!post.data.category) return;
 
-    const categorySlug = IdToSlug(post.data.category); // Gera o slug corretamente
+    const categorySlug = IdToSlug(post.data.category);
 
-    // Verifica se a categoria já existe, se não, cria com imagem associada
+    // Se a categoria ainda não foi criada, cria o objeto utilizando o valor da propriedade 'category'
     if (!categories.has(categorySlug)) {
       categories.set(categorySlug, {
         name: post.data.category,
-        slug: categorySlug, // Remove duplicação de `/categories`
-        image: post.data.image || `/images/default-category.jpg`,  // Usa a imagem do campo 'image' no MD
+        slug: categorySlug,
+        image: post.data.image || `/images/default-category.jpg`,
         posts: [],
+        // Utiliza o valor da propriedade 'category' como descrição
+        description: post.data.category 
       });
     }
 
@@ -106,9 +105,9 @@ export async function GetCategories() {
       title: post.data.title,
       id: `/posts/${IdToSlug(post.id)}`,
       date: new Date(post.data.published),
-      data: { // Adicione toda a estrutura data
+      data: {
         title: post.data.title,
-        description: post.data.description || "", // Campo crítico
+        description: post.data.description || "",
         image: post.data.attraction_image || `/images/default-attraction.jpg`,
         attraction_image: post.data.attraction_image,
         excerpt: post.data.excerpt
@@ -119,15 +118,14 @@ export async function GetCategories() {
   return categories;
 }
 
+
 /**
  * Retrieves and organizes blog post archives.
  *
- * This function fetches all blog posts from the "posts" collection, filters them based on the environment
- * (excluding drafts in production), and organizes them into a map of archives grouped by year.
- * Each archive entry contains the post's title, slug, publication date, and tags.
- * The archives are sorted in descending order by year and by date within each year.
+ * This function fetches all blog posts from the "posts" collection, filters out drafts (em produção),
+ * and organizes them em um Map agrupado por ano.
  *
- * @returns A promise that resolves to a map of archives grouped by year.
+ * @returns A promise that resolves to a Map of archives grouped by year.
  */
 export async function GetArchives() {
   const allBlogPosts = await getCollection("posts", ({ data }) => {
@@ -147,15 +145,21 @@ export async function GetArchives() {
       id: `/posts/${IdToSlug(post.id)}`,
       date: date,
       tags: post.data.tags,
-      image: post.data.attraction_image || `/images/default-attraction.jpg`, // A imagem da atração
+      data: {
+        title: post.data.title,
+        image: post.data.attraction_image || `/images/default-attraction.jpg`,
+        attraction_image: post.data.attraction_image,
+        description: post.data.description || "",
+        excerpt: post.data.excerpt
+      }
     });
   }
 
   const sortedArchives = new Map(
-    [...archives.entries()].sort((a, b) => b[0] - a[0]), // Ordenar por ano em ordem decrescente
+    [...archives.entries()].sort((a, b) => b[0] - a[0])
   );
   sortedArchives.forEach((value) => {
-    value.sort((a, b) => (a.date > b.date ? -1 : 1)); // Ordenar por data dentro do ano
+    value.sort((a, b) => (a.date > b.date ? -1 : 1));
   });
 
   return sortedArchives;
@@ -164,10 +168,10 @@ export async function GetArchives() {
 /**
  * Retrieves all tags from blog posts.
  *
- * This function fetches all blog posts from the "posts" collection and extracts tags from each post.
- * It then organizes the tags into a map where each tag is associated with its metadata and the posts that have that tag.
+ * This function fetches all blog posts from the "posts" collection and extracts tags de cada post,
+ * organizando-os em um Map com seus metadados e posts associados.
  *
- * @returns A promise that resolves to a map of tags. Each key is a tag slug, and the value is an object containing the tag's name, slug, and associated posts.
+ * @returns A promise that resolves to a Map of tags.
  */
 export async function GetTags() {
   const allBlogPosts = await getCollection("posts", ({ data }) => {
@@ -190,7 +194,13 @@ export async function GetTags() {
         id: `/posts/${IdToSlug(post.id)}`,
         date: new Date(post.data.published),
         tags: post.data.tags,
-        image: post.data.attraction_image || `/images/default-attraction.jpg`, // A imagem da atração
+        data: {
+          title: post.data.title,
+          image: post.data.attraction_image || `/images/default-attraction.jpg`,
+          attraction_image: post.data.attraction_image,
+          description: post.data.description || "",
+          excerpt: post.data.excerpt
+        }
       });
     });
   });

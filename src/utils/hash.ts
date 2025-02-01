@@ -2,10 +2,11 @@ import YukinaConfig from "../../yukina.config";
 import CryptoJS from "crypto-js";
 
 /**
- * Converts a given slug to a hashed slug or returns the raw slug based on the configuration.
+ * Converte um slug fornecido para um slug hasheado ou retorna o slug bruto
+ * com base na configuração.
  *
- * @param slug - The input slug to be converted.
- * @returns The hashed slug if the configuration mode is "HASH", otherwise the raw slug.
+ * @param slug - O slug de entrada.
+ * @returns O slug hasheado se a configuração for "HASH", caso contrário, o slug bruto.
  */
 export function IdToSlug(slug: string): string {
   switch (YukinaConfig.slugMode) {
@@ -22,23 +23,20 @@ export function IdToSlug(slug: string): string {
 }
 
 /**
- * Computes an index from a given slug ID string using a custom hash algorithm.
+ * Calcula um índice a partir de uma string de ID de slug utilizando um algoritmo de hash personalizado.
  *
- * Each character's ASCII code is multiplied by 31 raised to a decreasing power, and the sum is then reduced
- * by the length of the list. The returned index is guaranteed to be in the range [0, listLength - 1].
+ * Cada caractere é convertido para seu código ASCII, multiplicado por 31 elevado a uma potência decrescente.
+ * O somatório é então reduzido pelo comprimento da lista. O índice retornado estará no intervalo [0, listLength - 1].
  *
- * @param id - The slug ID string to hash.
- * @param listLength - The length of the list for which the index is computed.
- * @returns A zero-based index within the list.
+ * @param id - A string de ID do slug a ser hasheada.
+ * @param listLength - O comprimento da lista para o qual o índice é calculado.
+ * @returns Um índice zero-based dentro da lista.
  */
 export function GetIndexFromSlugID(id: string, listLength: number): number {
-  // Convert the string to a number
   let hashValue = 0;
   for (let i = 0; i < id.length; i++) {
     hashValue += id.charCodeAt(i) * 31 ** (id.length - 1 - i);
   }
-
-  // Modulo the list length to get the index
   const index = hashValue % listLength;
   return index;
 }

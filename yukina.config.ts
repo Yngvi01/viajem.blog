@@ -19,7 +19,7 @@ const YukinaConfig: Configuration = {
     },
     {
       nameKey: I18nKeys.nav_bar_archive,
-      href: "/archive",
+      href: "/destinos",
     },
     {
       nameKey: I18nKeys.nav_bar_about,
@@ -28,9 +28,9 @@ const YukinaConfig: Configuration = {
     
   ],
 
-  username: "Viagem.blog",
+  username: "Guia de Viagem",
   sign: "A bussola para seguir os seus sonhos!",
-  avatarUrl: "/images/logo.jpg",
+  avatarUrl: "/images/logo.jpeg",
   socialLinks: [
     {
       icon: "line-md:instagram",
@@ -51,7 +51,7 @@ const YukinaConfig: Configuration = {
     
   ],
 
-  slugMode: "HASH", // 'RAW' | 'HASH'
+  slugMode: "RAW", // 'RAW' | 'HASH'
 
 
 

@@ -1,12 +1,12 @@
 ---
-title: "Sobre o Viagem.Blog"
+title: "Sobre o Guia de Viagem"
 slug: "about"
 date: "2025-01-29"
 ---
 
-# Bem-vindo ao Viagem.Blog!
+# Bem-vindo ao Guia de Viagem!
 
-O **Viagem.Blog** é um espaço dedicado a compartilhar conteúdos sobre os destinos turísticos mais fascinantes ao redor do mundo. Nosso objetivo é proporcionar uma experiência única, guiando você pelas cidades mais incríveis, seus pontos turísticos, atrações imperdíveis e segredos locais.
+O **Guia de Viagem** é um espaço dedicado a compartilhar conteúdos sobre os destinos turísticos mais fascinantes ao redor do mundo. Nosso objetivo é proporcionar uma experiência única, guiando você pelas cidades mais incríveis, seus pontos turísticos, atrações imperdíveis e segredos locais.
 
 ## O que você encontrará por aqui
 
@@ -22,10 +22,10 @@ Nossas postagens são organizadas por categorias, geralmente baseadas em **cidad
 
 ## Contribua com sua experiência
 
-Queremos que o **Viagem.Blog** seja um ponto de encontro para viajantes, e sua experiência também é importante para nós. Caso tenha dicas de lugares especiais, atrações pouco conhecidas ou recomendações para outras pessoas, fique à vontade para compartilhar conosco!
+Queremos que o **Guia de Viagem** seja um ponto de encontro para viajantes, e sua experiência também é importante para nós. Caso tenha dicas de lugares especiais, atrações pouco conhecidas ou recomendações para outras pessoas, fique à vontade para compartilhar conosco!
 
 Fique atento às novas postagens e não deixe de explorar todo o nosso conteudo.
 
 ---
 
-Agradecemos sua visita e esperamos que o Viagem.Blog seja uma fonte de inspiração para suas próximas aventuras!
+Agradecemos sua visita e esperamos que o Guia de viagem seja uma fonte de inspiração para suas próximas aventuras!

@@ -12,7 +12,7 @@ const categories = await GetCategories();
   <div class="cities-grid">
     {Array.from(categories.values()).map((category) => (
       <div class="city-card" style={`background-image: url('${category.image}')`}>
-        <Link href={`/categories/${category.slug}`} class="city-link">
+        <Link href={`/categorias/${category.slug}`} class="city-link">
           <div class="city-content">
             <h3 class="city-title">{category.name}</h3>
             <p class="city-attractions">{category.posts.length} Artigo(s)</p>

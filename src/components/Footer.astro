@@ -5,7 +5,7 @@ import { i18n } from "../locales/translation";
 import I18nKeys from "../locales/keys";
 import { GetCategories, GetTags } from "../utils/content";
 
-const categories = await GetCategories();
+const categorias = await GetCategories();
 const tags = await GetTags();
 ---
 
@@ -72,17 +72,17 @@ const tags = await GetTags();
     </div>
     <div class="grid grid-cols-2 gap-1 md:grid-cols-3">
       {
-        Array.from(categories.keys()).map((category) => (
+        Array.from(categorias.keys()).map((category) => (
 
           <a
-            href={`/categories/${category}`}
+            href={`/categorias/${category}`}
             class="category flex flex-row items-center justify-between rounded-lg px-2 py-1.5 transition-all hover:bg-[var(--primary-color-lighten)]"
           >
             <p class="line-clamp-1 text-[var(--text-color)] transition-all">
-              {categories.get(category)!.name}
+              {categorias.get(category)!.name}
             </p>
             <span class="rounded-md bg-[var(--primary-color-lighten)] px-2.5 py-0.5 text-[var(--primary-color)]">
-              {categories.get(category)!.posts.length}
+              {categorias.get(category)!.posts.length}
             </span>
           </a>
         ))

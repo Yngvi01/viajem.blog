@@ -34,7 +34,7 @@ const YukinaConfig: Configuration = {
   socialLinks: [
     {
       icon: "line-md:instagram",
-      link: "#",
+      link: "https://www.instagram.com/guiadeviagem.blog/",
     },
     {
       icon: "line-md:facebook",

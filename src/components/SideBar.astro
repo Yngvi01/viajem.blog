@@ -62,7 +62,7 @@ const categorias = await GetCategories();
               <p class="text-[var(--text-color)] transition-all">
                 {categorias.get(category)!.name}
               </p>
-              <span class="rounded-md bg-[var(--primary-color-lighten)] px-2.5 py-0.5 text-[var(--primary-color)]">
+              <span class="rounded-md bg-[var(--primary-color-lighten)] px-2.5 py-0.5 text-[var(--text-color)]">
                 {categorias.get(category)!.posts.length}
               </span>
             </a>

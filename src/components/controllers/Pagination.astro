@@ -32,39 +32,43 @@ if (props.lastPage <= maxVisiblePages) {
   style={props.style}
   class:list={[props.class]}
 >
-  <!-- Link para a página anterior -->
-  <a
-    href={props.prevURL ? props.prevURL : undefined}
-    class:list={[props.prevURL ? "button" : "button-disabled"]}
-  >
-    <span>＜</span>
-  </a>
+<!-- Link para a página anterior -->
+<a
+  href={props.prevURL ? props.prevURL : "#"}
+  class:list={[props.prevURL ? "button" : "button-disabled"]}
+  aria-disabled={props.prevURL ? "false" : "true"}
+  style={props.prevURL ? {} : { pointerEvents: "none" }}
+>
+  <span>＜</span>
+</a>
 
-  <!-- Exibição das páginas -->
-  <div class="flex flex-row space-x-2">
-    {
-      pages.map((page) =>
-        page === "..." ? (
-          <span class="text-md text-[var(--primary-color)]">...</span>
-        ) : (
-          <a
-            href={page === 1 ? "/" : `/categories/${props.category}/page/${page}`}
-            class:list={[page === props.current ? "button-selected" : "button"]}
-          >
-            <span>{page}</span>
-          </a>
-        ),
-      )
-    }
-  </div>
+<!-- Exibição das páginas -->
+<div class="flex flex-row space-x-2">
+  {
+    pages.map((page) =>
+      page === "..." ? (
+        <span class="text-md text-[var(--primary-color)]">...</span>
+      ) : (
+        <a
+          href={page === 1 ? "/" : `/categories/${props.category}/page/${page}`}
+          class:list={[page === props.current ? "button-selected" : "button"]}
+        >
+          <span>{page}</span>
+        </a>
+      ),
+    )
+  }
+</div>
 
-  <!-- Link para a página seguinte -->
-  <a
-    href={props.nextURL ? props.nextURL : undefined}
-    class:list={[props.nextURL ? "button" : "button-disabled"]}
-  >
-    <span>＞</span>
-  </a>
+<!-- Link para a página seguinte -->
+<a
+  href={props.nextURL ? props.nextURL : "#"}
+  class:list={[props.nextURL ? "button" : "button-disabled"]}
+  aria-disabled={props.nextURL ? "false" : "true"}
+  style={props.nextURL ? {} : { pointerEvents: "none" }}
+>
+  <span>＞</span>
+</a>
 </div>
 
 <style>

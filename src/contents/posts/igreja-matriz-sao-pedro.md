@@ -25,7 +25,7 @@ draft: false
 
 # Igreja Matriz São Pedro em Gramado – Guia Completo
 
-A **Igreja Matriz São Pedro** é um dos **principais símbolos de Gramado**, conhecida por sua arquitetura imponente e vitrais coloridos que encantam visitantes e fiéis. Localizada no coração da cidade, a igreja é um ponto de parada obrigatória para quem deseja conhecer a história e a cultura da Serra Gaúcha.
+Aa **Igreja Matriz São Pedro** é um dos **principais símbolos de Gramado**, conhecida por sua arquitetura imponente e vitrais coloridos que encantam visitantes e fiéis. Localizada no coração da cidade, a igreja é um ponto de parada obrigatória para quem deseja conhecer a história e a cultura da Serra Gaúcha.
 
 ## História e Arquitetura da Igreja Matriz São Pedro
 

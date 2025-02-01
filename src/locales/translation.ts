@@ -1,6 +1,6 @@
 import YukinaConfig from "../../yukina.config";
 import type I18nKeys from "./keys";
-import { en } from "./languages/en";
+import { pt_BR } from "./languages/pt_br";
 import { zh_CN } from "./languages/zh_cn";
 
 export type Translation = {
@@ -8,12 +8,12 @@ export type Translation = {
 };
 
 const map: { [key: string]: Translation } = {
-  en: en,
+  "pt-br": pt_BR,
   "zh-cn": zh_CN,
 };
 
 export function getTranslation(lang: string): Translation {
-  return map[lang.toLowerCase()] || en;
+  return map[lang.toLowerCase()] || pt_BR;
 }
 
 export function i18n(key: I18nKeys, ...interpolations: string[]): string {

@@ -10,7 +10,7 @@ const YukinaConfig: Configuration = {
 
   site: "https://guiadeviagem.blog",
 
-  locale: "en", // set for website language and date format
+  locale: "pt-br", // set for website language and date format
 
   navigators: [
     {
@@ -30,7 +30,7 @@ const YukinaConfig: Configuration = {
 
   username: "Guia de Viagem",
   sign: "A bussola para seguir os seus sonhos!",
-  avatarUrl: "/images/logo.jpeg",
+  avatarUrl: "/images/logo.png",
   socialLinks: [
     {
       icon: "line-md:instagram",

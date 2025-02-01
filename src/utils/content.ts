@@ -81,7 +81,7 @@ export async function GetCategories() {
     return import.meta.env.PROD ? data.draft !== true : true;
   });
 
-  const categories = new Map<string, Category>();
+  const categorias = new Map<string, Category>();
 
   allBlogPosts.forEach((post) => {
     if (!post.data.category) return;
@@ -89,8 +89,8 @@ export async function GetCategories() {
     const categorySlug = IdToSlug(post.data.category);
 
     // Se a categoria ainda não foi criada, cria o objeto utilizando o valor da propriedade 'category'
-    if (!categories.has(categorySlug)) {
-      categories.set(categorySlug, {
+    if (!categorias.has(categorySlug)) {
+      categorias.set(categorySlug, {
         name: post.data.category,
         slug: categorySlug,
         image: post.data.image || `/images/default-category.jpg`,
@@ -101,7 +101,7 @@ export async function GetCategories() {
     }
 
     // Adiciona o post à categoria
-    categories.get(categorySlug)!.posts.push({
+    categorias.get(categorySlug)!.posts.push({
       title: post.data.title,
       id: `/posts/${IdToSlug(post.id)}`,
       date: new Date(post.data.published),
@@ -115,7 +115,7 @@ export async function GetCategories() {
     });
   });
 
-  return categories;
+  return categorias;
 }
 
 

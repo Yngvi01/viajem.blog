@@ -4,16 +4,16 @@ import { GetCategories } from "../../utils/content";
 
 // Corrigindo o parâmetro para 'category'
 export async function getStaticPaths() {
-  const categories = await GetCategories();
-  return Array.from(categories.keys()).map((categorySlug) => ({
+  const categorias = await GetCategories();
+  return Array.from(categorias.keys()).map((categorySlug) => ({
     params: { category: categorySlug },  // Parâmetro correto
   }));
 }
 
 // Usando o parâmetro correto 'category'
 const { category } = Astro.params;
-const categories = await GetCategories();
-const categoryData = categories.get(category);
+const categorias = await GetCategories();
+const categoryData = categorias.get(category);
 
 const categoryBanner = {
   title: categoryData?.name || "Categoria",

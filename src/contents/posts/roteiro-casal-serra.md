@@ -36,8 +36,14 @@ Buscando um roteiro a dois para conhecer a Serra Gaúcha? **Gramado** e **Canela
 ## Sexta-feira – Chegada e Jantar Romântico
 
 - **Check-in no hotel ou pousada**: Escolha uma hospedagem aconchegante e romântica para noites a dois inesquecíveis. Hotéis como o **Colline de France** e o **Casa da Montanha** são ótimas opções.
-- **Jantar à luz de velas**: Reserve uma mesa em um restaurante aconchegante para um jantar especial. Sugestão: Conheça a culinária típica da região, com opções de restaurantes de culinária alemã e italiana, típicos da Serra Gaúcha. O **Restaurante Cantina Pastasciutta** e o **Ristorante Stalla Madalena** são excelentes escolhas.
+![Gramado e Canela para casais](/images/colinedefrance.jpg)  
+*Hotel Colline de France.*
 
+---
+ 
+- **Jantar à luz de velas**: Reserve uma mesa em um restaurante aconchegante para um jantar especial. Sugestão: Conheça a culinária típica da região, com opções de restaurantes de culinária alemã e italiana, típicos da Serra Gaúcha. O **Restaurante Cantina Pastasciutta** e o **Olivas GastroBar** são excelentes escolhas.
+![Gramado e Canela para casais](/images/olivasgastrobar.jpg)  
+*Olivas GastroBar.*
 ---
 
 ## Sábado – Passeios e Experiências Inesquecíveis
@@ -76,7 +82,7 @@ Se tiverem mais tempo, visitem o **Skyglass Canela**, uma plataforma de vidro so
 
 Além dos pontos citados, outras atrações românticas na região incluem:
 
-- **Snowland**: Parque de neve artificial (funciona apenas no inverno).
+- **Snowland**: Parque de neve artificial.
 - **Parque Mini Mundo**: Miniaturas de cidades e monumentos famosos.
 - **Passeio de Maria Fumaça**: Uma viagem nostálgica de trem entre Canela e Gramado.
 

@@ -6,7 +6,7 @@ import { GetCategories, GetTags } from "../utils/content";
 import SocialIcon from "./widgets/SocialIcon.astro";
 
 const tags = await GetTags();
-const categories = await GetCategories();
+const categorias = await GetCategories();
 ---
 
 <div class="flex w-full flex-row justify-center">
@@ -53,16 +53,16 @@ const categories = await GetCategories();
       </div>
       <div class="flex flex-col">
         {
-          Array.from(categories.keys()).map((category) => (
+          Array.from(categorias.keys()).map((category) => (
             <a
               href={`/categorias/${category}`}
               class="category flex flex-row items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-[var(--primary-color-lighten)]"
             >
               <p class="text-[var(--text-color)] transition-all">
-                {categories.get(category)!.name}
+                {categorias.get(category)!.name}
               </p>
               <span class="rounded-md bg-[var(--primary-color-lighten)] px-2.5 py-0.5 text-[var(--primary-color)]">
-                {categories.get(category)!.posts.length}
+                {categorias.get(category)!.posts.length}
               </span>
             </a>
           ))

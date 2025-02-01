@@ -72,27 +72,30 @@ if (props.lastPage <= maxVisiblePages) {
     @apply flex h-10 w-10 flex-row items-center rounded-lg bg-[var(--card-color)] p-1 transition-all hover:brightness-90;
     @apply dark:bg-[var(--card-color-lighten)] dark:hover:brightness-125;
   }
-
   .button span {
-    @apply w-full text-center text-[var(--primary-color)];
+    @apply w-full text-center;
+    
   }
 
   .button-disabled {
     @apply flex h-10 w-10 cursor-not-allowed flex-row items-center rounded-lg bg-gray-200 p-1;
     @apply dark:bg-[var(--card-color-lighten)] dark:brightness-50;
+    
   }
 
   .button-disabled span {
-    @apply w-full text-center text-[var(--text-color)] opacity-50;
+    @apply w-full text-center  opacity-50;
+    
   }
 
   .button-selected {
     @apply flex h-10 w-10 cursor-not-allowed flex-row items-center rounded-lg bg-[var(--primary-color)] p-1;
     pointer-events: none;
+    
   }
 
   .button-selected span {
     @apply w-full text-center text-[var(--card-color)];
-    @apply dark:text-white/75;
+    @apply dark:text-black/75;
   }
 </style>

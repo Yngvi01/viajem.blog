@@ -35,10 +35,12 @@ const YukinaConfig: Configuration = {
     {
       icon: "line-md:instagram",
       link: "https://www.instagram.com/guiadeviagem.blog/",
+      label: "Instagram do Guia de Viagem",
     },
     {
       icon: "line-md:facebook",
       link: "#",
+      label: "Facebook do Guia de Viagem",
     },
   ],
 

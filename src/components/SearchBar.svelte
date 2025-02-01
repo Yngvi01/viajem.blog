@@ -69,9 +69,10 @@
   <div class="bg-black/5 dark:bg-white/5 h-10 rounded-lg flex flex-row">
     <label
       for="search-bar-input"
+      aria-label="Pesquisar"
       class="w-10 h-10 flex flex-row justify-center items-center pl-2 pr-1 hover:cursor-text text-gray-400"
     >
-      <Icon icon="mingcute:search-line" width={24} height={24} />
+      <Icon icon="mingcute:search-line" width={24} height={24} aria-hidden="true" />
     </label>
     <input
       id="search-bar-input"
@@ -86,6 +87,7 @@
     />
   </div>
 </div>
+
 <!-- result pannel -->
 <div
   id="result-pannel"

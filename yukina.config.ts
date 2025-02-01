@@ -8,7 +8,7 @@ const YukinaConfig: Configuration = {
 
   description: "Sua viagem legal!",
 
-  site: "https://Viagem.blog",
+  site: "https://guiadeviagem.blog",
 
   locale: "en", // set for website language and date format
 

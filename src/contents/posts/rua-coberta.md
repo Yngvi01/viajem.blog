@@ -37,7 +37,7 @@ Projetada para trazer o charme das ruas europeias para o Brasil, com iluminaçã
 
 ## O que fazer na Rua Coberta
 
-- **Passeio Noturno**: Aproveite a atmosfera única à noite, ideal para jantar em restaurantes que oferecem gastronomia típica alemã e italiana, como fondue, *eisbein* (joelho de porco) e massas artesanais.  
+- **Passeio Noturno**: Aproveite a atmosfera única à noite, ideal para jantar em restaurantes que oferecem gastronomia típica alemã e italiana, como fondue e massas artesanais.  
 
 - **Fotografar**: A Rua Coberta é um dos **pontos mais fotografados de Gramado**, com a **calçada da fama** e o **Palácio dos Festivais** logo a frente.
 
@@ -64,8 +64,8 @@ Além da Rua Coberta, explore outros pontos imperdíveis em Gramado:
 
 - **Palácio dos Festivais**: Sede do **Festival de Cinema de Gramado**, com arquitetura imponente e eventos culturais ao longo do ano.
 - **Calçada da Fama**: Registre sua passagem por homenagens a artistas como Fernanda Montenegro e Oscar Niemeyer.
-- **Lago Joaquina Rita Bier**: Um lago cercado por paisagens bucólicas, pedalinhos e cafés charmosos.
-- **Igreja Matriz São Pedro**: Conhecida por seus vitrais coloridos e arquitetura gótica.
+- **Lago Negro**: Um lago cercado por paisagens bucólicas, pedalinhos e cafés charmosos.
+- **Igreja Matriz São Pedro**: Conhecida por seus vitrais coloridos e arquitetura neogótica.
 
 ## Mais sobre Gramado
 

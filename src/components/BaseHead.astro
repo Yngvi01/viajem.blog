@@ -3,7 +3,14 @@ import YukinaConfig from "../../yukina.config";
 import GlobalStyles from "./GlobalStyles.astro";
 import ScriptSetup from "./ScriptSetup.astro";
 
+const DEFAULT_OG_IMAGE = "/images/social-share.jpg";
+const { image } = Astro.props;
+
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(
+  image?.startsWith("/images/logo.png") ? image : DEFAULT_OG_IMAGE,
+  Astro.url
+).href;
 ---
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -35,7 +42,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={YukinaConfig.title} />
 <meta property="og:description" content={YukinaConfig.description} />
-<!-- <meta property="og:image" content={new URL(image, Astro.url)} /> -->
+<meta property="og:image" content={new URL(image, Astro.url)} />
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />

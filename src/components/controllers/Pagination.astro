@@ -1,105 +1,105 @@
----
-// Recebe as propriedades
-const props = Astro.props;
+  ---
+  // Recebe as propriedades
+  const props = Astro.props;
 
-const maxVisiblePages = 4;
-let pages: (string | number)[] = [];
+  const maxVisiblePages = 4;
+  let pages: (string | number)[] = [];
 
-// Se o número de páginas for menor ou igual ao limite de páginas visíveis
-if (props.lastPage <= maxVisiblePages) {
-  pages = Array.from({ length: props.lastPage }, (_, i) => i + 1);
-} else {
-  const startPage = Math.max(
-    1,
-    props.current - Math.floor(maxVisiblePages / 2),
-  );
-  const endPage = Math.min(props.lastPage, startPage + maxVisiblePages - 1);
+  // Se o número de páginas for menor ou igual ao limite de páginas visíveis
+  if (props.lastPage <= maxVisiblePages) {
+    pages = Array.from({ length: props.lastPage }, (_, i) => i + 1);
+  } else {
+    const startPage = Math.max(
+      1,
+      props.current - Math.floor(maxVisiblePages / 2),
+    );
+    const endPage = Math.min(props.lastPage, startPage + maxVisiblePages - 1);
 
-  if (startPage > 1) pages.push(1);
-  if (startPage > 2) pages.push("...");
+    if (startPage > 1) pages.push(1);
+    if (startPage > 2) pages.push("...");
 
-  pages.push(
-    ...Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i),
-  );
+    pages.push(
+      ...Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i),
+    );
 
-  if (endPage < props.lastPage - 1) pages.push("...");
-  if (endPage < props.lastPage) pages.push(props.lastPage);
-}
----
-
-<div
-  class="flex flex-row justify-center space-x-4"
-  style={props.style}
-  class:list={[props.class]}
->
-<!-- Link para a página anterior -->
-<a
-  href={props.prevURL ? props.prevURL : "#"}
-  class:list={[props.prevURL ? "button" : "button-disabled"]}
-  aria-disabled={props.prevURL ? "false" : "true"}
-  style={props.prevURL ? {} : { pointerEvents: "none" }}
->
-  <span>＜</span>
-</a>
-
-<!-- Exibição das páginas -->
-<div class="flex flex-row space-x-2">
-  {
-    pages.map((page) =>
-      page === "..." ? (
-        <span class="text-md text-[var(--primary-color)]">...</span>
-      ) : (
-        <a
-          href={page === 1 ? "/" : `/categories/${props.category}/page/${page}`}
-          class:list={[page === props.current ? "button-selected" : "button"]}
-        >
-          <span>{page}</span>
-        </a>
-      ),
-    )
+    if (endPage < props.lastPage - 1) pages.push("...");
+    if (endPage < props.lastPage) pages.push(props.lastPage);
   }
-</div>
+  ---
 
-<!-- Link para a página seguinte -->
-<a
-  href={props.nextURL ? props.nextURL : "#"}
-  class:list={[props.nextURL ? "button" : "button-disabled"]}
-  aria-disabled={props.nextURL ? "false" : "true"}
-  style={props.nextURL ? {} : { pointerEvents: "none" }}
->
-  <span>＞</span>
-</a>
-</div>
+  <div
+    class="flex flex-row justify-center space-x-4"
+    style={props.style}
+    class:list={[props.class]}
+  >
+  <!-- Link para a página anterior -->
+  <a
+    href={props.prevURL ? props.prevURL : "#"}
+    class:list={[props.prevURL ? "button" : "button-disabled"]}
+    aria-disabled={props.prevURL ? "false" : "true"}
+    style={props.prevURL ? {} : { pointerEvents: "none" }}
+  >
+    <span>＜</span>
+  </a>
 
-<style>
-  .button {
-    @apply flex h-10 w-10 flex-row items-center rounded-lg bg-[var(--card-color)] p-1 transition-all hover:brightness-90;
-    @apply dark:bg-[var(--card-color-lighten)] dark:hover:brightness-125;
-  }
-  .button span {
-    @apply w-full text-center;
-    
-  }
+  <!-- Exibição das páginas -->
+  <div class="flex flex-row space-x-2">
+    {
+      pages.map((page) =>
+        page === "..." ? (
+          <span class="text-md text-[var(--primary-color)]">...</span>
+        ) : (
+          <a
+            href={page === 1 ? "/" : `/${page}`}
+            class:list={[page === props.current ? "button-selected" : "button"]}
+          >
+            <span>{page}</span>
+          </a>
+        ),
+      )
+    }
+  </div>
 
-  .button-disabled {
-    @apply flex h-10 w-10 cursor-not-allowed flex-row items-center rounded-lg bg-gray-200 p-1;
-    @apply dark:bg-[var(--card-color-lighten)] dark:brightness-50;
-    
-  }
+  <!-- Link para a página seguinte -->
+  <a
+    href={props.nextURL ? props.nextURL : "#"}
+    class:list={[props.nextURL ? "button" : "button-disabled"]}
+    aria-disabled={props.nextURL ? "false" : "true"}
+    style={props.nextURL ? {} : { pointerEvents: "none" }}
+  >
+    <span>＞</span>
+  </a>
+  </div>
 
-  .button-disabled span {
-    @apply w-full text-center  opacity-50;
-    
-  }
+  <style>
+    .button {
+      @apply flex h-10 w-10 flex-row items-center rounded-lg bg-[var(--card-color)] p-1 transition-all hover:brightness-90;
+      @apply dark:bg-[var(--card-color-lighten)] dark:hover:brightness-125;
+    }
+    .button span {
+      @apply w-full text-center;
+      
+    }
 
-  .button-selected {
-    @apply flex h-10 w-10 cursor-not-allowed flex-row items-center rounded-lg bg-[var(--primary-color)] p-1;
-    pointer-events: none;
-    
-  }
+    .button-disabled {
+      @apply flex h-10 w-10 cursor-not-allowed flex-row items-center rounded-lg bg-gray-200 p-1;
+      @apply dark:bg-[var(--card-color-lighten)] dark:brightness-50;
+      
+    }
 
-  .button-selected span {
-    @apply w-full text-center text-[var(--card-color)];
-    @apply dark:text-black/75;
-  }
-</style>
+    .button-disabled span {
+      @apply w-full text-center  opacity-50;
+      
+    }
+
+    .button-selected {
+      @apply flex h-10 w-10 cursor-not-allowed flex-row items-center rounded-lg bg-[var(--primary-color)] p-1;
+      pointer-events: none;
+      
+    }
+
+    .button-selected span {
+      @apply w-full text-center text-[var(--card-color)];
+      @apply dark:text-black/75;
+    }
+  </style>

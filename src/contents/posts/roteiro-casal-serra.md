@@ -57,7 +57,7 @@ Buscando um roteiro a dois para conhecer a Serra Gaúcha? **Gramado** e **Canela
 - **Le Jardin Parque de Lavanda**: Um campo de lavandas que oferece um cenário encantador para fotos e momentos especiais. Ideal para relaxar e aproveitar a natureza.
 
 ### Noite
-- **Fonte do Amor Eterno**: Aproveite a céu lindo do por do sol para eternizar o amor de vocÊ com um cadeado na Fonte do Amor Eterno ao lado da Igreja São Pedro
+- **Fonte do Amor Eterno**: Aproveite a céu lindo do por do sol para eternizar o amor de vocês com um cadeado na Fonte do Amor Eterno ao lado da Igreja São Pedro
 - **Passeio na Rua Coberta**: Aproveite o clima europeu de Gramado, com restaurantes e lojas charmosas. A Rua Coberta é um local perfeito para um passeio noturno.
 - **Jantar especial**: Em clima de despedida, aproveite a última noite com um fondue romântico, acompanhado de bons vinhos. A Av.Borges de Medeiros oferece uma vasta opção de fundues.
 
@@ -67,7 +67,7 @@ Buscando um roteiro a dois para conhecer a Serra Gaúcha? **Gramado** e **Canela
 
 - **Café da manhã no hotel**: Comece o dia com um café reforçado para aproveitar o último dia.
 - **Igreja de Pedra**: Visite a **Catedral de Pedra** em Canela, um dos cartões-postais da cidade, e tire belas fotos. A arquitetura única e o ambiente tranquilo fazem deste local um ponto imperdível.
-- **Vinícola Ravanello**: Se o casal gosta de vinhos, esse é um passeio imperdível, com degustação de vinhos e espumantes. A vinícola oferece um ambiente rústico e acolhedor, ideal para relaxar.
+- **Vinícola Jolimont**: Se o casal gosta de vinhos, esse é um passeio imperdível em Canela, com degustação de vinhos e espumantes com passeios exclusivos do local. A vinícola oferece um ambiente rústico e acolhedor, ideal para relaxar. Confira no Site: [https://vinicolajolimont.com.br/](https://vinicolajolimont.com.br/).
 - **Compras na Av. Borges de Medeiros**: Encontre chocolates artesanais e lembranças especiais para levar para casa. A avenida é repleta de lojas charmosas e cafés.
 
 ---

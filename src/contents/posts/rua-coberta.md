@@ -28,28 +28,24 @@ draft: false
 
 # Rua Coberta em Gramado – Guia Completo
 
-A **Rua Coberta**, localizada no centro de Gramado, é um dos **principais cartões-postais da Serra Gaúcha**. Com seu teto de vidro e arquitetura inspirada no estilo europeu, o local é parada obrigatória para quem visita a cidade. Além de sua beleza única, a Rua Coberta está de frente para a **Calçada da Fama de Gramado**, onde diversas personalidades do cinema  deixaram suas marcas, e é um ponto de referência durante o **Festival de Cinema de Gramado**, o mais importante do Brasil.
+A **Rua Coberta**, localizada no centro de Gramado, é um dos **principais cartões-postais da Serra Gaúcha**. A Rua Coberta de Gramado é um expoente de arquitetura e design. Mais do que uma via, ela encapsula a essência da Serra Gaúcha, combinando influências europeias com modernidade. Seu teto único, emoldurado por vegetação, cria um ambiente acolhedor, transformando-a em um ponto turístico imperdível, o local é parada obrigatória para quem visita a cidade. Além de sua beleza única, a Rua Coberta está de frente para a **Calçada da Fama de Gramado**, onde diversas personalidades do cinema  deixaram suas marcas, e é um ponto de referência durante o **Festival de Cinema de Gramado**, o mais importante do Brasil.
 
-![Vista noturna da Rua Coberta](/images/rua-coberta-gramado.jpg) *A Rua Coberta iluminada no Natal Luz.*
 
 ## História e Arquitetura da Rua Coberta
 
-Projetada para trazer o charme das ruas europeias para o Brasil, a Rua Coberta combina uma estrutura de **vidro e metal** com iluminação decorativa que realça sua atmosfera aconchegante. Durante o **Natal Luz de Gramado**, o local ganha decorações temáticas, enquanto no **Festival de Cinema de Gramado**, realizado anualmente no **Palácio dos Festivais** (próximo à Rua Coberta), a região se transforma em um cenário glamoroso com tapete vermelho e eventos exclusivos.
-
-![Estrutura da Rua Coberta](/images/rua-coberta-arquitetura.jpg) *Detalhes da arquitetura de vidro e metal da Rua Coberta.*
+Projetada para trazer o charme das ruas europeias para o Brasil, com iluminação decorativa que realça sua atmosfera aconchegante. Durante o **Natal Luz de Gramado**, o local ganha decorações temáticas, enquanto no **Festival de Cinema de Gramado**, realizado anualmente no **Palácio dos Festivais** (próximo à Rua Coberta), a região se transforma em um cenário glamoroso com tapete vermelho e eventos exclusivos.
 
 ## O que fazer na Rua Coberta
 
 - **Passeio Noturno**: Aproveite a atmosfera única à noite, ideal para jantar em restaurantes que oferecem gastronomia típica alemã e italiana, como fondue, *eisbein* (joelho de porco) e massas artesanais.  
-  ![Jantar na Rua Coberta](/images/rua-coberta-restaurantes.jpg) *Ambiente noturno com mesas ao ar livre.*
 
-- **Fotografar**: A Rua Coberta é um dos **pontos mais fotografados de Gramado**, com a Calçada da Fama ao seu lado e a estrutura de vidro como pano de fundo.
+- **Fotografar**: A Rua Coberta é um dos **pontos mais fotografados de Gramado**, com a **calçada da fama** e o **Palácio dos Festivais** logo a frente.
 
 - **Festival de Cinema**: Em agosto, durante o **Festival de Cinema de Gramado**, a região recebe cerimônias de tapete vermelho, com a presença de celebridades nacionais e internacionais.  
-  ![Tapete Vermelho em Gramado](/images/festival-cinema-gramado.jpg) *Momento do tapete vermelho durante o festival.*
+
 
 - **Calçada da Fama**: Registre fotos com as homenagens a grandes nomes do cinema brasileiro e internacional, que possuem placas e handprints no local.  
-  ![Calçada da Fama de Gramado](/images/calcada-da-fama-gramado.jpg) *Placas de celebridades na Calçada da Fama.*
+
 
 ## Como chegar à Rua Coberta
 

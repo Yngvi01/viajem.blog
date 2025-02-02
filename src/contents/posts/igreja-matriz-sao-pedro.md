@@ -29,7 +29,11 @@ Aa **Igreja Matriz São Pedro** é um dos **principais símbolos de Gramado**, c
 
 ## História e Arquitetura da Igreja Matriz São Pedro
 
-Construída em **1943**, a Igreja Matriz São Pedro foi projetada para ser um marco religioso e arquitetônico em Gramado. Sua arquitetura em estilo **neogótico** chama a atenção pelas torres altas e detalhes trabalhados, enquanto os **vitrais coloridos** retratam cenas bíblicas e iluminam o interior da igreja com uma luz natural única. A igreja é dedicada a São Pedro, padroeiro da cidade, e é palco de celebrações religiosas importantes, como missas e casamentos.
+A **Paróquia São Pedro**, também conhecida como Igreja Matriz de São Pedro ou Igreja Matriz de Gramado, é um marco religioso e cultural da cidade, pertencente à **Diocese de Novo Hamburgo**. Construída em **1917** como uma capela de madeira, foi reconstruída em **pedras basálticas** entre **1943 e 1951** (um período de oito anos), consolidando-se como um dos principais pontos turísticos de Gramado.
+
+Sua arquitetura em estilo **neogótico** destaca-se pelas **torres imponentes**, que alcançam **46 metros de altura**, e pelos detalhes em cantaria. Os **vitrais coloridos** são um espetáculo à parte, retratando cenas da vida do **apóstolo Pedro** ao lado de Jesus Cristo, iluminando o interior com uma atmosfera sagrada e artística.
+
+Dedicada a **São Pedro**, padroeiro da cidade, a igreja é palco de celebrações importantes, como missas, casamentos e festas religiosas. Além do valor espiritual, seu legado histórico e arquitetônico a torna um símbolo da identidade cultural gramadense, atraindo fiéis e visitantes de todo o Brasil.
 
 ![Igreja Matriz São Pedro - Gramado](/images/igreja-sao-pedro.jpg) *Vista frontal da Igreja Matriz São Pedro*
 

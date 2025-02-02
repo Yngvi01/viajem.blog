@@ -52,9 +52,13 @@ const tags = await GetTags();
           {
             YukinaConfig.socialLinks.map((item) => (
               <li>
-                <a href={item.link} class="text-[var(--primary-color)]" aria-label={item.label}>
+                <a
+                  href={item.link}
+                  class="text-[var(--primary-color)]"
+                  aria-label={item.icon}
+                >
                   <Icon name={item.icon} size={24} />
-                </a>  
+                </a>
               </li>
             ))
           }
@@ -129,7 +133,6 @@ const tags = await GetTags();
         © {new Date().getFullYear()}
         {YukinaConfig.username} Todos os Direitos Reservados.
       </p>
-    
     </div>
   </footer>
 </div>

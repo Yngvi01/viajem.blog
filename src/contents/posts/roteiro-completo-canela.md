@@ -17,9 +17,9 @@ tags:
 category: Roteiros
 author: emn178
 sourceLink: "https://www.visitcanela.com/roteiro-completo"
-image: /images/roteiro.jpg   
-attraction_image: /images/roteiro-canela.jpeg   
-meta_image: /images/roteiro-canela.jpeg  
+image: /images/roteiro.jpg
+attraction_image: /images/roteiro-canela.jpeg
+meta_image: /images/roteiro-canela.jpeg
 draft: false
 ---
 
@@ -27,14 +27,11 @@ draft: false
 
 Canela, na Serra Gaúcha, é um destino que combina natureza, cultura e gastronomia. Este roteiro completo inclui os principais pontos turísticos, dicas de hospedagem e experiências únicas para aproveitar ao máximo sua visita.
 
-
-
 ---
 
 ## Sexta-feira – Chegada e Primeiros Passos
 
 - **Check-in no hotel ou pousada**: Opte por hospedagens acolhedoras como a **Pousada Vale das Videiras** ou o **Hotel Serra Azul** para começar sua estadia com conforto.
-
 
 ---
 
@@ -45,14 +42,17 @@ Canela, na Serra Gaúcha, é um destino que combina natureza, cultura e gastrono
 ## Sábado – Natureza e Aventura
 
 ### Manhã
+
 - **Cascata do Caracol**: Comece o dia visitando uma das maiores quedas d’água do Brasil. Aproveite o mirante e as trilhas ao redor.
 - **Parque da Ferradura**: Faça uma caminhada pelas trilhas do parque e desfrute da vista do Vale da Ferradura.
 
 ### Tarde
+
 - **Almoço no Parque do Caracol**: O **Restaurante Mirante** oferece pratos regionais com vista para a cascata.
 - **Catedral de Pedra**: Visite a imponente igreja de estilo gótico, um dos símbolos da cidade. Conheça os vitrais e a arquitetura única.
 
 ### Noite
+
 - **Jantar romântico**: Reserve uma mesa no **Villa Valduga Vinhos & Restaurante** para harmonizar vinhos locais com pratos sofisticados.
 - **Passeio noturno**: Caminhe pela **Rua das Hortênsias** e aproveite o clima tranquilo da cidade.
 
@@ -61,10 +61,12 @@ Canela, na Serra Gaúcha, é um destino que combina natureza, cultura e gastrono
 ## Domingo – Cultura e Lazer
 
 ### Manhã
+
 - **Café colonial**: Delicie-se com um café colonial completo no **Café e Cia**, famoso por sua variedade de pães, bolos e geleias.
 - **Mundo a Vapor**: Conheça o parque temático que mistura diversão e educação com maquetes e atrações interativas.
 
 ### Tarde
+
 - **Vinícola Jolimont**: Participe de uma degustação de vinhos e espumantes em uma das vinícolas mais tradicionais da região.
 - **Compras no Centro**: Visite lojas de artesanato local na **Avenida Júlio de Castilhos** para levar lembranças como vinhos, chocolates e peças em madeira.
 

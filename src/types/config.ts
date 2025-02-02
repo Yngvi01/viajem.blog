@@ -9,7 +9,7 @@ interface Configuration {
 
   site: string;
 
-  locale: "en" | "zh-CN";
+  locale: "pt-BR" | "zh-CN";
 
   navigators: { nameKey: I18nKeys; href: string }[];
 
@@ -17,16 +17,11 @@ interface Configuration {
   sign: string;
   avatarUrl: string;
 
-  socialLinks: { icon: string; link: string }[];
+  socialLinks: { icon: string; link: string; label: string }[];
 
   banners: string[];
 
   slugMode: "HASH" | "RAW";
-
-  license: {
-    name: string;
-    url: string;
-  };
 
   bannerStyle: "LOOP";
 }

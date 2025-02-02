@@ -61,7 +61,11 @@ const navCount = YukinaConfig.navigators.length;
         <SearchBar client:only="svelte" />
       </div>
       <div class="theme">
-        <button type="button" id="theme-switcher" aria-label="Alternar entre modo claro e escuro">
+        <button
+          type="button"
+          id="theme-switcher"
+          aria-label="Alternar entre modo claro e escuro"
+        >
           <Icon
             id="theme-icon-light"
             name="line-md:moon-alt-to-sunny-outline-loop-transition"
@@ -82,7 +86,6 @@ const navCount = YukinaConfig.navigators.length;
     <ul
       id="mobile-menu-nav"
       class="mobile-menu-nav mobile-menu-nav-closed flex flex-col space-y-6 overflow-hidden text-xl font-medium text-[var(--text-color)] transition-all duration-300"
-      
     >
       {
         YukinaConfig.navigators.map((nav) => (
@@ -105,7 +108,6 @@ const navCount = YukinaConfig.navigators.length;
 </nav>
 
 <style define:vars={{ navCount }}>
-
   .nav {
     @apply fixed left-1/2 z-10 flex w-full select-none flex-col justify-end rounded-b-xl bg-[var(--card-color-transparent)] px-2.5 opacity-0 backdrop-blur-md transition-all;
     @apply lg:w-[var(--page-width-lg)] lg:rounded-b-2xl;
@@ -204,7 +206,6 @@ const navCount = YukinaConfig.navigators.length;
       opacity: 1;
     }
   }
-
 </style>
 
 <script>

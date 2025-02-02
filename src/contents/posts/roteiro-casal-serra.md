@@ -18,9 +18,9 @@ tags:
 category: Roteiros
 author: emn178
 sourceLink: "https://www.visitcanela.com/roteiro-romantico"
-image: /images/roteiro.jpg  
-attraction_image: /images/roteiro-casal.jpg  
-meta_image: /images/roteiro-casal.jpg  
+image: /images/roteiro.jpg
+attraction_image: /images/roteiro-casal.jpg
+meta_image: /images/roteiro-casal.jpg
 draft: false
 ---
 
@@ -29,34 +29,38 @@ draft: false
 Buscando um roteiro a dois para conhecer a Serra Gaúcha? **Gramado** e **Canela** oferecem o cenário perfeito para momentos românticos. Este roteiro inclui passeios encantadores, restaurantes aconchegantes e experiências únicas para casais.
 
 ![Gramado e Canela para casais](/images/casal.jpg)  
-*Gramado e Canela são destinos ideais para um final de semana romântico.*
+_Gramado e Canela são destinos ideais para um final de semana romântico._
 
 ---
 
 ## Sexta-feira – Chegada e Jantar Romântico
 
 - **Check-in no hotel ou pousada**: Escolha uma hospedagem aconchegante e romântica para noites a dois inesquecíveis. Hotéis como o **Colline de France** e o **Casa da Montanha** são ótimas opções.
-![Gramado e Canela para casais](/images/colinedefrance.jpg)  
-*Hotel Colline de France.*
+  ![Gramado e Canela para casais](/images/colinedefrance.jpg)  
+  _Hotel Colline de France._
 
 ---
- 
+
 - **Jantar à luz de velas**: Reserve uma mesa em um restaurante aconchegante para um jantar especial. Sugestão: Conheça a culinária típica da região, com opções de restaurantes de culinária alemã e italiana, típicos da Serra Gaúcha. O **Restaurante Cantina Pastasciutta** e o **Olivas GastroBar** são excelentes escolhas.
-![Gramado e Canela para casais](/images/olivasgastrobar.jpg)  
-*Olivas GastroBar.*
+  ![Gramado e Canela para casais](/images/olivasgastrobar.jpg)  
+  _Olivas GastroBar._
+
 ---
 
 ## Sábado – Passeios e Experiências Inesquecíveis
 
 ### Manhã
+
 - **Café da manhã especial**: Desfrute de um café da manhã completo no hotel ou busque por um café colonial tradicional, como o **Café Colonial Bela Vista**, famoso por sua variedade de pães, bolos e geleias artesanais.
 - **Lago Negro**: Caminhe de mãos dadas ao redor do Lago Negro, uma paisagem inspirada na Floresta Negra da Alemanha. Não deixe de andar de pedalinho para um momento a dois inesquecível.
 
 ### Tarde
+
 - **Parque do Caracol**: Visite o famoso cartão postal de Canela, a **Cascata do Caracol**, com uma vista espetacular do mirante. O parque também oferece trilhas leves e áreas para piquenique.
 - **Le Jardin Parque de Lavanda**: Um campo de lavandas que oferece um cenário encantador para fotos e momentos especiais. Ideal para relaxar e aproveitar a natureza.
 
 ### Noite
+
 - **Fonte do Amor Eterno**: Aproveite a céu lindo do por do sol para eternizar o amor de vocês com um cadeado na Fonte do Amor Eterno ao lado da Igreja São Pedro
 - **Passeio na Rua Coberta**: Aproveite o clima europeu de Gramado, com restaurantes e lojas charmosas. A Rua Coberta é um local perfeito para um passeio noturno.
 - **Jantar especial**: Em clima de despedida, aproveite a última noite com um fondue romântico, acompanhado de bons vinhos. A Av.Borges de Medeiros oferece uma vasta opção de fundues.

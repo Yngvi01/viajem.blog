@@ -10,7 +10,7 @@ const YukinaConfig: Configuration = {
 
   site: "https://guiadeviagem.blog",
 
-  locale: "pt-br", // set for website language and date format
+  locale: "pt-BR", // set for website language and date format
 
   navigators: [
     {
@@ -25,7 +25,6 @@ const YukinaConfig: Configuration = {
       nameKey: I18nKeys.nav_bar_about,
       href: "/sobre",
     },
-    
   ],
 
   username: "Guia de Viagem",
@@ -51,14 +50,9 @@ const YukinaConfig: Configuration = {
     "https://cdn.pixabay.com/photo/2016/01/15/23/46/rio-1142673_960_720.jpg",
     "https://cdn.pixabay.com/photo/2016/11/14/04/57/brazil-1822657_960_720.jpg",
     "https://cdn.pixabay.com/photo/2017/05/30/20/34/reflection-2358116_960_720.jpg",
-
-
-    
   ],
 
   slugMode: "RAW", // 'RAW' | 'HASH'
-
-
 
   // WIP functions
   bannerStyle: "LOOP", // 'loop' | 'static' | 'hidden'

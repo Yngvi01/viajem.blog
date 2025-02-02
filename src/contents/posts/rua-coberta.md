@@ -20,16 +20,15 @@ tags:
 category: Gramado
 author: emn178
 sourceLink: "https://www.gramado.rs.gov.br/turismo"
-image: /images/gramado.jpg  
-attraction_image: /images/rua-coberta.jpg  
-meta_image: /images/rua-coberta.jpg  
+image: /images/gramado.jpg
+attraction_image: /images/rua-coberta.jpg
+meta_image: /images/rua-coberta.jpg
 draft: false
 ---
 
 # Rua Coberta em Gramado – Guia Completo
 
-A **Rua Coberta**, localizada no centro de Gramado, é um dos **principais cartões-postais da Serra Gaúcha**. A Rua Coberta de Gramado é um expoente de arquitetura e design. Mais do que uma via, ela encapsula a essência da Serra Gaúcha, combinando influências europeias com modernidade. Seu teto único, emoldurado por vegetação, cria um ambiente acolhedor, transformando-a em um ponto turístico imperdível, o local é parada obrigatória para quem visita a cidade. Além de sua beleza única, a Rua Coberta está de frente para a **Calçada da Fama de Gramado**, onde diversas personalidades do cinema  deixaram suas marcas, e é um ponto de referência durante o **Festival de Cinema de Gramado**, o mais importante do Brasil.
-
+A **Rua Coberta**, localizada no centro de Gramado, é um dos **principais cartões-postais da Serra Gaúcha**. A Rua Coberta de Gramado é um expoente de arquitetura e design. Mais do que uma via, ela encapsula a essência da Serra Gaúcha, combinando influências europeias com modernidade. Seu teto único, emoldurado por vegetação, cria um ambiente acolhedor, transformando-a em um ponto turístico imperdível, o local é parada obrigatória para quem visita a cidade. Além de sua beleza única, a Rua Coberta está de frente para a **Calçada da Fama de Gramado**, onde diversas personalidades do cinema deixaram suas marcas, e é um ponto de referência durante o **Festival de Cinema de Gramado**, o mais importante do Brasil.
 
 ## História e Arquitetura da Rua Coberta
 
@@ -37,15 +36,13 @@ Projetada para trazer o charme das ruas europeias para o Brasil, com iluminaçã
 
 ## O que fazer na Rua Coberta
 
-- **Passeio Noturno**: Aproveite a atmosfera única à noite, ideal para jantar em restaurantes que oferecem gastronomia típica alemã e italiana, como fondue e massas artesanais.  
+- **Passeio Noturno**: Aproveite a atmosfera única à noite, ideal para jantar em restaurantes que oferecem gastronomia típica alemã e italiana, como fondue e massas artesanais.
 
 - **Fotografar**: A Rua Coberta é um dos **pontos mais fotografados de Gramado**, com a **calçada da fama** e o **Palácio dos Festivais** logo a frente.
 
-- **Festival de Cinema**: Em agosto, durante o **Festival de Cinema de Gramado**, a região recebe cerimônias de tapete vermelho, com a presença de celebridades nacionais e internacionais.  
+- **Festival de Cinema**: Em agosto, durante o **Festival de Cinema de Gramado**, a região recebe cerimônias de tapete vermelho, com a presença de celebridades nacionais e internacionais.
 
-
-- **Calçada da Fama**: Registre fotos com as homenagens a grandes nomes do cinema brasileiro e internacional, que possuem placas e handprints no local.  
-
+- **Calçada da Fama**: Registre fotos com as homenagens a grandes nomes do cinema brasileiro e internacional, que possuem placas e handprints no local.
 
 ## Como chegar à Rua Coberta
 

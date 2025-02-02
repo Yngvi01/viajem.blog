@@ -1,5 +1,5 @@
 ---
-title: Igreja de Pedra de Canela 
+title: Igreja de Pedra de Canela
 slug: catedral-de-pedra-canela
 date: 2025-01-28
 published: 2025-01-28
@@ -17,9 +17,9 @@ tags:
 category: Canela
 author: emn178
 sourceLink: "https://www.canela.rs.gov.br/turismo"
-image: "https://images.pexels.com/photos/6665803/pexels-photo-6665803.jpeg"  
-attraction_image: /images/igreja-de-pedra.jpg  
-meta_image: /images/igreja-de-pedra.jpg  
+image: "https://images.pexels.com/photos/6665803/pexels-photo-6665803.jpeg"
+attraction_image: /images/igreja-de-pedra.jpg
+meta_image: /images/igreja-de-pedra.jpg
 draft: false
 ---
 
@@ -34,7 +34,7 @@ Construída em **1953**, a Igreja de Pedra foi projetada pelo arquiteto suíço 
 Dedicada a **Nossa Senhora de Lourdes**, a igreja possui uma nave central com **12 metros de altura** e capacidade para 800 fiéis. Seu interior é iluminado por um lustre de cristal e luz natural que atravessa os vitrais, criando um ambiente solene e artístico.
 
 ![Catedral de Pedra - Canela](/images/igreja-de-pedra.jpg)  
-*Fachada da Igreja de Pedra, cercada por jardins bem cuidados.*
+_Fachada da Igreja de Pedra, cercada por jardins bem cuidados._
 
 ## O que fazer na Igreja de Pedra
 

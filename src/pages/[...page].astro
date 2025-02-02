@@ -27,20 +27,19 @@ const { page } = Astro.props;
             class="onload-animation"
             style={`animation-delay: calc(var(--onload-animation-delay) + ${index + 1} * var(--onload-animation-interval));`}
           >
-          <PostCard
-  id={entry.id}
-  title={entry.data.title}
-  published={entry.data.published}
-  category={entry.data.category}
-  tags={entry.data.tags}
-  description={entry.data.description}
-  image={entry.data.cover}  
-  attraction_image={entry.data.attraction_image}  
-  readingMetadata={
-    (entry.rendered!.metadata as any).frontmatter.readingMetadata
-  }
-/>
-
+            <PostCard
+              id={entry.id}
+              title={entry.data.title}
+              published={entry.data.published}
+              category={entry.data.category}
+              tags={entry.data.tags}
+              description={entry.data.description}
+              image={entry.data.cover}
+              attraction_image={entry.data.attraction_image}
+              readingMetadata={
+                (entry.rendered!.metadata as any).frontmatter.readingMetadata
+              }
+            />
           </div>
         ))
       }

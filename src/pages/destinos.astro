@@ -10,16 +10,21 @@ const categories = await GetCategories();
 
 <MainLayout title={i18n(I18nKeys.pages_archive_archive)}>
   <div class="cities-grid">
-    {Array.from(categories.values()).map((category) => (
-      <div class="city-card" style={`background-image: url('${category.image}')`}>
-        <Link href={`/categorias/${category.slug}`} class="city-link">
-          <div class="city-content">
-            <h3 class="city-title">{category.name}</h3>
-            <p class="city-attractions">{category.posts.length} Artigo(s)</p>
-          </div>
-        </Link>
-      </div>
-    ))}
+    {
+      Array.from(categories.values()).map((category) => (
+        <div
+          class="city-card"
+          style={`background-image: url('${category.image}')`}
+        >
+          <Link href={`/categorias/${category.slug}`} class="city-link">
+            <div class="city-content">
+              <h3 class="city-title">{category.name}</h3>
+              <p class="city-attractions">{category.posts.length} Artigo(s)</p>
+            </div>
+          </Link>
+        </div>
+      ))
+    }
   </div>
 </MainLayout>
 
@@ -35,7 +40,9 @@ const categories = await GetCategories();
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+    transition:
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.3s ease;
     background-size: cover;
     background-position: center;
     height: 200px;
@@ -45,7 +52,7 @@ const categories = await GetCategories();
   }
 
   .city-card::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -97,7 +104,7 @@ const categories = await GetCategories();
   }
 
   .city-title::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: -4px;
     left: 0;

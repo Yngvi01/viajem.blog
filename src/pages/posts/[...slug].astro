@@ -23,14 +23,14 @@ const DEFAULT_IMAGE = "/images/default-image.jpg";
 const licenseData = entry.data.licenseName && {
   license: {
     name: entry.data.licenseName,
-    url: entry.data.licenseUrl
+    url: entry.data.licenseUrl,
   },
   author: entry.data.author,
-  sourceLink: entry.data.sourceLink
+  sourceLink: entry.data.sourceLink,
 };
 
 // Determinar a imagem do banner
-const bannerImage = entry.data.licenseName 
+const bannerImage = entry.data.licenseName
   ? entry.data.cover || DEFAULT_BANNER
   : entry.data.attraction_image || DEFAULT_BANNER;
 ---
@@ -51,12 +51,9 @@ const bannerImage = entry.data.licenseName
   >
     {entry.data.title}
   </div>
-  
+
   <div data-pagefind-body>
     <Content />
-    
-    
-  
   </div>
 </PostLayout>
 

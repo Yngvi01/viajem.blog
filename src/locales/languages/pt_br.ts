@@ -6,7 +6,7 @@ export const pt_BR: Translation = {
   [key.copy_right_publish_date]: "Data de publicação",
   [key.copy_right_license]: "Licença",
 
-  [key.nav_bar_home]: "Inicio",
+  [key.nav_bar_home]: "Início",
   [key.nav_bar_archive]: "Destinos",
   [key.nav_bar_about]: "Sobre",
   [key.nav_bar_github]: "GitHub",
@@ -21,7 +21,12 @@ export const pt_BR: Translation = {
   [key.archive_year_title_count]: "{{}} Artigo(s)",
   [key.archive_year_title_count_single]: "{{}} Artigo(s)",
 
-  [key.pages_categories_archive]: "Artigos Destino",
+  [key.pages_categories_archive]: "Artigos por Categoria",
   [key.pages_tags_archive]: "Tags",
   [key.pages_archive_archive]: "Destinos",
+
+  // Adicionando as chaves que estavam faltando
+  [key.category_archive_title]: "Artigos sobre {{}}",
+  [key.category_archive_subtitle]: "Explorando a categoria {{}}",
+  [key.errors_category_not_found]: "Categoria não encontrada",
 };

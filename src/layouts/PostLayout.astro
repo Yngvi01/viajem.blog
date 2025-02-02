@@ -16,15 +16,8 @@ interface Props {
   sourceLink?: string;
 }
 
-const {
-  title,
-  subTitle,
-  bannerImage,
-  published,
-  license,
-  author,
-  sourceLink,
-} = Astro.props;
+const { title, subTitle, bannerImage, published, license, author, sourceLink } =
+  Astro.props;
 ---
 
 <Main title={title} subTitle={subTitle} bannerImage={bannerImage}>

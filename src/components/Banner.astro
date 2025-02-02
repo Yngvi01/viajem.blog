@@ -20,32 +20,41 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 
 <div id="banner" class="banner onload-animation-fade-in">
   <div class="transition-main banner-inner h-full w-full">
-    { !hasHeaderImg && (
-      <div class="carousel">
-        <ul id="carousel_imgs">
-          {carouselImgsList.map((img, index) => (
-            <li
-              class="item lozad"
-              style={{ animationDelay: `${index * 6}s` }}
-              data-background-image={img}
-            />
-          ))}
-        </ul>
-      </div>
-    )}
-    { hasHeaderImg && (
-      <div class="cover">
-        <img
-          class="item lozad"
-          data-src={bannerImage ?? GetCoverURLForUnspecifiedEntry(slug ?? "")}
-          alt="PostCover"
-        />
-      </div>
-    )}
+    {
+      !hasHeaderImg && (
+        <div class="carousel">
+          <ul id="carousel_imgs">
+            {carouselImgsList.map((img, index) => (
+              <li
+                class="item lozad"
+                style={{ animationDelay: `${index * 6}s` }}
+                data-background-image={img}
+              />
+            ))}
+          </ul>
+        </div>
+      )
+    }
+    {
+      hasHeaderImg && (
+        <div class="cover">
+          <img
+            class="item lozad"
+            data-src={bannerImage ?? GetCoverURLForUnspecifiedEntry(slug ?? "")}
+            alt="PostCover"
+          />
+        </div>
+      )
+    }
     <div class="relative h-[95%] w-full">
-      <div class="absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 lg:w-3/4">
-        <div class="flex flex-col justify-center items-center text-center">
-          <h1 class:list={[hasTitle ? "title-normal" : "title-index"]} class="title">
+      <div
+        class="absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 lg:w-3/4"
+      >
+        <div class="flex flex-col items-center justify-center text-center">
+          <h1
+            class:list={[hasTitle ? "title-normal" : "title-index"]}
+            class="title"
+          >
             {title ?? YukinaConfig.title}
           </h1>
           <h2 class="subtitle">{subTitle ?? YukinaConfig.subTitle}</h2>
@@ -66,7 +75,7 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
         <path
           id="gentle-wave"
           d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
-        />
+        ></path>
       </defs>
       <g class="parallax">
         <use
@@ -74,28 +83,24 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
           x="48"
           y="0"
           class="opacity-25"
-          style={{ animationDelay: "-2s", animationDuration: "7s" }}
-        ></use>
+          style={{ animationDelay: "-2s", animationDuration: "7s" }}></use>
         <use
           xlink:href="#gentle-wave"
           x="48"
           y="3"
           class="opacity-50"
-          style={{ animationDelay: "-3s", animationDuration: "10s" }}
-        ></use>
+          style={{ animationDelay: "-3s", animationDuration: "10s" }}></use>
         <use
           xlink:href="#gentle-wave"
           x="48"
           y="5"
           class="opacity-75"
-          style={{ animationDelay: "-4s", animationDuration: "13s" }}
-        ></use>
+          style={{ animationDelay: "-4s", animationDuration: "13s" }}></use>
         <use
           xlink:href="#gentle-wave"
           x="48"
           y="7"
-          style={{ animationDelay: "-5s", animationDuration: "20s" }}
-        ></use>
+          style={{ animationDelay: "-5s", animationDuration: "20s" }}></use>
       </g>
     </svg>
   </div>
@@ -160,7 +165,8 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 
   .carousel .item {
     @apply absolute left-0 top-0 z-0 h-full w-full origin-center bg-cover bg-center bg-no-repeat opacity-0;
-    animation: carousel-animation var(--carouselAnimationTime) linear infinite 0s;
+    animation: carousel-animation var(--carouselAnimationTime) linear infinite
+      0s;
     backface-visibility: hidden;
     transform-style: preserve-3d;
   }
@@ -188,7 +194,7 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
   }
 
   .title-index {
-    @apply mb-0  text-5xl leading-[4rem] lg:text-6xl;
+    @apply mb-0 text-5xl leading-[4rem] lg:text-6xl;
   }
 
   .title-normal {
@@ -197,11 +203,11 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 
   .subtitle {
     @apply text-center text-2xl text-[var(--subtitle-color)] drop-shadow-md lg:text-3xl;
-    font-family: var(--subtitle-font); 
+    font-family: var(--subtitle-font);
   }
 
   .waves {
-    @apply absolute left-0 right-0 bottom-0 w-full;
+    @apply absolute bottom-0 left-0 right-0 w-full;
     height: 12vh;
     max-height: 9.375rem;
     min-height: 3.125rem;
@@ -227,20 +233,20 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
       height: 12vh;
     }
     .banner {
-    @apply relative opacity-100;
-    height: 100%;
-  }
+      @apply relative opacity-100;
+      height: 100%;
+    }
 
     .waves > .parallax use {
       animation: wave 25s cubic-bezier(0.5, 0.5, 0.45, 0.5) infinite;
     }
 
     .title-normal {
-      @apply  text-4xl lg:text-6xl;
+      @apply text-4xl lg:text-6xl;
     }
 
     .title-index {
-      @apply  text-6xl leading-[5rem] lg:text-8xl;
+      @apply text-6xl leading-[5rem] lg:text-8xl;
     }
 
     .subtitle {
@@ -260,17 +266,17 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
     }
   }
   @media (max-width: 640px) {
-  .title-index {
-    font-size: 2.5rem;
-    line-height: 3rem;
+    .title-index {
+      font-size: 2.5rem;
+      line-height: 3rem;
+    }
+    .title-normal {
+      font-size: 1.75rem;
+      line-height: 2.4rem;
+    }
+    .subtitle {
+      font-size: 1.3rem;
+      line-height: 1.2rem;
+    }
   }
-  .title-normal {
-    font-size: 1.75rem;
-    line-height: 2.4rem;
-  }
-  .subtitle {
-    font-size: 1.3rem;
-    line-height: 1.2rem;
-  }
-}
 </style>

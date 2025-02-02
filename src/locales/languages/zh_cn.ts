@@ -24,4 +24,8 @@ export const zh_CN: Translation = {
   [key.pages_categories_archive]: "文章归档",
   [key.pages_tags_archive]: "标签归档",
   [key.pages_archive_archive]: "归档",
+  // Adicionando as chaves que estavam faltando
+  [key.category_archive_title]: "Artigos sobre {{}}",
+  [key.category_archive_subtitle]: "Explorando a categoria {{}}",
+  [key.errors_category_not_found]: "Categoria não encontrada",
 };

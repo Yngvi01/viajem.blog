@@ -2,7 +2,7 @@
 title: Recordar Fotos
 date: 2025-01-31
 published: 2025-01-31
-description: Venha viver uma experiência única em Gramado com uma mini sessão fotográfica no Recordar Fotos. 
+description: Venha viver uma experiência única em Gramado com uma mini sessão fotográfica no Recordar Fotos.
 keywords:
   - estúdio de fotografia Gramado
   - mini sessão fotográfica
@@ -26,7 +26,8 @@ draft: false
 # Recordar Fotos – A Experiência Fotográfica Imperdível em Gramado
 
 Se você está visitando Gramado e Canela e quer levar uma recordação verdadeiramente única, **Recordar Fotos** é o lugar perfeito para você! Localizado na famosa **Rua Coberta**, o estúdio de fotografia à moda antiga oferece uma experiência personalizada, com fotos incríveis em um ambiente acolhedor e nostálgico. Aqui, cada clique captura a essência da sua viagem, imortalizando momentos especiais com uma estética vintage, cheia de charme.
-![foto a moda antiga](/images/recordar-fotos.jpg) *Foto a moda antiga no estudio recordarfotos*
+![foto a moda antiga](/images/recordar-fotos.jpg) _Foto a moda antiga no estudio recordarfotos_
+
 ## O que é a mini sessão fotográfica no Recordar Fotos?
 
 No **Recordar Fotos**, realizamos uma **mini sessão fotográfica** que é muito mais do que tirar algumas fotos. É uma experiência imersiva, onde você será guiado em cada passo para criar imagens que contam a sua história de forma única. São cerca de **20 fotos** feitas sob medida, com **figurino personalizado**, onde cada detalhe é cuidadosamente planejado para capturar a sua essência e transformar seu momento em algo memorável.

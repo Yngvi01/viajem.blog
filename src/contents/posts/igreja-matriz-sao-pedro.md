@@ -17,9 +17,9 @@ tags:
 category: Gramado
 author: emn178
 sourceLink: "https://www.gramado.rs.gov.br/turismo"
-image: /images/gramado.jpg  
-attraction_image: /images/igreja-sao-pedro.jpg  
-meta_image: /images/igreja-sao-pedro.jpg  
+image: /images/gramado.jpg
+attraction_image: /images/igreja-sao-pedro.jpg
+meta_image: /images/igreja-sao-pedro.jpg
 draft: false
 ---
 
@@ -35,7 +35,7 @@ Sua arquitetura em estilo **neogótico** destaca-se pelas **torres imponentes**,
 
 Dedicada a **São Pedro**, padroeiro da cidade, a igreja é palco de celebrações importantes, como missas, casamentos e festas religiosas. Além do valor espiritual, seu legado histórico e arquitetônico a torna um símbolo da identidade cultural gramadense, atraindo fiéis e visitantes de todo o Brasil.
 
-![Igreja Matriz São Pedro - Gramado](/images/igreja-sao-pedro.jpg) *Vista frontal da Igreja Matriz São Pedro*
+![Igreja Matriz São Pedro - Gramado](/images/igreja-sao-pedro.jpg) _Vista frontal da Igreja Matriz São Pedro_
 
 ## O que fazer na Igreja Matriz São Pedro
 

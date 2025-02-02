@@ -25,7 +25,7 @@ draft: false
 
 # Recordar Fotos – A Experiência Fotográfica Imperdível em Gramado
 
-Se você está visitando Gramado e Canela e quer levar uma recordação verdadeiramente única, **Recordar Fotos** é o lugar perfeito para você! Localizado na famosa **Rua Coberta**, nosso estúdio de fotografia à moda antiga oferece uma experiência personalizada, com fotos incríveis em um ambiente acolhedor e nostálgico. Aqui, cada clique captura a essência da sua viagem, imortalizando momentos especiais com uma estética vintage, cheia de charme.
+Se você está visitando Gramado e Canela e quer levar uma recordação verdadeiramente única, **Recordar Fotos** é o lugar perfeito para você! Localizado na famosa **Rua Coberta**, o estúdio de fotografia à moda antiga oferece uma experiência personalizada, com fotos incríveis em um ambiente acolhedor e nostálgico. Aqui, cada clique captura a essência da sua viagem, imortalizando momentos especiais com uma estética vintage, cheia de charme.
 ![foto a moda antiga](/images/recordar-fotos.jpg) *Foto a moda antiga no estudio recordarfotos*
 ## O que é a mini sessão fotográfica no Recordar Fotos?
 
@@ -39,7 +39,7 @@ No **Recordar Fotos**, realizamos uma **mini sessão fotográfica** que é muito
 
 ## Após a sessão: A escolha das suas fotos
 
-Assim que a sessão fotográfica terminar, você será convidado a escolher as suas fotos preferidas, diretamente no computador. Todo o processo é rápido e dinâmico, permitindo que você veja o resultado e decida suas fotos digitais de forma prática. Nosso **produto principal** é a **foto digital**, mas também oferecemos opções de **revelações** e **molduras vintage** para quem deseja eternizar suas memórias de forma física.
+Assim que a sessão fotográfica terminar, você será convidado a escolher as suas fotos preferidas, diretamente no computador. Todo o processo é rápido e dinâmico, permitindo que você veja o resultado e decida suas fotos digitais de forma prática. O **produto principal** é a **foto digital**, mas também oferecem opções de **revelações** e **molduras vintage** para quem deseja eternizar suas memórias de forma física.
 
 ## Por que escolher o Recordar Fotos?
 
@@ -47,9 +47,9 @@ Assim que a sessão fotográfica terminar, você será convidado a escolher as s
 - **Fotos com qualidade e estilo vintage**: Nossos fotógrafos são especializados em capturar a essência de cada momento com um toque artístico e nostálgico.
 - **Ideal para casais, famílias e amigos**: Seja você viajante solo, em casal, com amigos ou em família, a nossa sessão fotográfica é perfeita para qualquer tipo de visita a Gramado e Canela.
 
-## Onde nos encontrar?
+## Onde encontrar?
 
-Estamos localizados na **Rua Coberta**, um dos pontos turísticos mais charmosos de Gramado, na **Rua Madre Verônica, 30 - Sala 204**, Centro. Estamos abertos todos os dias das **10:00 às 18:00**, prontos para proporcionar a melhor experiência fotográfica para você e seus acompanhantes.
+Fica localizados na **Rua Coberta**, um dos pontos turísticos mais charmosos de Gramado, na **Rua Madre Verônica, 30 - Sala 204**, Centro. Funciona todos os dias das **10:00 às 18:00**, prontos para proporcionar a melhor experiência fotográfica para você e seus acompanhantes.
 
 ---
 

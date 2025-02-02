@@ -17,7 +17,7 @@ const tags = await GetTags();
         <img
           class="lozad absolute left-0 top-0 h-40 rounded-l-3xl"
           data-src={YukinaConfig.avatarUrl}
-          alt="Avatar"
+          alt="Avatar de {YukinaConfig.username}"
         />
         <div
           class="absolute right-0 top-0 h-40 w-20 bg-gradient-to-l from-[var(--card-color)]"
@@ -25,6 +25,7 @@ const tags = await GetTags();
         </div>
       </a>
       <a
+        href="/sobre"
         class="mx-auto hidden h-40 w-40 cursor-pointer rounded-3xl transition-all hover:brightness-75 md:block"
       >
         <img
@@ -73,7 +74,6 @@ const tags = await GetTags();
     <div class="grid grid-cols-2 gap-1 md:grid-cols-3">
       {
         Array.from(categorias.keys()).map((category) => (
-
           <a
             href={`/categorias/${category}`}
             class="category flex flex-row items-center justify-between rounded-lg px-2 py-1.5 transition-all hover:bg-[var(--primary-color-lighten)]"
@@ -101,7 +101,6 @@ const tags = await GetTags();
     <div class="flex flex-row flex-wrap">
       {
         Array.from(tags.keys()).map((tag) => (
-
           <a
             href={`/tags/${tag}`}
             class="tag m-1 rounded-md bg-[var(--primary-color-lighten)] px-2 py-1 transition-all hover:brightness-95"

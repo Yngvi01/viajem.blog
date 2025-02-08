@@ -31,11 +31,11 @@ Canela, na Serra Gaúcha, é um destino que combina natureza, cultura e gastrono
 
 ## Sexta-feira – Chegada e Primeiros Passos
 
-- **Check-in no hotel ou pousada**: Opte por hospedagens acolhedoras como a **Pousada Vale das Videiras** ou o **Hotel Serra Azul** para começar sua estadia com conforto.
+- **Check-in no hotel ou pousada**: Opte por hospedagens acolhedoras como a **Hotel Vovó Carolina** ou o **Hotel Serra Azul** para começar sua estadia com conforto.
 
 ---
 
-- **Jantar típico**: Experimente a culinária local no **Restaurante Tia Nêna**, conhecido por seus pratos gaúchos autênticos. Não deixe de provar o carreteiro e o café colonial.
+- **Jantar típico**: Experimente a culinária local no **Restaurante Bella Brasa**, Diversos pratos da região em farto self-service e destaque às carnes na brasa, doces típicos e clima familiar.
 
 ---
 

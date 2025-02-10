@@ -1,5 +1,5 @@
 ---
-title: Roteiro Completo em Canela[2025]
+title: Canela-RS
 slug: roteiro-completo-canela
 date: 2025-02-11
 published: 2025-02-11

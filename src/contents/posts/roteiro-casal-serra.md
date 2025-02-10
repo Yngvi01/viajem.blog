@@ -1,5 +1,5 @@
 ---
-title: Final de Semana para Casais na Serra
+title:  Casal na Serra Gaucha
 slug: roteiro-romantico-canela-gramado
 date: 2025-02-01
 published: 2025-02-01

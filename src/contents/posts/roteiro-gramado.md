@@ -1,5 +1,5 @@
 ---
-title: Roteiro Turístico Completo para Gramado - RS
+title:  Gramado-RS
 slug: roteiro-completo-gramado
 date: 2025-02-01
 published: 2025-02-01

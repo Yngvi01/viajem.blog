@@ -3,17 +3,19 @@ import YukinaConfig from "../../yukina.config";
 import BaseHead from "../components/BaseHead.astro";
 ---
 
-<html lang={YukinaConfig.locale}>
+<html lang={YukinaConfig.locale || "en"}>
   <BaseHead />
   <body class="overflow-y-hidden">
     <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
+    <noscript>
+      <iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-W8FQBNKB"
         height="0"
         width="0"
-        style="display:none;visibility:hidden"></iframe></noscript
-    >
+        style="display:none;visibility:hidden"
+        title="Google Tag Manager"
+      ></iframe>
+    </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <slot />
   </body>

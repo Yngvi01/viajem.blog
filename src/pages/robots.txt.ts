@@ -2,6 +2,9 @@ import type { APIRoute } from "astro";
 
 const getRobotsTxt = (sitemapURL: URL) => `
 User-agent: *
+Allow: /api/
+Allow: /pagead/
+Allow: /gtm.js
 Sitemap: ${sitemapURL.href}
 `;
 

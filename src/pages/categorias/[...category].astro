@@ -30,13 +30,16 @@ const posts = categoryData?.posts || [];
   bannerImage={categoryBanner.bannerImage}
 >
   <div class="space-y-8">
-    <div class="cities-grid">
+    <div class="cities-grid" data-pagefind-body>
       {
         posts.length > 0 ? (
           posts.map((entry) => (
             <div
               class="city-card"
               style={`background-image: url('${entry.data.image || "/images/default-attraction.jpg"}')`}
+              data-pagefind-body
+              data-pagefind-weight="10"
+              data-pagefind-meta="title"
             >
               <a href={entry.id} class="city-link">
                 <h3 class="city-title">{entry.data.title}</h3>

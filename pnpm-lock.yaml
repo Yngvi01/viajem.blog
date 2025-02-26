@@ -62,14 +62,14 @@ devDependencies:
     specifier: ^1.2.5
     version: 1.2.5
   '@iconify-json/mdi':
-    specifier: ^1.2.2
-    version: 1.2.2
+    specifier: ^1.2.3
+    version: 1.2.3
   '@iconify-json/mingcute':
     specifier: ^1.2.3
     version: 1.2.3
   '@iconify-json/ooui':
-    specifier: ^1.2.5
-    version: 1.2.5
+    specifier: ^1.2.6
+    version: 1.2.6
   '@iconify/svelte':
     specifier: ^4.2.0
     version: 4.2.0(svelte@5.17.4)
@@ -2085,8 +2085,8 @@ packages:
       '@iconify/types': 2.0.0
     dev: true
 
-  /@iconify-json/mdi@1.2.2:
-    resolution: {integrity: sha512-84aznJXzfGdbOXGe8xB7E5uNAb7Yo5IABwTgq2X3kczb819qZeS9eL31bTVn7wJdCLK5ieaoUc2GTS3QYIkJ6g==}
+  /@iconify-json/mdi@1.2.3:
+    resolution: {integrity: sha512-O3cLwbDOK7NNDf2ihaQOH5F9JglnulNDFV7WprU2dSoZu3h3cWH//h74uQAB87brHmvFVxIOkuBX2sZSzYhScg==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
@@ -2097,8 +2097,8 @@ packages:
       '@iconify/types': 2.0.0
     dev: true
 
-  /@iconify-json/ooui@1.2.5:
-    resolution: {integrity: sha512-Q91cOigbuDjOOH+Mm6ies/djOEZoSrrbt9HPwxoJYF0374RH4cQqMylTFZur4SlKgSGh3RVY8JOFB2yyo6g5Dg==}
+  /@iconify-json/ooui@1.2.6:
+    resolution: {integrity: sha512-5gdoO3EAbCo5l3z+Yc5W1hxsQYMV2ikdPIjyZM2a+0Cxa4P/ufyiGjjfWd9eMiGwmTttMLhJc+9T3wIKf9UTzw==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true

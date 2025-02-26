@@ -4,7 +4,8 @@ import GlobalStyles from "./GlobalStyles.astro";
 import ScriptSetup from "./ScriptSetup.astro";
 
 const { attractionImage, image = "/images/logo.png" } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname.replace(/^\/?/, "/"), YukinaConfig.site);
+const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
+
 ---
 
 <!-- Google Tag Manager -->

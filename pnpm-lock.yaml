@@ -85,6 +85,9 @@ devDependencies:
   eslint:
     specifier: ^9.19.0
     version: 9.19.0
+  esm-env:
+    specifier: ^1.2.2
+    version: 1.2.2
   globals:
     specifier: ^15.14.0
     version: 15.14.0

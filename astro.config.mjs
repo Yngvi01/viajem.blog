@@ -13,15 +13,25 @@ import remarkMath from "remark-math";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 
 import YukinaConfig from "./yukina.config";
-
 import pagefind from "astro-pagefind";
 
-// https://astro.build/config
 export default defineConfig({
   site: YukinaConfig.site,
+  base: '/',
+  trailingSlash: 'ignore',
+  build: {
+    format: 'file',
+    assetsPrefix: '/',
+    inlineStylesheets: 'never'
+  },
   integrations: [
     tailwind(),
-    svelte(),
+    svelte({
+      compilerOptions: {
+        hydratable: true,
+        customElement: false
+      }
+    }),
     icon(),
     swup({
       theme: false,
@@ -40,6 +50,7 @@ export default defineConfig({
   markdown: {
     shikiConfig: {
       theme: "github-dark-default",
+      wrap: true
     },
     remarkPlugins: [remarkReadingTime, remarkMath],
     rehypePlugins: [
@@ -49,8 +60,21 @@ export default defineConfig({
         rehypeAutolinkHeadings,
         {
           behavior: "prepend",
-        },
+          properties: {
+            class: "heading-anchor",
+            ariaHidden: true
+          }
+        }
       ],
     ],
   },
+  vite: {
+    build: {
+      sourcemap: process.env.NODE_ENV !== 'production',
+      minify: true
+    },
+    resolve: {
+      preserveSymlinks: true
+    }
+  }
 });

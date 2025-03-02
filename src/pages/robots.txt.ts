@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro";
 
 const getRobotsTxt = (sitemapURL: URL) => `
-# Astro generated robots.txt
 User-agent: *
+Allow: /  
 Allow: /_astro/
 Allow: /assets/
 Allow: /fonts/
@@ -27,7 +27,7 @@ export const GET: APIRoute = ({ site }) => {
   return new Response(getRobotsTxt(sitemapURL), {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "public, max-age=3600" // 1 hora de cache
+      "Cache-Control": "public, max-age=3600"
     }
   });
 };

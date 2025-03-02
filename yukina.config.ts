@@ -8,7 +8,7 @@ const YukinaConfig: Configuration = {
 
   description: "A direção para sua viagem inesquecível!",
 
-  site: "https://guiadeviagem.blog",
+  site: "https://www.guiadeviagem.blog",
 
   locale: "pt-BR", // set for website language and date format
 

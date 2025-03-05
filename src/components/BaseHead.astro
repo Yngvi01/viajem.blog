@@ -3,7 +3,7 @@ import YukinaConfig from "../../yukina.config";
 import GlobalStyles from "./GlobalStyles.astro";
 import ScriptSetup from "./ScriptSetup.astro";
 
-const { attractionImage, image = "/images/logo.png" } = Astro.props;
+const { attractionImage, image = "/images/logo.png", description } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 
 ---
@@ -28,6 +28,16 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" href="/favicon.png" type="image/x-icon" />
 <meta name="generator" content={Astro.generator} />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+<meta name="author" content={YukinaConfig.username} />
+<meta name="format-detection" content="telephone=no" />
+<meta name="color-scheme" content="light dark" />
+
+<!-- Security Headers -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
 
 <script
   async
@@ -39,23 +49,28 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 <link rel="canonical" href={canonicalURL} />
 
 <!-- Primary Meta Tags -->
-<title>{YukinaConfig.title}</title>
-<meta name="title" content={YukinaConfig.title} />
-<meta name="description" content={YukinaConfig.description} />
+<title>{Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title}</title>
+<meta name="title" content={Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title} />
+<meta name="description" content={Astro.props.description || YukinaConfig.description} />
+<meta name="keywords" content={YukinaConfig.keywords} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={YukinaConfig.title} />
-<meta property="og:description" content={YukinaConfig.description} />
+<meta property="og:title" content={Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title} />
+<meta property="og:description" content={Astro.props.description || YukinaConfig.description} />
 <meta property="og:image" content={new URL(attractionImage || image, Astro.url).href} />
+<meta property="og:image:alt" content={Astro.props.title || YukinaConfig.title} />
+<meta property="og:locale" content={YukinaConfig.locale} />
+<meta property="og:site_name" content={YukinaConfig.title} />
 
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={YukinaConfig.title} />
-<meta property="twitter:description" content={YukinaConfig.description} />
-<meta property="twitter:image" content={new URL(attractionImage || image, Astro.url).href} />
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={Astro.url} />
+<meta name="twitter:title" content={Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title} />
+<meta name="twitter:description" content={Astro.props.description || YukinaConfig.description} />
+<meta name="twitter:image" content={new URL(attractionImage || image, Astro.url).href} />
+<meta name="twitter:image:alt" content={Astro.props.title || YukinaConfig.title} />
 
 <!-- RSS AutoDiscovery -->
 <link rel="alternate" type="application/rss+xml" title={YukinaConfig.title} href={new URL("rss.xml", Astro.site)} />

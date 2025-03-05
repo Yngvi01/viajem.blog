@@ -3,9 +3,11 @@ import YukinaConfig from "../../yukina.config";
 import BaseHead from "../components/BaseHead.astro";
 ---
 
-<html lang={YukinaConfig.locale || "en"}>
-  <BaseHead />
-  <body class="overflow-y-hidden">
+<html lang={YukinaConfig.locale || "en"} dir="ltr">
+  <head>
+    <BaseHead {...Astro.props} />
+  </head>
+  <body>
     <!-- Google Tag Manager (noscript) -->
     <noscript>
       <iframe
@@ -18,7 +20,10 @@ import BaseHead from "../components/BaseHead.astro";
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <div data-pagefind-body>
-    <slot />
+      <main id="main-content">
+        <slot />
+      </main>
+    </div>
   </body>
 </html>
 

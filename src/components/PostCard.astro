@@ -38,7 +38,7 @@ const { time, wordCount } = props.readingMetadata;
       data-src={props.attraction_image ??
         props.image ??
         GetCoverURLForUnspecifiedEntry(entryID)}
-      alt="CoverPost"
+      alt={`Imagem de capa para o post: ${props.title}`}
     />
     <div class="absolute bottom-2 w-full">
       <div class="mx-2 flex flex-row justify-between">
@@ -154,7 +154,7 @@ const { time, wordCount } = props.readingMetadata;
           data-src={props.attraction_image ??
             props.image ??
             GetCoverURLForUnspecifiedEntry(entryID)}
-          alt="PostCover"
+          alt={`Imagem de capa para o post: ${props.title}`}
         />
       </a>
     </div>

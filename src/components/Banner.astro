@@ -18,17 +18,19 @@ let carouselImgsList = YukinaConfig.banners;
 const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 ---
 
-<div id="banner" class="banner onload-animation-fade-in">
+<div id="banner" class="banner onload-animation-fade-in" role="banner" aria-label="Site banner">
   <div class="transition-main banner-inner h-full w-full">
     {
       !hasHeaderImg && (
-        <div class="carousel">
-          <ul id="carousel_imgs">
+        <div class="carousel" role="region" aria-label="Image carousel">
+          <ul id="carousel_imgs" aria-live="polite">
             {carouselImgsList.map((img, index) => (
               <li
                 class="item lozad"
                 style={{ animationDelay: `${index * 6}s` }}
                 data-background-image={img}
+                role="img"
+                aria-label={`Banner image ${index + 1}`}
               />
             ))}
           </ul>
@@ -41,7 +43,8 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
           <img
             class="item lozad"
             data-src={bannerImage ?? GetCoverURLForUnspecifiedEntry(slug ?? "")}
-            alt="PostCover"
+            alt={title ? `Imagem de capa para: ${title}` : "Imagem de capa do blog"}
+            loading="eager"
           />
         </div>
       )
@@ -62,7 +65,7 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
       </div>
     </div>
   </div>
-  <div class="waves" id="header-waves">
+  <div class="waves" id="header-waves" aria-hidden="true">
     <svg
       class="waves"
       xmlns="http://www.w3.org/2000/svg"
@@ -70,6 +73,8 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
       viewBox="0 24 150 28"
       preserveAspectRatio="none"
       shape-rendering="auto"
+      role="img"
+      aria-label="Decorative wave pattern"
     >
       <defs>
         <path

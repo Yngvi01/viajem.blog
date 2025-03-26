@@ -35,12 +35,14 @@ const props = Astro.props;
 
   <div class="main-container my-10">
     <div class="flex flex-row items-start xl:space-x-4">
-      <div class="side-bar">
+      <aside class="side-bar" aria-label="Barra lateral">
         <SideBar />
-      </div>
+      </aside>
       <div class="transition-leaving w-full space-y-8">
-        <main class="content onload-animation">
-          <slot />
+        <main class="content onload-animation" id="main-content" role="main" aria-label="Conteúdo principal">
+          <article>
+            <slot />
+          </article>
         </main>
         <Footer />
       </div>

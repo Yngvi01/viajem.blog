@@ -1,6 +1,8 @@
 import type { APIRoute } from "astro";
 
 const getRobotsTxt = (sitemapURL: URL) => `
+# Guia de Viagem - Regras para Robots
+
 User-agent: *
 Allow: /  
 Allow: /_astro/
@@ -13,12 +15,28 @@ Disallow: /admin/
 Disallow: /private/
 Disallow: /node_modules/
 
-User-agent: AdsBot-Google
+# Google Bots
+User-agent: Googlebot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Googlebot-Image
 Allow: /
+Crawl-delay: 1
 
+User-agent: Googlebot-Mobile
+Allow: /
+Crawl-delay: 1
+
+User-agent: AdsBot-Google
+Allow: /
+
+# Bing Bots
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Sitemap
 Sitemap: ${sitemapURL.href}
 `;
 

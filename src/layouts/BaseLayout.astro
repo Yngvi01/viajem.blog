@@ -3,7 +3,7 @@ import YukinaConfig from "../../yukina.config";
 import BaseHead from "../components/BaseHead.astro";
 ---
 
-<html lang={YukinaConfig.locale || "en"} dir="ltr">
+<html lang={YukinaConfig.locale || "en"} dir="ltr" itemscope itemtype="https://schema.org/WebPage">
   <head>
     <BaseHead {...Astro.props} />
   </head>
@@ -19,8 +19,9 @@ import BaseHead from "../components/BaseHead.astro";
       ></iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
+    <a href="#main-content" class="skip-link visually-hidden">Pular para o conteúdo principal</a>
     <div data-pagefind-body>
-      <main id="main-content">
+      <main id="main-content" role="main">
         <slot />
       </main>
     </div>

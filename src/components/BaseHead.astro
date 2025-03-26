@@ -53,6 +53,14 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 <meta name="title" content={Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title} />
 <meta name="description" content={Astro.props.description || YukinaConfig.description} />
 <meta name="keywords" content={YukinaConfig.keywords} />
+<meta name="news_keywords" content={YukinaConfig.keywords} />
+<meta name="language" content={YukinaConfig.locale.split('-')[0]} />
+<meta name="revisit-after" content="7 days" />
+<meta name="geo.region" content="BR" />
+<meta name="geo.placename" content="Brasil" />
+<meta name="distribution" content="global" />
+<meta name="rating" content="general" />
+<meta name="copyright" content={`© ${new Date().getFullYear()} ${YukinaConfig.title}`} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
@@ -77,6 +85,59 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 
 <!-- SiteMap -->
 <link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- Schema.org markup for Google -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "${YukinaConfig.title}",
+    "url": "${YukinaConfig.site}",
+    "description": "${YukinaConfig.description}",
+    "inLanguage": "${YukinaConfig.locale}",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "${YukinaConfig.site}/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "sameAs": [
+      "${YukinaConfig.socialLinks[0]?.link || ''}",
+      "${YukinaConfig.socialLinks[1]?.link || ''}"
+    ]
+  }
+</script>
+
+{Astro.props.title && (
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "${Astro.props.title}",
+      "image": "${new URL(attractionImage || image, Astro.url).href}",
+      "author": {
+        "@type": "Person",
+        "name": "${YukinaConfig.username}"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "${YukinaConfig.title}",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "${new URL('/images/logo.png', YukinaConfig.site)}"
+        }
+      },
+      "datePublished": "${new Date().toISOString()}",
+      "dateModified": "${new Date().toISOString()}",
+      "url": "${Astro.url}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "${Astro.url}"
+      },
+      "description": "${Astro.props.description || YukinaConfig.description}",
+      "inLanguage": "${YukinaConfig.locale}"
+    }
+  </script>
+)}
 
 <!-- CSS -->
 <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex/dist/katex.min.css" />

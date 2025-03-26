@@ -22,19 +22,28 @@ const { title, subTitle, bannerImage, published, license, author, sourceLink } =
 
 <Main title={title} subTitle={subTitle} bannerImage={bannerImage}>
   <!-- <Fragment set:html={tocHTMLString} /> -->
-  <div class="article-wrapper">
+  <div class="article-wrapper" itemscope itemtype="https://schema.org/Article">
     <div class="article">
-      <Markdown>
-        <slot />
-      </Markdown>
+      <header>
+        {title && <h1 class="post-title" itemprop="headline">{title}</h1>}
+        {published && <time datetime={published.toISOString()} itemprop="datePublished">{published.toLocaleDateString('pt-BR', {day: 'numeric', month: 'long', year: 'numeric'})}</time>}
+        {author && <span itemprop="author" itemscope itemtype="https://schema.org/Person"><span itemprop="name">{author}</span></span>}
+      </header>
+      <div itemprop="articleBody">
+        <Markdown>
+          <slot />
+        </Markdown>
+      </div>
       {
         published && title && (
-          <CopyRight
-            title={title}
-            published={published}
-            author={author}
-            sourceLink={sourceLink}
-          />
+          <footer>
+            <CopyRight
+              title={title}
+              published={published}
+              author={author}
+              sourceLink={sourceLink}
+            />
+          </footer>
         )
       }
     </div>

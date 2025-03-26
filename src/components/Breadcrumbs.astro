@@ -1,0 +1,93 @@
+---
+// Componente de Breadcrumbs para melhorar SEO
+const { currentPage, title } = Astro.props;
+import YukinaConfig from "../../yukina.config";
+
+// Função para gerar os breadcrumbs com base na URL atual
+const generateBreadcrumbs = (currentPath: string, pageTitle?: string) => {
+  const segments = currentPath.split('/').filter(Boolean);
+  const breadcrumbs = [
+    { name: 'Início', url: '/' }
+  ];
+
+  let currentUrl = '';
+  segments.forEach((segment, index) => {
+    currentUrl += `/${segment}`;
+    
+    // Formatar o nome do segmento para exibição
+    let name = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
+    
+    // Se for o último segmento e temos um título específico, use-o
+    if (index === segments.length - 1 && pageTitle) {
+      name = pageTitle;
+    }
+    
+    breadcrumbs.push({ name, url: currentUrl });
+  });
+
+  return breadcrumbs;
+};
+
+const breadcrumbs = generateBreadcrumbs(Astro.url.pathname, title);
+---
+
+<nav aria-label="Breadcrumb" class="breadcrumbs-container">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList" class="breadcrumbs">
+    {breadcrumbs.map((crumb, index) => (
+      <li 
+        itemprop="itemListElement" 
+        itemscope 
+        itemtype="https://schema.org/ListItem"
+        class={index === breadcrumbs.length - 1 ? 'breadcrumb-item current' : 'breadcrumb-item'}
+      >
+        {index < breadcrumbs.length - 1 ? (
+          <a itemprop="item" href={crumb.url}>
+            <span itemprop="name">{crumb.name}</span>
+          </a>
+        ) : (
+          <span itemprop="name">{crumb.name}</span>
+        )}
+        <meta itemprop="position" content={`${index + 1}`} />
+        {index < breadcrumbs.length - 1 && <span class="separator"> / </span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<!-- Script para gerar dados estruturados de breadcrumbs para SEO -->
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": breadcrumbs.map((crumb, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": crumb.name,
+    "item": new URL(crumb.url, YukinaConfig.site).href
+  }))
+})}></script>
+
+<style>
+  .breadcrumbs-container {
+    @apply mb-4 mt-2 px-2;
+  }
+  
+  .breadcrumbs {
+    @apply flex flex-wrap items-center text-sm;
+  }
+  
+  .breadcrumb-item {
+    @apply flex items-center;
+  }
+  
+  .breadcrumb-item a {
+    @apply text-[var(--primary-color)] hover:underline;
+  }
+  
+  .breadcrumb-item.current {
+    @apply font-medium text-[var(--text-color)];
+  }
+  
+  .separator {
+    @apply mx-2 text-[var(--text-color-lighten)];
+  }
+</style>

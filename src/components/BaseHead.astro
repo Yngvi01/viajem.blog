@@ -87,56 +87,53 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 <link rel="sitemap" href="/sitemap-index.xml" />
 
 <!-- Schema.org markup for Google -->
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "${YukinaConfig.title}",
-    "url": "${YukinaConfig.site}",
-    "description": "${YukinaConfig.description}",
-    "inLanguage": "${YukinaConfig.locale}",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "${YukinaConfig.site}/?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    },
-    "sameAs": [
-      "${YukinaConfig.socialLinks[0]?.link || ''}",
-      "${YukinaConfig.socialLinks[1]?.link || ''}"
-    ]
-  }
-</script>
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": YukinaConfig.title,
+  "url": YukinaConfig.site,
+  "description": YukinaConfig.description,
+  "inLanguage": YukinaConfig.locale,
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": `${YukinaConfig.site}/?q={search_term_string}`,
+    "query-input": "required name=search_term_string"
+  },
+  "sameAs": YukinaConfig.socialLinks
+    .filter(link => link?.link)
+    .map(link => link.link)
+})}></script>
 
 {Astro.props.title && (
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "${Astro.props.title}",
-      "image": "${new URL(attractionImage || image, Astro.url).href}",
-      "author": {
-        "@type": "Person",
-        "name": "${YukinaConfig.username}"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "${YukinaConfig.title}",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "${new URL('/images/logo.png', YukinaConfig.site)}"
-        }
-      },
-      "datePublished": "${new Date().toISOString()}",
-      "dateModified": "${new Date().toISOString()}",
-      "url": "${Astro.url}",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "${Astro.url}"
-      },
-      "description": "${Astro.props.description || YukinaConfig.description}",
-      "inLanguage": "${YukinaConfig.locale}"
-    }
-  </script>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": Astro.props.title,
+    "image": new URL(attractionImage || image, Astro.url).href,
+    "author": {
+      "@type": "Person",
+      "name": YukinaConfig.username
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": YukinaConfig.title,
+      "logo": {
+        "@type": "ImageObject",
+        "url": new URL('/images/logo.png', YukinaConfig.site).href
+      }
+    },
+    "datePublished": new Date().toISOString(),
+    "dateModified": new Date().toISOString(),
+    "url": Astro.url,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": Astro.url
+    },
+    "description": Astro.props.description || YukinaConfig.description,
+    "inLanguage": YukinaConfig.locale,
+    "keywords": YukinaConfig.keywords,
+    "articleSection": "Viagem e Turismo"
+  })}></script>
 )}
 
 <!-- CSS -->

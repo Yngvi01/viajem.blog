@@ -61,6 +61,10 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 <meta name="distribution" content="global" />
 <meta name="rating" content="general" />
 <meta name="copyright" content={`© ${new Date().getFullYear()} ${YukinaConfig.title}`} />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="apple-mobile-web-app-title" content={YukinaConfig.title} />
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
@@ -101,7 +105,15 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
   },
   "sameAs": YukinaConfig.socialLinks
     .filter(link => link?.link)
-    .map(link => link.link)
+    .map(link => link.link),
+  "publisher": {
+    "@type": "Organization",
+    "name": YukinaConfig.title,
+    "logo": {
+      "@type": "ImageObject",
+      "url": new URL('/images/logo.png', YukinaConfig.site).href
+    }
+  }
 })}></script>
 
 {Astro.props.title && (
@@ -132,7 +144,12 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
     "description": Astro.props.description || YukinaConfig.description,
     "inLanguage": YukinaConfig.locale,
     "keywords": YukinaConfig.keywords,
-    "articleSection": "Viagem e Turismo"
+    "articleSection": "Viagem e Turismo",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": ["h1", "h2", ".article-body"]
+  },
+  "isAccessibleForFree": "True"
   })}></script>
 )}
 

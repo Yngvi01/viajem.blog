@@ -5,6 +5,8 @@ interface Configuration {
   subTitle: string;
   brandTitle: string;
 
+  keywords: string;
+
   description: string;
 
   site: string;

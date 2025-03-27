@@ -8,7 +8,7 @@ const YukinaConfig: Configuration = {
 
   description: "A direção para sua viagem inesquecível! Dicas, roteiros e experiências para planejar sua próxima aventura.",
 
-  site: "https://www.guiadeviagem.blog",
+  site: "https://guiadeviagem.blog",
   
   keywords: "viagem, turismo, dicas de viagem, roteiros de viagem, destinos turísticos, guia de viagem, melhores lugares para visitar, planejamento de viagem, férias, hospedagem, passeios, aventura, Brasil, internacional",
 

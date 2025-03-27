@@ -5,7 +5,7 @@
       "has": [
         {
           "type": "host",
-          "value": "www.guiadeviagem.blog"
+          "value": "https://www.guiadeviagem.blog"
         }
       ],
       "destination": "https://guiadeviagem.blog/:path*",

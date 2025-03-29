@@ -35,9 +35,7 @@ const { time, wordCount } = props.readingMetadata;
   >
     <img
       class="lozad absolute left-0 top-0 h-full w-full rounded-t-3xl object-cover lg:hidden"
-      data-src={props.attraction_image ??
-        props.image ??
-        GetCoverURLForUnspecifiedEntry(entryID)}
+      data-src={props.image ?? props.attraction_image ?? GetCoverURLForUnspecifiedEntry(entryID)}
       alt={`Imagem de capa para o post: ${props.title}`}
     />
     <div class="absolute bottom-2 w-full">

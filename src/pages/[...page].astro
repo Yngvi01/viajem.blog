@@ -34,7 +34,7 @@ const { page } = Astro.props;
               category={entry.data.category}
               tags={entry.data.tags}
               description={entry.data.description}
-              image={entry.data.cover}
+              image={entry.data.cover || entry.data.image || entry.data.attraction_image}
               attraction_image={entry.data.attraction_image}
               readingMetadata={
                 (entry.rendered!.metadata as any).frontmatter.readingMetadata

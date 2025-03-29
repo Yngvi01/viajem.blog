@@ -18,9 +18,9 @@ tags:
 category: Roteiros
 author: emn178
 sourceLink: "https://www.visitcanela.com/roteiro-romantico"
-image: /images/roteiro.jpg
-attraction_image: /images/roteiro-casal.jpg
-meta_image: /images/roteiro-casal.jpg
+image: src/images/roteiro.jpg
+attraction_image: src/images/roteiro-casal.jpg
+meta_image: src/images/roteiro-casal.jpg
 draft: false
 ---
 

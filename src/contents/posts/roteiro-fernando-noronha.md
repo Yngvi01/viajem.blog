@@ -17,9 +17,9 @@ tags:
 category: Roteiros
 author: emn178
 sourceLink: "https://www.fernandodenoronha.pe.gov.br/turismo"
-image: /images/roteiro.jpg
+image: src/images/roteiro.jpg
 attraction_image: https://cdn.pixabay.com/photo/2019/10/31/01/29/fernando-de-noronha-4590866_1280.jpg
-meta_image: /images/roteiro-fernando.jpeg
+meta_image: src/images/roteiro-fernando.jpeg
 draft: false
 ---
 # Roteiro Completo em Fernando de Noronha – Paraíso Ecológico (2025)

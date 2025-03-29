@@ -17,9 +17,9 @@ tags:
 category: Roteiros
 author: emn178
 sourceLink: "https://www.lençóis-maranhenses.com.br/turismo"
-image: /images/roteiro.jpg
-attraction_image: /images/lencois.jpg
-meta_image: /images/lencois.jpg
+image: src/images/roteiro.jpg
+attraction_image: src/images/lencois.jpg
+meta_image: src/images/lencois.jpg
 draft: false
 ---
 # Roteiro Completo para os Lençóis Maranhenses – Oásis de Dunas e Lagoas (2025)

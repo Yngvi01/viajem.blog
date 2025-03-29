@@ -17,9 +17,9 @@ tags:
 category: Gramado
 author: emn178
 sourceLink: "https://www.gramado.rs.gov.br/turismo"
-image: /images/gramado.jpg
-attraction_image: /images/igreja-sao-pedro.jpg
-meta_image: /images/igreja-sao-pedro.jpg
+image: src/images/gramado.jpg
+attraction_image: src/images/igreja-sao-pedro.jpg
+meta_image: src/images/igreja-sao-pedro.jpg
 draft: false
 ---
 

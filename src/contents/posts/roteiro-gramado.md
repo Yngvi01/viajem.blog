@@ -17,9 +17,9 @@ tags:
 category: Roteiros
 author: emn178
 sourceLink: "https://www.gramado.rs.gov.br/turismo"
-image: /images/gramado.jpg
-attraction_image: /images/roteiro-gramado.jpeg
-meta_image: /images/roteiro-gramado.jpeg
+image: src/images/gramado.jpg
+attraction_image: src/images/roteiro-gramado.jpeg
+meta_image: src/images/roteiro-gramado.jpeg
 draft: false
 ---
 

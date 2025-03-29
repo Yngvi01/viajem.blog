@@ -18,7 +18,7 @@ author: emn178
 sourceLink: "https://www.tangol.com/blog/por/5-dias-no-rio-de-janeiro-roteiro-para-a-primeira-visita"
 image: /images/rio.jpg
 attraction_image: https://img.freepik.com/fotos-gratis/paisagem-do-rio-de-janeiro-cercada-pelo-mar-sob-um-ceu-azul-no-brasil_181624-17265.jpg?t=st=1739216789~exp=1739220389~hmac=7c8911092ded07724797b62f9ccf66ca8d1ba5e52d0ac187c71e6f2768023e43&w=740
-meta_image: /images/roteiro-rio.jpeg
+meta_image: src/images/roteiro-rio.jpeg
 draft: false
 ---
 # Roteiro Completo: O Que Fazer no Rio de Janeiro em 5 Dias (2025)

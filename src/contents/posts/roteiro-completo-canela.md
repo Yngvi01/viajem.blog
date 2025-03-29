@@ -17,9 +17,9 @@ tags:
 category: Roteiros
 author: emn178
 sourceLink: "https://www.visitcanela.com/roteiro-completo"
-image: /images/roteiro.jpg  
-attraction_image: /images/roteiro-canela.jpeg  
-meta_image: /images/roteiro-canela.jpeg  
+image: src/images/roteiro.jpg  
+attraction_image: src/images/roteiro-canela.jpeg  
+meta_image: src/images/roteiro-canela.jpeg  
 draft: false
 ---
 

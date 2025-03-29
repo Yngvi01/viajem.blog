@@ -18,8 +18,8 @@ category: Canela
 author: emn178
 sourceLink: "https://www.canela.rs.gov.br/turismo"
 image: "https://images.pexels.com/photos/6665803/pexels-photo-6665803.jpeg"
-attraction_image: /images/igreja-de-pedra.jpg
-meta_image: /images/igreja-de-pedra.jpg
+attraction_image: src/images/igreja-de-pedra.jpg
+meta_image: src/images/igreja-de-pedra.jpg
 draft: false
 ---
 

@@ -3,7 +3,7 @@ import YukinaConfig from "../../yukina.config";
 import GlobalStyles from "./GlobalStyles.astro";
 import ScriptSetup from "./ScriptSetup.astro";
 
-const { attractionImage, image = "/images/logo.png", description } = Astro.props;
+const { attractionImage, image = "src/images/logo.png", description } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 
 ---
@@ -111,7 +111,7 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
     "name": YukinaConfig.title,
     "logo": {
       "@type": "ImageObject",
-      "url": new URL('/images/logo.png', YukinaConfig.site).href
+      "url": new URL('src/images/logo.png', YukinaConfig.site).href
     }
   }
 })}></script>
@@ -131,7 +131,7 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
       "name": YukinaConfig.title,
       "logo": {
         "@type": "ImageObject",
-        "url": new URL('/images/logo.png', YukinaConfig.site).href
+        "url": new URL('src/images/logo.png', YukinaConfig.site).href
       }
     },
     "datePublished": new Date().toISOString(),

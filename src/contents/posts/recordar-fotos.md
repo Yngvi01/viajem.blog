@@ -17,9 +17,9 @@ tags:
 category: Gramado
 author: emn178
 sourceLink: "https://recordarfotos.com.br/"
-image: /images/gramado.jpg
-attraction_image: /images/recordar-fotos.jpg
-meta_image: /images/recordar-fotos.jpg
+image: src/images/gramado.jpg
+attraction_image: src/images/recordar-fotos.jpg
+meta_image: src/images/recordar-fotos.jpg
 draft: false
 ---
 

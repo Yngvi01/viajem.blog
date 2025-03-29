@@ -5,6 +5,7 @@ export const pt_BR: Translation = {
   [key.copy_right_author]: "Autor",
   [key.copy_right_publish_date]: "Data de publicação",
   [key.copy_right_license]: "Licença",
+  [key.source_link]: "Link da fonte",
 
   [key.nav_bar_home]: "Início",
   [key.nav_bar_archive]: "Destinos",

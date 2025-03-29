@@ -5,6 +5,7 @@ export const zh_CN: Translation = {
   [key.copy_right_author]: "作者",
   [key.copy_right_publish_date]: "发布日期",
   [key.copy_right_license]: "许可证",
+  [key.source_link]: "源链接",
 
   [key.nav_bar_home]: "首页",
   [key.nav_bar_archive]: "归档",

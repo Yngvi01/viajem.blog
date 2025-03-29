@@ -14,7 +14,7 @@ const categories = await GetCategories();
       Array.from(categories.values()).map((category) => (
         <div
           class="city-card"
-          style={`background-image: url('${category.image}')`}
+          style={`background-image: url('${category.image ? (category.image.startsWith("src/") ? "/" + category.image : category.image) : "/images/default-category-banner.svg"}')`}
         >
           <Link href={`/categorias/${category.slug}`} class="city-link">
             <div class="city-content">

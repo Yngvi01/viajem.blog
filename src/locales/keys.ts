@@ -2,6 +2,7 @@ enum I18nKeys {
   copy_right_author = "copy_right_author",
   copy_right_publish_date = "copy_right_publish_date",
   copy_right_license = "copy_right_license",
+  source_link = "source_link",
 
   nav_bar_home = "nav_bar_home",
   nav_bar_archive = "nav_bar_archive",

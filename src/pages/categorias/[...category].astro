@@ -18,7 +18,7 @@ const categoryData = categorias.get(category);
 const categoryBanner = {
   title: categoryData?.name || "Categoria",
   subTitle: categoryData?.description || "Escolha o seu artigo!",
-  bannerImage: categoryData?.image || "/images/default-category-banner.jpg",
+  bannerImage: categoryData?.image ? (categoryData.image.startsWith("src/") ? "/" + categoryData.image : categoryData.image) : "/images/default-category-banner.svg",
 };
 
 const posts = categoryData?.posts || [];
@@ -36,7 +36,7 @@ const posts = categoryData?.posts || [];
           posts.map((entry) => (
             <div
               class="city-card"
-              style={`background-image: url('${entry.data.attraction_image ? (entry.data.attraction_image.startsWith("src/") ? "/" + entry.data.attraction_image : entry.data.attraction_image) : "/images/default-attraction.jpg"}')`}
+              style={`background-image: url('${entry.data.attraction_image ? (entry.data.attraction_image.startsWith("src/") ? "/" + entry.data.attraction_image : entry.data.attraction_image) : "/images/default-attraction.svg"}')`}
               data-pagefind-body
               data-pagefind-weight="10"
               data-pagefind-meta="title"

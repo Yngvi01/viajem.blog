@@ -36,7 +36,7 @@ const posts = categoryData?.posts || [];
           posts.map((entry) => (
             <div
               class="city-card"
-              style={`background-image: url('${entry.data.image || "/images/default-attraction.jpg"}')`}
+              style={`background-image: url('${entry.data.attraction_image ? (entry.data.attraction_image.startsWith("src/") ? "/" + entry.data.attraction_image : entry.data.attraction_image) : "/images/default-attraction.jpg"}')`}
               data-pagefind-body
               data-pagefind-weight="10"
               data-pagefind-meta="title"

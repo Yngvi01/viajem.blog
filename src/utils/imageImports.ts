@@ -25,9 +25,35 @@ imageMap['images/default-attraction.jpg'] = defaultAttraction;
 export function getImageSource(imagePath: string | undefined) {
   if (!imagePath) return defaultAttraction;
   
-  // Se for uma URL externa ou caminho absoluto, retorna o caminho diretamente
-  if (imagePath.startsWith('http') || imagePath.startsWith('/')) {
+  // Se for uma URL externa, retorna o caminho diretamente
+  if (imagePath.startsWith('http')) {
     return imagePath;
+  }
+  
+  // Se for um caminho absoluto, corrige para não incluir o prefixo '/posts'
+  if (imagePath.startsWith('/')) {
+    // Remove o prefixo '/posts' se existir
+    if (imagePath.startsWith('/posts/')) {
+      imagePath = imagePath.replace('/posts/', '/');
+    }
+    return imagePath;
+  }
+  
+  // Verifica se o caminho começa com 'src/' e converte para um caminho absoluto
+  if (imagePath.startsWith('src/')) {
+    // Verifica se o caminho contém 'src/images/'
+    if (imagePath.startsWith('src/images/')) {
+      // Usa o imageMap para obter a imagem importada diretamente
+      const normalizedPath = imagePath.replace('src/', '');
+      if (normalizedPath in imageMap) {
+        return imageMap[normalizedPath];
+      }
+      // Se não encontrar no mapa, retorna o caminho absoluto
+      return '/' + imagePath;
+    } else {
+      // Para outros caminhos que começam com 'src/' mas não são imagens
+      return '/' + imagePath;
+    }
   }
   
   // Normaliza o caminho removendo 'src/' se existir

@@ -131,6 +131,7 @@ const navCount = YukinaConfig.navigators.length;
   .brand button {
     @apply mr-2 flex h-[44px] w-[44px] flex-row items-center rounded-lg text-[var(--text-color)] transition-all;
     @apply hover:bg-[var(--primary-color-hover)] hover:text-[var(--primary-color)];
+    @apply lg:hidden;
   }
 
   .brand .icon {
@@ -179,6 +180,19 @@ const navCount = YukinaConfig.navigators.length;
   }
 
   .toolbar .icon {
+    @apply stroke-2 text-xl;
+  }
+
+  .theme {
+    @apply flex items-center;
+  }
+
+  .theme button {
+    @apply flex w-11 justify-center rounded-lg py-2 text-[var(--text-color)] transition-all;
+    @apply hover:bg-[var(--primary-color-hover)] hover:text-[var(--primary-color)];
+  }
+
+  .theme .icon {
     @apply stroke-2 text-xl;
   }
 
@@ -317,6 +331,9 @@ const navCount = YukinaConfig.navigators.length;
   document.addEventListener("DOMContentLoaded", () => {
     setTheme(currentTheme);
     menuIconClosed.style.display = "block";
+    menuIconOpened.style.display = "none";
+    themeIconLight.style.display = currentTheme === "light" ? "block" : "none";
+    themeIconDark.style.display = currentTheme === "dark" ? "block" : "none";
   });
 
   // fold nav bar when scroll down

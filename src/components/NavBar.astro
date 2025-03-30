@@ -25,13 +25,15 @@ const navCount = YukinaConfig.navigators.length;
           id="menu-icon-closed"
           size={24}
           name="line-md:close-to-menu-transition"
-          class="mx-auto hidden"
+          class="mx-auto"
+          style="display: block;"
         />
         <Icon
           id="menu-icon-opened"
           size={24}
           name="line-md:menu-to-close-transition"
-          class="mx-auto hidden"
+          class="mx-auto"
+          style="display: none;"
         />
       </button>
       <a class="title" href="/">
@@ -70,13 +72,15 @@ const navCount = YukinaConfig.navigators.length;
             id="theme-icon-light"
             name="line-md:moon-alt-to-sunny-outline-loop-transition"
             size={24}
-            class="hidden"
+            class=""
+            style=""
           />
           <Icon
             id="theme-icon-dark"
             name="line-md:sunny-outline-to-moon-alt-loop-transition"
             size={24}
-            class="hidden"
+            class=""
+            style=""
           />
         </button>
       </div>
@@ -222,130 +226,125 @@ const navCount = YukinaConfig.navigators.length;
   }
 </style>
 
-<script>
+<script is:inline>
   /**
    * Reinitializes an SVG icon by cloning it and replacing the original icon with the clone.
    *
    * @param icon - The SVG element to be reinitialized.
    * @returns The cloned SVG element that replaced the original.
    */
-  const reinitializeIcon = (icon: SVGElement) => {
-    const cloned = icon.cloneNode(true) as SVGElement;
+  const reinitializeIcon = (icon) => {
+    const cloned = icon.cloneNode(true);
     icon.parentNode?.replaceChild(cloned, icon);
     return cloned;
   };
 
-  // get elements
-  const menuSwitcher = document.getElementById(
-    "menu-switcher",
-  ) as HTMLButtonElement;
-  const mobileMenuNav = document.getElementById(
-    "mobile-menu-nav",
-  ) as HTMLUListElement;
-  const mobileMenuNavItems = document.getElementsByClassName("mobile-nav-item");
-  let menuIconClosed = document.getElementById(
-    "menu-icon-closed",
-  ) as any as SVGElement;
-  let menuIconOpened = document.getElementById(
-    "menu-icon-opened",
-  ) as any as SVGElement;
-
   // menu state
   let isMenuOpen = false;
-
-  // switch menu open / close
-  const switchMenuState = () => {
-    menuIconClosed.style.display = isMenuOpen ? "block" : "none";
-    menuIconOpened.style.display = !isMenuOpen ? "block" : "none";
-    if (isMenuOpen) menuIconClosed = reinitializeIcon(menuIconClosed);
-    else menuIconOpened = reinitializeIcon(menuIconOpened);
-    if (isMenuOpen) {
-      mobileMenuNav.classList.replace(
-        "mobile-menu-nav-opened",
-        "mobile-menu-nav-closed",
-      );
-    } else {
-      mobileMenuNav.classList.replace(
-        "mobile-menu-nav-closed",
-        "mobile-menu-nav-opened",
-      );
-    }
-    isMenuOpen = !isMenuOpen;
-  };
-
-  // click menu item then close menu
-  menuSwitcher.addEventListener("click", switchMenuState);
-  for (let i = 0; i < mobileMenuNavItems.length; ++i) {
-    mobileMenuNavItems.item(i)?.addEventListener("click", switchMenuState);
-  }
-  // click other elements then close menu
-  document.addEventListener("click", (event) => {
-    if (
-      !menuSwitcher.contains(event.target as any) &&
-      !mobileMenuNav.contains(event.target as any) &&
-      isMenuOpen
-    ) {
-      switchMenuState();
-    }
-  });
-
-  // Theme switcher
-  // Get elements
-  const themeSwitcher = document.getElementById(
-    "theme-switcher",
-  ) as HTMLButtonElement;
-  let themeIconLight = document.getElementById(
-    "theme-icon-light",
-  ) as any as SVGElement;
-  let themeIconDark = document.getElementById(
-    "theme-icon-dark",
-  ) as any as SVGElement;
-
-  // Record the current theme
   let currentTheme = localStorage.getItem("theme") || "light";
 
-  // Set theme
-  const setTheme = (theme: string) => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-    currentTheme = theme;
-
-    // Show/hide icons for different themes
-    themeIconDark.style.display = theme === "dark" ? "block" : "none";
-    themeIconLight.style.display = theme === "light" ? "block" : "none";
-
-    // If the theme is dark, update the dark icon; otherwise, update the light icon
-    if (theme === "dark") themeIconDark = reinitializeIcon(themeIconDark);
-    else themeIconLight = reinitializeIcon(themeIconLight);
-
-    // Toggle dark class
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  };
-
-  // Click to switch theme
-  themeSwitcher.addEventListener("click", () => {
-    setTheme(currentTheme === "light" ? "dark" : "light");
-  });
-
-  // Initialize
-  document.addEventListener("DOMContentLoaded", () => {
-    setTheme(currentTheme);
-    menuIconClosed.style.display = "block";
-    menuIconOpened.style.display = "none";
-    themeIconLight.style.display = currentTheme === "light" ? "block" : "none";
-    themeIconDark.style.display = currentTheme === "dark" ? "block" : "none";
-  });
-
+  // Function to update the UI based on current state
+  function updateUI() {
+    // Get all elements
+    const menuIconClosed = document.getElementById("menu-icon-closed");
+    const menuIconOpened = document.getElementById("menu-icon-opened");
+    const mobileMenuNav = document.getElementById("mobile-menu-nav");
+    const themeIconLight = document.getElementById("theme-icon-light");
+    const themeIconDark = document.getElementById("theme-icon-dark");
+    
+    // Update menu state
+    if (menuIconClosed && menuIconOpened) {
+      menuIconClosed.style.display = isMenuOpen ? "none" : "block";
+      menuIconOpened.style.display = isMenuOpen ? "block" : "none";
+    }
+    
+    // Update theme state
+    if (themeIconLight && themeIconDark) {
+      themeIconLight.style.display = currentTheme === "light" ? "block" : "none";
+      themeIconDark.style.display = currentTheme === "dark" ? "block" : "none";
+    }
+    
+    // Update mobile menu state
+    if (mobileMenuNav) {
+      if (isMenuOpen) {
+        mobileMenuNav.classList.remove("mobile-menu-nav-closed");
+        mobileMenuNav.classList.add("mobile-menu-nav-opened");
+      } else {
+        mobileMenuNav.classList.remove("mobile-menu-nav-opened");
+        mobileMenuNav.classList.add("mobile-menu-nav-closed");
+      }
+    }
+    
+    // Update document theme
+    document.documentElement.setAttribute("data-theme", currentTheme);
+    document.documentElement.classList.toggle("dark", currentTheme === "dark");
+  }
+  
+  // Toggle menu state
+  function toggleMenu() {
+    isMenuOpen = !isMenuOpen;
+    updateUI();
+  }
+  
+  // Toggle theme
+  function toggleTheme() {
+    currentTheme = currentTheme === "light" ? "dark" : "light";
+    localStorage.setItem("theme", currentTheme);
+    updateUI();
+  }
+  
+  // Setup click handlers
+  function setupClickHandlers() {
+    const menuSwitcher = document.getElementById("menu-switcher");
+    const themeSwitcher = document.getElementById("theme-switcher");
+    const mobileNavItems = document.getElementsByClassName("mobile-nav-item");
+    
+    // Set direct onclick handlers
+    if (menuSwitcher) menuSwitcher.onclick = toggleMenu;
+    if (themeSwitcher) themeSwitcher.onclick = toggleTheme;
+    
+    // Set mobile menu item click handlers
+    for (let i = 0; i < mobileNavItems.length; i++) {
+      if (mobileNavItems[i]) mobileNavItems[i].onclick = toggleMenu;
+    }
+    
+    // Handle clicks outside menu to close
+    document.onclick = function(event) {
+      const menuSwitcher = document.getElementById("menu-switcher");
+      const mobileMenuNav = document.getElementById("mobile-menu-nav");
+      
+      if (isMenuOpen && 
+          menuSwitcher && !menuSwitcher.contains(event.target) && 
+          mobileMenuNav && !mobileMenuNav.contains(event.target)) {
+        toggleMenu();
+      }
+    };
+  }
+  
+  // Initialize everything
+  function initAll() {
+    updateUI();
+    setupClickHandlers();
+  }
+  
+  // Run on load and at intervals to handle navigation
+  initAll();
+  document.addEventListener("DOMContentLoaded", initAll);
+  setInterval(initAll, 100);
+  
   // fold nav bar when scroll down
-  const navBarElement = document.getElementById("nav");
-  const bannerElement = document.getElementById("banner");
-  const bannerHeight = bannerElement!.offsetHeight - 50;
   let lastYPos = 0;
   window.addEventListener("scroll", () => {
-    if (bannerHeight < window.scrollY && window.scrollY > lastYPos) {
-      navBarElement!.style.top = "-72px";
-    } else {
-      navBarElement!.style.top = "0";
+    const navBarElement = document.getElementById("nav");
+    const bannerElement = document.getElementById("banner");
+    const bannerHeight = bannerElement ? bannerElement.offsetHeight - 50 : 0;
+    
+    if (navBarElement) {
+      if (bannerHeight < window.scrollY && window.scrollY > lastYPos) {
+        navBarElement.style.top = "-72px";
+      } else {
+        navBarElement.style.top = "0";
+      }
     }
     lastYPos = window.scrollY;
   });

@@ -1,0 +1,9 @@
+[33mcommit 8d0d390d64235e2a6875dde483a87edce663b2ed[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Yngvi01 <yngvi161616@gmail.com>
+Date:   Sun Mar 30 16:40:39 2025 -0300
+
+    aJUSTES FINOS
+
+M	pnpm-lock.yaml
+M	src/pages/categorias/[...category].astro
+M	src/pages/destinos.astro

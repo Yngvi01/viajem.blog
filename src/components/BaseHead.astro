@@ -163,8 +163,8 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 )}
 
 <!-- Carregamento Assíncrono de CSS -->
-<link rel="preload" href="https://fastly.jsdelivr.net/npm/katex/dist/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex/dist/katex.min.css"></noscript>
+<link rel="preload" href="/assets/katex/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="/assets/katex/katex.min.css"></noscript>
 
 <GlobalStyles />
 <ScriptSetup />

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { OverlayScrollbars } from "overlayscrollbars";
+  // Importar OverlayScrollbars sob demanda quando necessário
+  let OverlayScrollbars: any;
   import Icon from "@iconify/svelte";
 
   import I18nKeys from "../locales/keys";
@@ -9,6 +10,9 @@
   let searchKeyword = "";
   let searchResult: any[] = [];
   let searchBarDisplay = false;
+  let searchInitialized = false;
+  let isSearching = false;
+  let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
   let resultPannel: HTMLDivElement;
   let searchBar: HTMLDivElement;
@@ -17,13 +21,26 @@
   let search = (keyword: string) => {};
 
   onMount(async () => {
-    // setup overlay scrollbars
-    OverlayScrollbars(resultPannel, {
-      scrollbars: {
-        theme: "scrollbar-base scrollbar-auto py-1",
-        autoHide: "move",
-      },
-    });
+    searchInitialized = true;
+    
+    // setup overlay scrollbars apenas quando houver resultados
+    const initScrollbars = async () => {
+      // Atrasar carregamento até ser realmente necessário
+      if (!OverlayScrollbars) {
+        const module = await import("overlayscrollbars");
+        OverlayScrollbars = module.OverlayScrollbars;
+      }
+      
+      // Usar requestAnimationFrame para sincronizar com a renderização
+      requestAnimationFrame(() => {
+        OverlayScrollbars(resultPannel, {
+          scrollbars: {
+            theme: "scrollbar-base scrollbar-auto py-1",
+            autoHide: "move",
+          },
+        });
+      });
+    };
 
     /**
      * Asynchronously performs a search based on the provided keyword.
@@ -32,56 +49,171 @@
      * Toggles the visibility and height of the results panel based on the outcome.
      */
     search = async (keyword: string) => {
-      let searchResultArr = [];
-
-      // @ts-ignore
-      const ret = await pagefind.search(keyword);
-      for (const item of ret.results) {
-        searchResultArr.push(await item.data());
+      // Evitar buscas repetidas do mesmo termo
+      if (isSearching) return;
+      
+      // Cancelar busca anterior se estiver em progresso
+      if (searchTimeout) {
+        clearTimeout(searchTimeout);
       }
-      searchResult = searchResultArr;
-
-      const searchResultVisable = keyword != "" && searchResult.length != 0;
-
-      if (searchResultVisable) {
-        resultPannel.style.height = `${searchResultArr.length * 84 + 16}px`;
-        resultPannel.style.opacity = "100%";
-      } else {
-        resultPannel.style.height = "0px";
-        resultPannel.style.opacity = "0";
-      }
+      
+      // Debounce para evitar buscas enquanto o usuário digita
+      searchTimeout = setTimeout(async () => {
+        if (keyword.trim().length < 2) {
+          searchResult = [];
+          updateResultPanel(false);
+          return;
+        }
+        
+        isSearching = true;
+        
+        try {
+          let searchResultArr = [];
+          
+          // Envolver operação pesada em uma Promise e executeAsync para liberar a thread principal
+          await new Promise<void>(resolve => {
+            // Usar setTimeout de 0 para permitir que a UI responda enquanto processamos
+            setTimeout(async () => {
+              try {
+                // @ts-ignore
+                const ret = await pagefind.search(keyword);
+                
+                // Processar resultados em lotes para reduzir bloqueio
+                const results = ret.results;
+                const batchSize = 5;
+                
+                for (let i = 0; i < results.length; i += batchSize) {
+                  const batch = results.slice(i, i + batchSize);
+                  const batchResults = await Promise.all(
+                    batch.map(item => item.data())
+                  );
+                  
+                  searchResultArr = [...searchResultArr, ...batchResults];
+                  
+                  // Se for o primeiro lote, já atualizamos a UI para feedback mais rápido
+                  if (i === 0) {
+                    searchResult = [...searchResultArr];
+                    updateResultPanel(true);
+                    
+                    // Inicializar scrollbars se temos resultados suficientes
+                    if (searchResultArr.length > 5) {
+                      initScrollbars();
+                    }
+                  }
+                  
+                  // Pequena pausa entre lotes para permitir que a UI responda
+                  if (i + batchSize < results.length) {
+                    await new Promise(r => setTimeout(r, 10));
+                  }
+                }
+                
+                // Atualizar com todos os resultados
+                searchResult = searchResultArr;
+                updateResultPanel(searchResultArr.length > 0);
+              } catch (error) {
+                console.error("Erro na busca:", error);
+                searchResult = [];
+                updateResultPanel(false);
+              }
+              
+              resolve();
+            }, 0);
+          });
+        } finally {
+          isSearching = false;
+          searchTimeout = null;
+        }
+      }, 250); // Debounce de 250ms
+    };
+    
+    // Separar a atualização visual da lógica de busca
+    const updateResultPanel = (shouldShow: boolean) => {
+      requestAnimationFrame(() => {
+        if (shouldShow) {
+          resultPannel.style.height = `${Math.min(searchResult.length * 84 + 16, 436)}px`;
+          resultPannel.style.opacity = "100%";
+        } else {
+          resultPannel.style.height = "0px";
+          resultPannel.style.opacity = "0";
+        }
+      });
     };
   });
 
-  // handle click outside to closed search pannel
-  document.addEventListener("click", (event) => {
-    if (
-      !resultPannel.contains(event.target as any) &&
-      !searchBar.contains(event.target as any) &&
-      !searchButton.contains(event.target as any)
-    ) {
-      searchBar.style.height = "0px";
-      searchBar.style.opacity = "0";
-      searchBarDisplay = false;
-      searchKeyword = "";
-      search("");
-    }
-  });
+  // Otimizar event listener com cleanup e delegação
+  if (typeof document !== 'undefined') {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (!searchInitialized) return;
+      
+      const target = event.target as Node;
+      if (
+        resultPannel && 
+        searchBar && 
+        searchButton &&
+        !resultPannel.contains(target) &&
+        !searchBar.contains(target) &&
+        !searchButton.contains(target)
+      ) {
+        if (searchTimeout) {
+          clearTimeout(searchTimeout);
+          searchTimeout = null;
+        }
+        
+        // Usar requestAnimationFrame para operações visuais
+        requestAnimationFrame(() => {
+          searchBar.style.height = "0px";
+          searchBar.style.opacity = "0";
+          resultPannel.style.height = "0px";
+          resultPannel.style.opacity = "0";
+        });
+        
+        searchBarDisplay = false;
+        searchResult = [];
+        searchKeyword = "";
+      }
+    };
+    
+    document.addEventListener("click", handleOutsideClick);
+    
+    // Cleanup listener on component destruction
+    onMount(() => {
+      return () => {
+        document.removeEventListener("click", handleOutsideClick);
+      };
+    });
+  }
 
+  // Otimizar toggle do search bar
   const toggleSearchBar = () => {
     searchBarDisplay = !searchBarDisplay;
-    if (searchBarDisplay) {
-      searchBar.style.height = "48px";
-      searchBar.style.opacity = "100%";
-    } else {
-      searchBar.style.height = "0px";
-      searchBar.style.opacity = "0";
-      searchKeyword = "";
-      search("");
-    }
+    
+    // Usar requestAnimationFrame para operações visuais
+    requestAnimationFrame(() => {
+      if (searchBarDisplay) {
+        searchBar.style.height = "48px";
+        searchBar.style.opacity = "100%";
+      } else {
+        searchBar.style.height = "0px";
+        searchBar.style.opacity = "0";
+        resultPannel.style.height = "0px";
+        resultPannel.style.opacity = "0";
+        
+        searchKeyword = "";
+        searchResult = [];
+        if (searchTimeout) {
+          clearTimeout(searchTimeout);
+          searchTimeout = null;
+        }
+      }
+    });
   };
 
-  $: search(searchKeyword);
+  // Implementar debounce reativo para a busca
+  $: {
+    if (searchInitialized && searchBarDisplay) {
+      search(searchKeyword);
+    }
+  }
 </script>
 
 <div class="lg:hidden">
@@ -118,7 +250,7 @@
         type="text"
         autocomplete="off"
         on:focus={() => {
-          search(searchKeyword);
+          if (searchBarDisplay) search(searchKeyword);
         }}
         bind:value={searchKeyword}
       />

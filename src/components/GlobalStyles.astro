@@ -5,8 +5,60 @@ import "../styles/transitions.css";
 import "../styles/searchbar.css";
 import "../styles/markdown.css";
 import "../styles/accessibility.css";
-import "overlayscrollbars/overlayscrollbars.css";
 ---
+
+<script>
+  // Carregar apenas quando necessário usando Intersection Observer
+  // para detectar a necessidade real de scrollbars personalizados
+  const loadScrollbarStyles = () => {
+    // Detectar elementos que precisariam de scrollbar personalizado
+    const detectScrollableContent = () => {
+      // Verificar se temos elementos que realmente precisam de scrollbar personalizado
+      const hasCodeBlocks = document.querySelectorAll('pre').length > 0;
+      const isLongContent = document.body.scrollHeight > window.innerHeight * 1.5;
+      
+      return hasCodeBlocks || isLongContent;
+    };
+    
+    // Usar requestIdleCallback para não bloquear o carregamento inicial
+    const checkAndLoadStyles = () => {
+      if (detectScrollableContent()) {
+        // Importar CSS diretamente do node_modules usando ESM dinâmico
+        import('overlayscrollbars/overlayscrollbars.css')
+          .catch(error => {
+            console.warn('Erro ao carregar CSS de OverlayScrollbars:', error);
+          });
+      }
+    };
+    
+    // Usar API de carregamento preguiçoso quando disponível
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(checkAndLoadStyles, { timeout: 2000 });
+    } else {
+      // Fallback para browsers mais antigos
+      setTimeout(checkAndLoadStyles, 1000);
+    }
+  };
+
+  // Inicializar verificação uma vez que o DOM estiver pronto
+  // Usar { once: true } para remover o listener automaticamente após execução
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadScrollbarStyles, { once: true });
+  } else {
+    loadScrollbarStyles();
+  }
+  
+  // Adicionar suporte para navegação SPA com Swup
+  if (typeof window !== 'undefined') {
+    if (window.swup?.hooks) {
+      window.swup.hooks.on("content:replace", loadScrollbarStyles);
+    } else {
+      document.addEventListener("swup:enable", () => {
+        window.swup.hooks.on("content:replace", loadScrollbarStyles);
+      }, { once: true });
+    }
+  }
+</script>
 
 <style is:global>
   :root {

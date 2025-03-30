@@ -4,9 +4,18 @@
 
 <script>
   import lozad from "lozad";
-  import { OverlayScrollbars } from "overlayscrollbars";
+  
+  // Importar OverlayScrollbars sob demanda
+  let OverlayScrollbars: any;
+  const loadOverlayScrollbars = async () => {
+    if (!OverlayScrollbars) {
+      const module = await import("overlayscrollbars");
+      OverlayScrollbars = module.OverlayScrollbars;
+    }
+    return OverlayScrollbars;
+  };
 
-  // setup post url
+  // setup post url - operação leve
   const setupUrlAnchor = () => {
     const url = window.location.href;
     const urlElement = document.getElementById("post-url") as HTMLAnchorElement;
@@ -18,92 +27,183 @@
 
   // setup lazy load for images
   const setupLozad = () => {
-    const observer = lozad(".lozad", {
-      loaded: (el) => {
-        el.classList.add("loaded");
-      },
-      rootMargin: "300px 0px", // Carrega imagens 300px antes de entrar na viewport
-    });
-
-    observer.observe();
-  };
-
-  // add global scroll bar - adiado para melhorar o carregamento inicial
-  const setupScrollBar = () => {
-    // Adiar a inicialização do scrollbar para após a renderização inicial
-    setTimeout(() => {
-      OverlayScrollbars(
-        { target: document.body, cancel: { nativeScrollbarsOverlaid: true } },
-        {
-          scrollbars: {
-            theme: "scrollbar-base scrollbar-auto py-1",
-            autoHide: "move",
-          },
-        }
-      );
-      document.body.classList.remove("overflow-y-hidden");
-
-      // Adicionar scrollbar para code blocks apenas para os visíveis
-      const visiblePreElements = Array.from(document.querySelectorAll("pre"))
-        .filter(el => {
-          const rect = el.getBoundingClientRect();
-          return rect.top < window.innerHeight + 500; // elementos visíveis ou próximos
-        });
-      
-      if (visiblePreElements.length > 0) {
-        visiblePreElements.forEach((ele) => {
-          OverlayScrollbars(ele, {
-            scrollbars: {
-              theme: "scrollbar-base scrollbar-dark px-2",
-              autoHide: "leave",
-              autoHideDelay: 500,
-              autoHideSuspend: false,
-            },
+    // Usar requestIdleCallback para inicializar lozad quando o navegador estiver ocioso
+    const initLozad = () => {
+      const observer = lozad(".lozad", {
+        loaded: (el) => {
+          // Adiar a aplicação da classe loaded para fora do fluxo de renderização
+          requestAnimationFrame(() => {
+            el.classList.add("loaded");
           });
-        });
-      }
-      
-      // Adicionar scrollbar aos outros elementos de forma lazy
-      if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              OverlayScrollbars(entry.target as HTMLElement, {
-                scrollbars: {
-                  theme: "scrollbar-base scrollbar-dark px-2",
-                  autoHide: "leave",
-                  autoHideDelay: 500,
-                  autoHideSuspend: false,
-                },
-              });
-              observer.unobserve(entry.target);
-            }
-          });
-        }, { rootMargin: "100px" });
-        
-        document.querySelectorAll("pre").forEach(el => {
-          if (!visiblePreElements.includes(el)) {
-            observer.observe(el);
-          }
-        });
-      }
-    }, 100); // pequeno atraso para priorizar o conteúdo principal
-  };
+        },
+        rootMargin: "300px 0px", // Carrega imagens 300px antes de entrar na viewport
+      });
 
-  // init
-  const setup = () => {
-    setupUrlAnchor();
-    setupLozad(); // Carregamento de imagens - prioridade alta
-    
-    // Adiar a inicialização do scrollbar para melhorar o primeiro carregamento
-    if (document.readyState === 'complete') {
-      setupScrollBar();
+      observer.observe();
+    };
+
+    // Usar requestIdleCallback se disponível, ou setTimeout como fallback
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(initLozad, { timeout: 1000 });
     } else {
-      window.addEventListener('load', setupScrollBar);
+      setTimeout(initLozad, 100);
     }
   };
 
-  document.addEventListener("DOMContentLoaded", setup);
+  // Processar elementos pre em lotes para evitar bloquear a thread principal
+  const processPrebatchs = async (
+    elements: Element[], 
+    OS: any, 
+    options: Record<string, any>, 
+    batchSize = 3, 
+    delay = 10
+  ) => {
+    const total = elements.length;
+    
+    for (let i = 0; i < total; i += batchSize) {
+      const batch = elements.slice(i, i + batchSize);
+      
+      // Processar um lote
+      await new Promise(resolve => {
+        requestAnimationFrame(() => {
+          batch.forEach((ele: Element) => {
+            OS(ele, options);
+          });
+          setTimeout(resolve, delay); // Pequena pausa entre lotes
+        });
+      });
+    }
+  };
+
+  // add global scroll bar - adiado para melhorar o carregamento inicial
+  const setupScrollBar = async () => {
+    // Verificar se a página atual realmente precisa de scrollbars personalizados
+    // Posts e páginas longas se beneficiam mais
+    const isLongContent = document.body.scrollHeight > window.innerHeight * 1.5;
+    
+    // Adiar esta verificação para não bloquear a thread principal durante o carregamento
+    let hasCodeBlocks = false;
+    
+    // Liberar o scrolling do body imediatamente, não bloqueie a interação do usuário
+    document.body.classList.remove("overflow-y-hidden");
+    
+    // Adiar a detecção de blocos de código com requestIdleCallback
+    const checkForCodeBlocks = () => {
+      hasCodeBlocks = document.querySelectorAll("pre").length > 0;
+      if (!isLongContent && !hasCodeBlocks) return;
+      
+      // Continuar com a inicialização dos scrollbars apenas se necessário
+      initScrollbars();
+    };
+    
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(checkForCodeBlocks, { timeout: 1000 });
+    } else {
+      setTimeout(checkForCodeBlocks, 300);
+    }
+    
+    const initScrollbars = async () => {
+      // Carregar OverlayScrollbars sob demanda
+      const OS = await loadOverlayScrollbars();
+      
+      // Aplicar scrollbar no body apenas se for conteúdo longo (em idle time)
+      if (isLongContent) {
+        const applyBodyScrollbar = () => {
+          OS(
+            { target: document.body, cancel: { nativeScrollbarsOverlaid: true } },
+            {
+              scrollbars: {
+                theme: "scrollbar-base scrollbar-auto py-1",
+                autoHide: "move",
+              },
+            }
+          );
+        };
+        
+        if ('requestIdleCallback' in window) {
+          (window as any).requestIdleCallback(applyBodyScrollbar, { timeout: 2000 });
+        } else {
+          setTimeout(applyBodyScrollbar, 500);
+        }
+      }
+
+      // Aplicar scrollbar nos blocos de código
+      if (hasCodeBlocks) {
+        // Configuração padrão para scrollbars em blocos de código
+        const preOptions = {
+          scrollbars: {
+            theme: "scrollbar-base scrollbar-dark px-2",
+            autoHide: "leave",
+            autoHideDelay: 500,
+            autoHideSuspend: false,
+          }
+        };
+        
+        // Inicializar apenas elementos visíveis em um primeiro momento
+        const elements = Array.from(document.querySelectorAll("pre"));
+        const visiblePreElements = elements.filter(el => {
+          const rect = el.getBoundingClientRect();
+          return rect.top < window.innerHeight + 300;
+        });
+        
+        // Processar elementos visíveis em pequenos lotes
+        if (visiblePreElements.length > 0) {
+          // Usar um timeout para dar ao navegador um tempo para renderizar
+          setTimeout(() => {
+            processPrebatchs(visiblePreElements, OS, preOptions);
+          }, 200);
+        }
+        
+        // Configurar Observer para elementos fora da viewport
+        if ('IntersectionObserver' in window) {
+          const offscreenElements = elements.filter(el => !visiblePreElements.includes(el));
+          
+          if (offscreenElements.length > 0) {
+            const observer = new IntersectionObserver((entries) => {
+              const intersectingElements = entries
+                .filter(entry => entry.isIntersecting)
+                .map(entry => entry.target);
+              
+              if (intersectingElements.length > 0) {
+                // Processar em lotes os elementos que entraram na viewport
+                processPrebatchs(intersectingElements, OS, preOptions);
+                
+                // Remover elementos observados
+                intersectingElements.forEach(element => observer.unobserve(element));
+              }
+            }, { rootMargin: "100px", threshold: 0.1 });
+            
+            // Adicionar elementos ao observer
+            offscreenElements.forEach(el => observer.observe(el));
+          }
+        }
+      }
+    };
+  };
+
+  // init com prioridades e sequenciamento
+  const setup = () => {
+    // Operações rápidas executadas imediatamente
+    setupUrlAnchor();
+    
+    // Operações críticas para a experiência do usuário com prioridade
+    setupLozad(); // Carregamento de imagens - prioridade alta
+    
+    // Operações não-críticas após pequeno atraso
+    setTimeout(() => {
+      // Adiar a inicialização do scrollbar
+      if (document.readyState === 'complete') {
+        setupScrollBar();
+      } else {
+        window.addEventListener('load', setupScrollBar, { once: true });
+      }
+    }, 200);
+  };
+
+  // Usar event listener com { once: true } para auto-remover após execução
+  document.addEventListener("DOMContentLoaded", setup, { once: true });
+  
+  // Evitar inicialização duplicada com Swup
   if (window.swup?.hooks) {
     setup();
   } else {

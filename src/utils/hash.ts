@@ -1,22 +1,78 @@
 import YukinaConfig from "../../yukina.config";
-import CryptoJS from "crypto-js";
+
+// Armazenar a instância CryptoJS após ser carregada
+let CryptoJS: any = null;
+
+// Carregar CryptoJS sob demanda quando necessário
+const loadCryptoJS = async () => {
+  if (!CryptoJS) {
+    try {
+      const module = await import("crypto-js");
+      CryptoJS = module.default;
+    } catch (error) {
+      console.warn("Erro ao carregar CryptoJS:", error);
+    }
+  }
+  return CryptoJS;
+};
+
+// Pré-carregar CryptoJS se estiver em modo HASH
+if (YukinaConfig.slugMode === "HASH") {
+  loadCryptoJS();
+}
 
 /**
  * Converte um slug fornecido para um slug hasheado ou retorna o slug bruto
  * com base na configuração.
+ * Versão síncrona, usada principalmente por getStaticPaths.
  *
  * @param slug - O slug de entrada.
- * @returns O slug hasheado se a configuração for "HASH", caso contrário, o slug bruto.
+ * @returns O slug hasheado se a configuração for "HASH" e CryptoJS estiver disponível, caso contrário, o slug bruto.
  */
 export function IdToSlug(slug: string): string {
   switch (YukinaConfig.slugMode) {
     case "HASH": {
-      const hash = CryptoJS.SHA256(slug);
-      const hasedSlug = hash.toString(CryptoJS.enc.Hex).slice(0, 8);
-      return hasedSlug;
+      if (CryptoJS) {
+        const hash = CryptoJS.SHA256(slug);
+        const hasedSlug = hash.toString(CryptoJS.enc.Hex).slice(0, 8);
+        return hasedSlug;
+      } else {
+        // Se CryptoJS não estiver disponível, usar slug bruto
+        // Também inicia o carregamento para uso futuro
+        loadCryptoJS();
+        return slug;
+      }
     }
     case "RAW":
+    default:
       return slug;
+  }
+}
+
+/**
+ * Versão assíncrona de IdToSlug que espera o carregamento de CryptoJS.
+ * Ideal para uso em contextos não-críticos onde a espera é aceitável.
+ * 
+ * @param slug - O slug de entrada.
+ * @returns Uma Promise com o slug hasheado ou o slug bruto.
+ */
+export async function IdToSlugAsync(slug: string): Promise<string> {
+  switch (YukinaConfig.slugMode) {
+    case "HASH": {
+      try {
+        const crypto = await loadCryptoJS();
+        if (crypto) {
+          const hash = crypto.SHA256(slug);
+          const hasedSlug = hash.toString(crypto.enc.Hex).slice(0, 8);
+          return hasedSlug;
+        }
+        return slug;
+      } catch (error) {
+        console.warn("Erro ao gerar hash para slug:", error);
+        return slug;
+      }
+    }
+    case "RAW":
     default:
       return slug;
   }

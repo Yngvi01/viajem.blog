@@ -22,42 +22,85 @@
       loaded: (el) => {
         el.classList.add("loaded");
       },
+      rootMargin: "300px 0px", // Carrega imagens 300px antes de entrar na viewport
     });
 
     observer.observe();
   };
 
-  // add global scroll bar
+  // add global scroll bar - adiado para melhorar o carregamento inicial
   const setupScrollBar = () => {
-    OverlayScrollbars(
-      { target: document.body, cancel: { nativeScrollbarsOverlaid: true } },
-      {
-        scrollbars: {
-          theme: "scrollbar-base scrollbar-auto py-1",
-          autoHide: "move",
-        },
-      },
-    );
-    document.body.classList.remove("overflow-y-hidden");
+    // Adiar a inicialização do scrollbar para após a renderização inicial
+    setTimeout(() => {
+      OverlayScrollbars(
+        { target: document.body, cancel: { nativeScrollbarsOverlaid: true } },
+        {
+          scrollbars: {
+            theme: "scrollbar-base scrollbar-auto py-1",
+            autoHide: "move",
+          },
+        }
+      );
+      document.body.classList.remove("overflow-y-hidden");
 
-    // add scrollbar for code blocks
-    document.querySelectorAll("pre").forEach((ele) => {
-      OverlayScrollbars(ele, {
-        scrollbars: {
-          theme: "scrollbar-base scrollbar-dark px-2",
-          autoHide: "leave",
-          autoHideDelay: 500,
-          autoHideSuspend: false,
-        },
-      });
-    });
+      // Adicionar scrollbar para code blocks apenas para os visíveis
+      const visiblePreElements = Array.from(document.querySelectorAll("pre"))
+        .filter(el => {
+          const rect = el.getBoundingClientRect();
+          return rect.top < window.innerHeight + 500; // elementos visíveis ou próximos
+        });
+      
+      if (visiblePreElements.length > 0) {
+        visiblePreElements.forEach((ele) => {
+          OverlayScrollbars(ele, {
+            scrollbars: {
+              theme: "scrollbar-base scrollbar-dark px-2",
+              autoHide: "leave",
+              autoHideDelay: 500,
+              autoHideSuspend: false,
+            },
+          });
+        });
+      }
+      
+      // Adicionar scrollbar aos outros elementos de forma lazy
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              OverlayScrollbars(entry.target as HTMLElement, {
+                scrollbars: {
+                  theme: "scrollbar-base scrollbar-dark px-2",
+                  autoHide: "leave",
+                  autoHideDelay: 500,
+                  autoHideSuspend: false,
+                },
+              });
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: "100px" });
+        
+        document.querySelectorAll("pre").forEach(el => {
+          if (!visiblePreElements.includes(el)) {
+            observer.observe(el);
+          }
+        });
+      }
+    }, 100); // pequeno atraso para priorizar o conteúdo principal
   };
 
   // init
   const setup = () => {
     setupUrlAnchor();
-    setupLozad();
-    setupScrollBar();
+    setupLozad(); // Carregamento de imagens - prioridade alta
+    
+    // Adiar a inicialização do scrollbar para melhorar o primeiro carregamento
+    if (document.readyState === 'complete') {
+      setupScrollBar();
+    } else {
+      window.addEventListener('load', setupScrollBar);
+    }
   };
 
   document.addEventListener("DOMContentLoaded", setup);

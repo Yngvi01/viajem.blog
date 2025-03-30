@@ -351,15 +351,50 @@ const navCount = YukinaConfig.navigators.length;
 </script>
 
 <script is:inline>
-  // load pagefind
+  // load pagefind somente quando necessário
+  let pagefindLoaded = false;
+  
   async function loadPagefind() {
-    const pagefind = await import("/pagefind/pagefind.js");
-    await pagefind.options({
-      excerptLength: 20,
-    });
-    pagefind.init();
-    window.pagefind = pagefind;
-    pagefind.search("");
+    if (pagefindLoaded) return window.pagefind;
+    
+    try {
+      const pagefind = await import("/pagefind/pagefind.js");
+      await pagefind.options({
+        excerptLength: 20,
+      });
+      pagefind.init();
+      window.pagefind = pagefind;
+      pagefindLoaded = true;
+      return pagefind;
+    } catch (error) {
+      console.error("Erro ao carregar pagefind:", error);
+      return null;
+    }
   }
-  loadPagefind();
+  
+  // Carregar pagefind quando o usuário interage com a busca
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.querySelector('input[name="query"]');
+    const searchButton = document.querySelector('#search-button');
+    
+    if (searchInput) {
+      searchInput.addEventListener('focus', () => {
+        loadPagefind();
+      });
+    }
+    
+    if (searchButton) {
+      searchButton.addEventListener('click', () => {
+        loadPagefind();
+      });
+    }
+    
+    // Verificar se há parâmetro de busca na URL e carregar se necessário
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('q')) {
+      loadPagefind().then(pagefind => {
+        if (pagefind) pagefind.search(urlParams.get('q'));
+      });
+    }
+  });
 </script>

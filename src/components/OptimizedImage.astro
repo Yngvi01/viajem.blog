@@ -11,6 +11,9 @@ export interface Props {
   quality?: number;
   loading?: 'eager' | 'lazy';
   format?: 'webp' | 'avif' | 'png' | 'jpg' | 'jpeg';
+  sizes?: string;
+  priority?: boolean;
+  fetchpriority?: 'high' | 'low' | 'auto';
 }
 
 const { 
@@ -21,10 +24,15 @@ const {
   class: className = '', 
   quality = 80,
   loading = 'lazy',
-  format = 'webp'
+  format = 'webp',
+  sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px',
+  priority = false,
+  fetchpriority = 'auto'
 } = Astro.props;
 
 const imageSrc = getImageSource(src);
+const actualLoading = priority ? 'eager' : loading;
+const actualFetchPriority = priority ? 'high' : fetchpriority;
 ---
 
 <Image 
@@ -34,6 +42,8 @@ const imageSrc = getImageSource(src);
   height={height} 
   class={className}
   quality={quality}
-  loading={loading}
+  loading={actualLoading}
   format={format}
+  sizes={sizes}
+  fetchpriority={actualFetchPriority}
 />

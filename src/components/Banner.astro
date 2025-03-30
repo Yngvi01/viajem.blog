@@ -29,11 +29,13 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
           <ul id="carousel_imgs" aria-live="polite">
             {carouselImgsList.map((img, index) => (
               <li
-                class="item lozad"
+                class={`item lozad ${index === 0 ? 'first-banner' : ''}`}
                 style={{ animationDelay: `${index * 6}s` }}
-                data-background-image={img}
+                data-background-image={img.url}
+                data-width={img.width}
+                data-height={img.height}
                 role="img"
-                aria-label={`Banner image ${index + 1}`}
+                aria-label={img.alt}
               />
             ))}
           </ul>
@@ -121,6 +123,21 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
   const styleElement = document.createElement("style");
   const carouselImgs = document.getElementById("carousel_imgs");
   const carouselImgsCount = carouselImgs?.children.length ?? 0;
+  
+  // Pré-carregamento otimizado para a primeira imagem
+  if (carouselImgs && carouselImgs.children.length > 0) {
+    const firstImage = carouselImgs.children[0] as HTMLElement;
+    const imgUrl = firstImage.getAttribute('data-background-image');
+    if (imgUrl) {
+      // Pré-carregar a primeira imagem para renderização imediata
+      const preloadImg = new Image();
+      preloadImg.onload = () => {
+        firstImage.style.backgroundImage = `url(${imgUrl})`;
+        firstImage.classList.add('loaded');
+      };
+      preloadImg.src = imgUrl;
+    }
+  }
 
   const carouselAnimation = `
     @keyframes carousel-animation {

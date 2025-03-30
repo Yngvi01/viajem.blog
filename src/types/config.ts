@@ -1,5 +1,12 @@
 import type I18nKeys from "../locales/keys";
 
+interface BannerImage {
+  url: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
 interface Configuration {
   title: string;
   subTitle: string;
@@ -21,11 +28,11 @@ interface Configuration {
 
   socialLinks: { icon: string; link: string; label: string }[];
 
-  banners: string[];
+  banners: BannerImage[];
 
   slugMode: "HASH" | "RAW";
 
   bannerStyle: "LOOP";
 }
 
-export type { Configuration };
+export type { Configuration, BannerImage };

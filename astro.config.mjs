@@ -1,4 +1,3 @@
-
 import { defineConfig } from "astro/config";
 
 import icon from "astro-icon";
@@ -7,6 +6,7 @@ import tailwind from "@astrojs/tailwind";
 import svelte from "@astrojs/svelte";
 import swup from "@swup/astro";
 import { defineConfig as defineImageConfig } from 'astro/config';
+import compress from "astro-compress";
 
 import rehypeSlug from "rehype-slug";
 import rehypeKatex from "rehype-katex";
@@ -21,6 +21,17 @@ import pagefind from "astro-pagefind";
 // https://astro.build/config
 export default defineConfig({
   site: YukinaConfig.site,
+  compressHTML: true,
+  build: {
+    inlineStylesheets: "auto",
+  },
+  image: {
+    domains: ["cdn.pixabay.com"],
+    remotePatterns: [{ protocol: "https" }],
+    service: {
+      entrypoint: "astro/assets/services/sharp",
+    },
+  },
   integrations: [
     tailwind(),
     svelte(),
@@ -38,6 +49,13 @@ export default defineConfig({
     }),
     sitemap(),
     pagefind(),
+    compress({
+      css: true,
+      html: true,
+      img: true,
+      js: true,
+      svg: true,
+    })
   ],
   markdown: {
     shikiConfig: {

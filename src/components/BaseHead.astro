@@ -8,18 +8,25 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 
 ---
 
-<!-- Google Tag Manager -->
-<script>
-  (function (w, d, s, l, i) {
-    w[l] = w[l] || [];
-    w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-    var f = d.getElementsByTagName(s)[0],
-      j = d.createElement(s),
-      dl = l !== "dataLayer" ? "&l=" + l : "";
-    j.async = true;
-    j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-    f.parentNode.insertBefore(j, f);
-  })(window, document, "script", "dataLayer", "GTM-W8FQBNKB");
+<!-- Preconnect para domínios importantes -->
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+<link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin />
+<link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
+<link rel="preconnect" href="https://cdn.pixabay.com" />
+
+<!-- Google Tag Manager - com carregamento assíncrono -->
+<script type="text/javascript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXX'); // Substitua pelo seu ID do Google Analytics, se tiver
+  
+  (function(w,d,s,l,i){
+    w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+    var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+    j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+    f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-W8FQBNKB');
 </script>
 <!-- End Google Tag Manager -->
 
@@ -39,8 +46,10 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
 
+<!-- AdSense - com carregamento assíncrono -->
 <script
   async
+  defer
   src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6672548583196657"
   crossorigin="anonymous"
 ></script>
@@ -67,7 +76,7 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 <meta name="apple-mobile-web-app-title" content={YukinaConfig.title} />
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content={Astro.props.title ? "article" : "website"} />
 <meta property="og:url" content={Astro.url} />
 <meta property="og:title" content={Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title} />
 <meta property="og:description" content={Astro.props.description || YukinaConfig.description} />
@@ -134,8 +143,8 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
         "url": new URL('src/images/logo.png', YukinaConfig.site).href
       }
     },
-    "datePublished": new Date().toISOString(),
-    "dateModified": new Date().toISOString(),
+    "datePublished": Astro.props.published ? new Date(Astro.props.published).toISOString() : new Date().toISOString(),
+    "dateModified": Astro.props.lastModified ? new Date(Astro.props.lastModified).toISOString() : new Date().toISOString(),
     "url": Astro.url,
     "mainEntityOfPage": {
       "@type": "WebPage",
@@ -145,16 +154,17 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
     "inLanguage": YukinaConfig.locale,
     "keywords": YukinaConfig.keywords,
     "articleSection": "Viagem e Turismo",
-  "speakable": {
-    "@type": "SpeakableSpecification",
-    "cssSelector": ["h1", "h2", ".article-body"]
-  },
-  "isAccessibleForFree": "True"
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": ["h1", "h2", ".article-body"]
+    },
+    "isAccessibleForFree": "True"
   })}></script>
 )}
 
-<!-- CSS -->
-<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex/dist/katex.min.css" />
+<!-- Carregamento Assíncrono de CSS -->
+<link rel="preload" href="https://fastly.jsdelivr.net/npm/katex/dist/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/katex/dist/katex.min.css"></noscript>
 
 <GlobalStyles />
 <ScriptSetup />

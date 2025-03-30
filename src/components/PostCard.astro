@@ -7,6 +7,8 @@ import { i18n } from "../locales/translation";
 import I18nKeys from "../locales/keys";
 import YukinaConfig from "../../yukina.config";
 import { formatDate } from "../utils/date";
+import { Image } from "astro:assets";
+import { getImageSource } from "../utils/imageImports";
 
 export interface Props {
   id: string;
@@ -33,9 +35,11 @@ const { time, wordCount } = props.readingMetadata;
     href={contentUrl}
     class="relative h-[128px] transition-all hover:brightness-75 lg:hidden"
   >
-    <img
-      class="lozad absolute left-0 top-0 h-full w-full rounded-t-3xl object-cover lg:hidden"
-      data-src={props.attraction_image ?? props.image ?? GetCoverURLForUnspecifiedEntry(entryID)}
+    <Image
+      src={getImageSource(props.attraction_image || props.image) || GetCoverURLForUnspecifiedEntry(entryID)}
+      width={400}
+      height={300}
+      class="absolute left-0 top-0 h-full w-full rounded-t-3xl object-cover lg:hidden"
       alt={`Imagem de capa para o post: ${props.title}`}
     />
     <div class="absolute bottom-2 w-full">
@@ -149,9 +153,7 @@ const { time, wordCount } = props.readingMetadata;
         <Icon class="right-icon" name="cuida:caret-right-outline" size={96} />
         <img
           class="lozad h-[212px] w-[404px] select-none rounded-r-3xl object-cover dark:brightness-90"
-          data-src={props.attraction_image ??
-            props.image ??
-            GetCoverURLForUnspecifiedEntry(entryID)}
+          data-src={getImageSource(props.attraction_image || props.image) || GetCoverURLForUnspecifiedEntry(entryID)}
           alt={`Imagem de capa para o post: ${props.title}`}
         />
       </a>

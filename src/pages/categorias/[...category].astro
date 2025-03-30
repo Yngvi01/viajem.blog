@@ -1,6 +1,8 @@
 ---
 import Main from "../../layouts/MainLayout.astro";
+import { Image } from "astro:assets";
 import { GetCategories } from "../../utils/content";
+import { getImageSource } from "../../utils/imageImports";
 
 // Corrigindo o parâmetro para 'category'
 export async function getStaticPaths() {
@@ -36,12 +38,19 @@ const posts = categoryData?.posts || [];
           posts.map((entry) => (
             <div
               class="city-card"
-              style={`background-image: url('${entry.data.attraction_image || entry.data.image ? (entry.data.attraction_image || entry.data.image).startsWith("src/") ? "/" + (entry.data.attraction_image || entry.data.image) : (entry.data.attraction_image || entry.data.image) : "/images/default-attraction.jpg"}')`}
+
               data-pagefind-body
               data-pagefind-weight="10"
               data-pagefind-meta="title"
             >
               <a href={entry.id} class="city-link">
+                <Image
+                  src={getImageSource(entry.data.attraction_image || entry.data.image)}
+                  alt={entry.data.title}
+                  width={300}
+                  height={200}
+                  class="city-card-image"
+                />
                 <h3 class="city-title">{entry.data.title}</h3>
                 <p class="city-description">{entry.data.description}</p>
               </a>

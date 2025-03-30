@@ -4,6 +4,8 @@ import I18nKeys from "../locales/keys";
 import { i18n } from "../locales/translation";
 import Link from "../components/Link.astro";
 import MainLayout from "../layouts/MainLayout.astro";
+import { Image } from "astro:assets";
+import { getImageSource } from "../utils/imageImports";
 
 const categories = await GetCategories();
 ---
@@ -12,10 +14,16 @@ const categories = await GetCategories();
   <div class="cities-grid">
     {
       Array.from(categories.values()).map((category) => (
-        <div
-          class="city-card"
-          style={`background-image: url('${category.image ? (category.image.startsWith("src/") ? "/" + category.image : category.image) : "/images/default-category-banner.svg"}')`}
-        >
+        <div class="city-card">
+          <div class="city-image-container">
+            <Image 
+              src={getImageSource(category.image) || "/images/default-category-banner.svg"}
+              alt={category.name}
+              width={300}
+              height={200}
+              class="city-background-image"
+            />
+          </div>
           <Link href={`/categorias/${category.slug}`} class="city-link">
             <div class="city-content">
               <h3 class="city-title">{category.name}</h3>
@@ -43,12 +51,26 @@ const categories = await GetCategories();
     transition:
       transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
       box-shadow 0.3s ease;
-    background-size: cover;
-    background-position: center;
     height: 200px;
     position: relative;
     overflow: hidden;
     cursor: pointer;
+  }
+  
+  .city-image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  
+  .city-background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .city-card::before {

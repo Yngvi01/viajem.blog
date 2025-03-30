@@ -112,16 +112,19 @@ const categorias = await GetCategories();
 </div>
 
 <style>
-  .avatar-wrapper::after {
-    @apply absolute left-3 top-3 h-56 w-56 rounded-xl transition-all content-[''];
-  }
-
-  .avatar-wrapper::after:hover {
-    @apply bg-black/25 dark:bg-black/50;
+  .avatar-wrapper {
+    @apply relative inline-block;
   }
 
   .avatar {
-    @apply h-56 w-56 rounded-xl transition-all hover:cursor-pointer;
+    @apply h-56 w-56 rounded-xl cursor-pointer;
+  }
+  
+  /* Impede qualquer efeito de escurecimento */
+  .avatar-wrapper:hover .avatar,
+  .avatar:hover {
+    @apply brightness-100;
+    filter: brightness(100%);
   }
 
   .username > p {

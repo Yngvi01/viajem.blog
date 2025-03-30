@@ -29,16 +29,20 @@ const licenseData = entry.data.licenseName && {
   sourceLink: entry.data.sourceLink,
 };
 
-// Determinar a imagem do banner
-const bannerImage = entry.data.licenseName
-  ? entry.data.cover || DEFAULT_BANNER
-  : entry.data.attraction_image || DEFAULT_BANNER;
+// Configuração do banner para a página de post
+const postBanner = {
+  title: entry.data.title,
+  subTitle: entry.data.description || "Sua próxima aventura começa aqui!",
+  bannerImage: entry.data.licenseName
+    ? entry.data.cover || DEFAULT_BANNER
+    : entry.data.attraction_image || DEFAULT_BANNER,
+};
 ---
 
 <PostLayout
-  title={entry.data.title}
-  subTitle={entry.data.description || "Sua próxima aventura começa aqui!"}
-  bannerImage={bannerImage}
+  title={postBanner.title}
+  subTitle={postBanner.subTitle}
+  bannerImage={postBanner.bannerImage}
   published={entry.data.published}
   slug={IdToSlug(entry.id)}
   {...licenseData}

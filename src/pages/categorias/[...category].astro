@@ -19,7 +19,7 @@ const categoryData = categorias.get(category);
 
 const categoryBanner = {
   title: categoryData?.name || "Categoria",
-  subTitle: categoryData?.description || "Escolha o seu artigo!",
+  subTitle: "Escolha o seu artigo:",
   bannerImage: categoryData?.image ? (categoryData.image.startsWith("src/") ? "/" + categoryData.image : categoryData.image) : "/images/default-category-banner.svg",
 };
 

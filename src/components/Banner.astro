@@ -14,7 +14,8 @@ export interface Props {
 const { title, subTitle, bannerImage, slug } = Astro.props;
 
 const hasTitle = title !== undefined || subTitle !== undefined;
-const hasHeaderImg = bannerImage !== undefined || slug !== undefined;
+// Sempre usar o slideshow, independentemente de haver uma imagem específica
+const hasHeaderImg = false;
 
 let carouselImgsList = YukinaConfig.banners;
 const carouselAnimationTime = `${carouselImgsList.length * 6}s`;

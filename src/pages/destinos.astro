@@ -8,9 +8,20 @@ import { Image } from "astro:assets";
 import { getImageSource } from "../utils/imageImports";
 
 const categories = await GetCategories();
+
+// Configuração do banner para a página de destinos
+const destinosBanner = {
+  title: i18n(I18nKeys.pages_archive_archive),
+  subTitle: "Explore nossos destinos",
+  bannerImage: "/images/default-banner.jpg",
+};
 ---
 
-<MainLayout title={i18n(I18nKeys.pages_archive_archive)}>
+<MainLayout
+  title={destinosBanner.title}
+  subTitle={destinosBanner.subTitle}
+  bannerImage={destinosBanner.bannerImage}
+>
   <div class="cities-grid">
     {
       Array.from(categories.values()).map((category) => (
@@ -154,3 +165,5 @@ const categories = await GetCategories();
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }
 </style>
+
+---

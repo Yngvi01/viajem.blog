@@ -29,6 +29,7 @@
     "js-yaml": "^4.1.0",
     "lozad": "^1.16.0",
     "overlayscrollbars": "^2.10.1",
+    "sharp": "^0.33.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3"
   },

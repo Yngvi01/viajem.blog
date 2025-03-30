@@ -96,7 +96,7 @@ const { time, wordCount } = props.readingMetadata;
                 <PostCardInfoIcon name="dashicons:category" />
                 <a
                   class="select-none rounded-md px-1.5 py-0.5 text-[var(--text-color-lighten)] transition-all hover:bg-[var(--primary-color-lighten)] hover:text-[var(--primary-color)]"
-                  href={`/categories/${IdToSlug(props.category)}`}
+                  href={`/categorias/${IdToSlug(props.category)}`}
                 >
                   {props.category}
                 </a>
@@ -151,9 +151,11 @@ const { time, wordCount } = props.readingMetadata;
     <div class="cover-container">
       <a href={contentUrl} class="cover-wrapper">
         <Icon class="right-icon" name="cuida:caret-right-outline" size={96} />
-        <img
-          class="lozad h-[212px] w-[404px] select-none rounded-r-3xl object-cover dark:brightness-90"
-          data-src={getImageSource(props.attraction_image || props.image) || GetCoverURLForUnspecifiedEntry(entryID)}
+        <Image
+          src={getImageSource(props.attraction_image || props.image) || GetCoverURLForUnspecifiedEntry(entryID)}
+          width={404}
+          height={212}
+          class="h-[212px] w-[404px] select-none rounded-r-3xl object-cover dark:brightness-90"
           alt={`Imagem de capa para o post: ${props.title}`}
         />
       </a>
@@ -204,7 +206,7 @@ const { time, wordCount } = props.readingMetadata;
     transition: all 0.3s;
   }
 
-  .cover-wrapper::before:hover {
+  .cover-wrapper:hover::before {
     @apply h-full w-full select-none;
   }
 

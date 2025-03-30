@@ -97,7 +97,7 @@ export async function GetCategories() {
       data: {
         title: post.data.title,
         description: post.data.description || "",
-        image: post.data.attraction_image || `/images/default-attraction.jpg`,
+        image: post.data.image || `/images/default-attraction.jpg`,
         attraction_image: post.data.attraction_image,
       },
     });

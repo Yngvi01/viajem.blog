@@ -9,13 +9,13 @@ const imageMap: Record<string, any> = {};
 
 // Preenche o mapa de imagens automaticamente
 Object.entries(imageModules).forEach(([path, module]) => {
-  // Converte o caminho para o formato usado no blog (src/images/...)
-  const normalizedPath = path.replace('../', 'src/');
+  // Mantém o caminho original para referência interna
+  const normalizedPath = path.replace('../', '');
   imageMap[normalizedPath] = (module as any).default;
 });
 
 // Garante que a imagem padrão esteja sempre disponível
-imageMap['src/images/default-attraction.jpg'] = defaultAttraction;
+imageMap['images/default-attraction.jpg'] = defaultAttraction;
 
 /**
  * Função para obter a imagem importada corretamente
@@ -30,10 +30,21 @@ export function getImageSource(imagePath: string | undefined) {
     return imagePath;
   }
   
+  // Normaliza o caminho removendo 'src/' se existir
+  const normalizedPath = imagePath.replace('src/', '');
+  
   // Verifica se a imagem existe no mapa de importações
-  if (imagePath in imageMap) {
-    return imageMap[imagePath as keyof typeof imageMap];
+  if (normalizedPath in imageMap) {
+    return imageMap[normalizedPath];
   }
+  
+  // Tenta verificar se existe com o caminho completo (para compatibilidade)
+  if (imagePath in imageMap) {
+    return imageMap[imagePath];
+  }
+  
+  // Log para debug
+  console.log(`Imagem não encontrada: ${imagePath}. Caminhos disponíveis:`, Object.keys(imageMap));
   
   // Fallback para imagem padrão
   return defaultAttraction;

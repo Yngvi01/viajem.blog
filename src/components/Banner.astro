@@ -1,6 +1,8 @@
 ---
 import YukinaConfig from "../../yukina.config";
 import { GetCoverURLForUnspecifiedEntry } from "../utils/cover";
+import { Image } from "astro:assets";
+import { getImageSource } from "../utils/imageImports";
 
 export interface Props {
   title?: string;
@@ -40,11 +42,14 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
     {
       hasHeaderImg && (
         <div class="cover">
-          <img
-            class="item lozad"
-            data-src={bannerImage ?? GetCoverURLForUnspecifiedEntry(slug ?? "")}
+          <Image
+            src={getImageSource(bannerImage) ?? GetCoverURLForUnspecifiedEntry(slug ?? "")}
+            width={1920}
+            height={1080}
+            class="item"
             alt={title ? `Imagem de capa para: ${title}` : "Imagem de capa do blog"}
             loading="eager"
+            quality={80}
           />
         </div>
       )

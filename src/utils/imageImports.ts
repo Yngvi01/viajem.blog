@@ -1,5 +1,6 @@
 // Importação dinâmica de todas as imagens disponíveis
 import defaultAttraction from '../images/default-attraction.jpg';
+import logoImage from '../images/logo.png';
 
 // Importação automática de todas as imagens na pasta src/images
 const imageModules = import.meta.glob('../images/**/*.{png,jpg,jpeg,gif,webp,avif,svg}', { eager: true });
@@ -12,10 +13,18 @@ Object.entries(imageModules).forEach(([path, module]) => {
   // Mantém o caminho original para referência interna
   const normalizedPath = path.replace('../', '');
   imageMap[normalizedPath] = (module as any).default;
+  
+  // Adiciona também versões sem o prefixo 'src/'
+  if (normalizedPath.startsWith('images/')) {
+    const withoutSrcPrefix = normalizedPath.replace('images/', '');
+    imageMap[withoutSrcPrefix] = (module as any).default;
+  }
 });
 
-// Garante que a imagem padrão esteja sempre disponível
+// Garante que imagens essenciais estejam sempre disponíveis
 imageMap['images/default-attraction.jpg'] = defaultAttraction;
+imageMap['logo.png'] = logoImage;
+imageMap['images/logo.png'] = logoImage;
 
 /**
  * Função para obter a imagem importada corretamente
@@ -26,40 +35,79 @@ export function getImageSource(imagePath: string | undefined) {
   if (!imagePath) return defaultAttraction;
   
   // Se for uma URL externa, retorna o caminho diretamente
-  if (imagePath.startsWith('http')) {
+  if (imagePath && (imagePath.startsWith('http') || imagePath.startsWith('data:'))) {
     return imagePath;
   }
   
-  // Se for um caminho absoluto, corrige para não incluir o prefixo '/posts'
-  if (imagePath.startsWith('/')) {
-    // Remove o prefixo '/posts' se existir
-    if (imagePath.startsWith('/posts/')) {
-      imagePath = imagePath.replace('/posts/', '/');
+  // Verificação direta no mapa de imagens
+  if (imagePath && imageMap[imagePath]) {
+    return imageMap[imagePath];
+  }
+  
+  // Função auxiliar para extrair o nome do arquivo de um caminho
+  const extractImageName = (path: string) => {
+    return path.split('/').pop() || '';
+  };
+  
+  // Função auxiliar para normalizar o caminho para o formato 'images/nome-do-arquivo'
+  const normalizeToImagesPath = (path: string) => {
+    // Se o caminho já contém 'src/images/', extraímos apenas o nome do arquivo
+    if (path.includes('src/images/')) {
+      return 'images/' + extractImageName(path);
     }
-    return imagePath;
-  }
+    
+    // Se o caminho já começa com 'images/', retornamos como está
+    if (path.startsWith('images/')) {
+      return path;
+    }
+    
+    // Se o caminho começa com '/images/', removemos a barra inicial
+    if (path.startsWith('/images/')) {
+      return path.substring(1);
+    }
+    
+    // Para outros casos, tentamos normalizar removendo prefixos comuns
+    return path
+      .replace('/posts/', '/')
+      .replace('src/', '')
+      .replace(/^\//, ''); // Remove a barra inicial se existir
+  };
   
-  // Verifica se o caminho começa com 'src/' e converte para um caminho absoluto
-  if (imagePath.startsWith('src/')) {
-    // Verifica se o caminho contém 'src/images/'
-    if (imagePath.startsWith('src/images/')) {
-      // Usa o imageMap para obter a imagem importada diretamente
-      const normalizedPath = imagePath.replace('src/', '');
+  // Tratamento para caminhos absolutos
+  if (imagePath.startsWith('/')) {
+    // Se o caminho contém '/src/images/', normalizamos para o formato 'images/nome-do-arquivo'
+    if (imagePath.includes('/src/images/')) {
+      const normalizedPath = normalizeToImagesPath(imagePath);
       if (normalizedPath in imageMap) {
         return imageMap[normalizedPath];
       }
-      // Se não encontrar no mapa, retorna o caminho absoluto
-      return '/' + imagePath;
-    } else {
-      // Para outros caminhos que começam com 'src/' mas não são imagens
-      return '/' + imagePath;
+      return '/' + normalizedPath;
     }
+    
+    // Para outros caminhos absolutos, retornamos como está
+    return imagePath;
   }
   
-  // Normaliza o caminho removendo 'src/' se existir
-  const normalizedPath = imagePath.replace('src/', '');
+  // Tratamento para caminhos que começam com 'src/images/'
+  if (imagePath.startsWith('src/images/')) {
+    const normalizedPath = imagePath.replace('src/', '');
+    if (normalizedPath in imageMap) {
+      return imageMap[normalizedPath];
+    }
+    return '/' + normalizedPath;
+  }
   
-  // Verifica se a imagem existe no mapa de importações
+  // Tratamento para caminhos que contêm 'src/images/' em qualquer posição
+  if (imagePath.includes('src/images/')) {
+    const normalizedPath = normalizeToImagesPath(imagePath);
+    if (normalizedPath in imageMap) {
+      return imageMap[normalizedPath];
+    }
+    return '/' + normalizedPath;
+  }
+  
+  // Tentativa final: verificar se o caminho existe no mapa após normalização
+  const normalizedPath = normalizeToImagesPath(imagePath);
   if (normalizedPath in imageMap) {
     return imageMap[normalizedPath];
   }
@@ -69,8 +117,18 @@ export function getImageSource(imagePath: string | undefined) {
     return imageMap[imagePath];
   }
   
-  // Log para debug
-  console.log(`Imagem não encontrada: ${imagePath}. Caminhos disponíveis:`, Object.keys(imageMap));
+  // Tenta encontrar a imagem removendo barras iniciais
+  if (imagePath && imagePath.startsWith('/')) {
+    const pathWithoutSlash = imagePath.substring(1);
+    if (imageMap[pathWithoutSlash]) {
+      return imageMap[pathWithoutSlash];
+    }
+  }
+  
+  // Log para debug (apenas em desenvolvimento)
+  if (import.meta.env.DEV) {
+    console.log(`Imagem não encontrada: ${imagePath}`);
+  }
   
   // Fallback para imagem padrão
   return defaultAttraction;

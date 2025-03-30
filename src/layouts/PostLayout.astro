@@ -3,6 +3,8 @@ import Main from "../layouts/MainLayout.astro";
 import Markdown from "../components/Markdown.astro";
 import CopyRight from "../components/misc/CopyRight.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { Image } from "astro:assets";
+import { getImageSource } from "../utils/imageImports";
 
 interface Props {
   title?: string;
@@ -25,7 +27,7 @@ const { title, subTitle, bannerImage, published, license, author, sourceLink } =
   <!-- <Fragment set:html={tocHTMLString} /> -->
   <div class="article-wrapper" itemscope itemtype="https://schema.org/Article">
     <div class="article">
-      <div itemprop="articleBody">
+      <div itemprop="articleBody" class="article-content">
         <Markdown>
           <slot />
         </Markdown>

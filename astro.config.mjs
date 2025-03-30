@@ -6,6 +6,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import svelte from "@astrojs/svelte";
 import swup from "@swup/astro";
+import { defineConfig as defineImageConfig } from 'astro/config';
 
 import rehypeSlug from "rehype-slug";
 import rehypeKatex from "rehype-katex";

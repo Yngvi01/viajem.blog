@@ -1,0 +1,39 @@
+---
+import { Image } from 'astro:assets';
+import { getImageSource } from '../utils/imageImports';
+
+export interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  quality?: number;
+  loading?: 'eager' | 'lazy';
+  format?: 'webp' | 'avif' | 'png' | 'jpg' | 'jpeg';
+}
+
+const { 
+  src, 
+  alt, 
+  width = 800, 
+  height = 600, 
+  class: className = '', 
+  quality = 80,
+  loading = 'lazy',
+  format = 'webp'
+} = Astro.props;
+
+const imageSrc = getImageSource(src);
+---
+
+<Image 
+  src={imageSrc} 
+  alt={alt} 
+  width={width} 
+  height={height} 
+  class={className}
+  quality={quality}
+  loading={loading}
+  format={format}
+/>

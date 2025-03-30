@@ -14,23 +14,23 @@ const categories = await GetCategories();
   <div class="cities-grid">
     {
       Array.from(categories.values()).map((category) => (
-        <div class="city-card">
-          <div class="city-image-container">
-            <Image 
-              src={getImageSource(category.image) || "/images/default-category-banner.svg"}
-              alt={category.name}
-              width={300}
-              height={200}
-              class="city-background-image"
-            />
-          </div>
-          <Link href={`/categorias/${category.slug}`} class="city-link">
+        <Link href={`/categorias/${category.slug}`} class="city-link">
+          <div class="city-card">
+            <div class="city-image-container">
+              <Image 
+                src={getImageSource(category.image) || "/images/default-category-banner.svg"}
+                alt={category.name}
+                width={300}
+                height={200}
+                class="city-background-image"
+              />
+            </div>
             <div class="city-content">
               <h3 class="city-title">{category.name}</h3>
               <p class="city-attractions">{category.posts.length} Artigo(s)</p>
             </div>
-          </Link>
-        </div>
+          </div>
+        </Link>
       ))
     }
   </div>

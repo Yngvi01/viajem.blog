@@ -1,9 +1,13 @@
 ---
+import { Icon } from "astro-icon/components";
 import YukinaConfig from "../../yukina.config";
 import I18nKeys from "../locales/keys";
 import { i18n } from "../locales/translation";
 import { GetCategories, GetTags } from "../utils/content";
 import SocialIcon from "./widgets/SocialIcon.astro";
+import Link from "./Link.astro";
+import { Image } from "astro:assets";
+import { getImageSource } from "../utils/imageImports";
 
 const tags = await GetTags();
 const categorias = await GetCategories();
@@ -20,10 +24,13 @@ const categorias = await GetCategories();
         class="avatar-wrapper"
         aria-label={`Visite a página sobre de ${YukinaConfig.username}`}
       >
-        <img
-          src={YukinaConfig.avatarUrl}
+        <Image
+          src={getImageSource(YukinaConfig.avatarUrl)}
           alt={`Imagem de perfil de ${YukinaConfig.username}`}
-          class="avatar lozad select-none"
+          width={224}
+          height={224}
+          class="avatar select-none"
+          quality={80}
         />
       </a>
       <div class="username mt-4">

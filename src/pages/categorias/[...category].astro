@@ -3,6 +3,9 @@ import Main from "../../layouts/MainLayout.astro";
 import { Image } from "astro:assets";
 import { GetCategories } from "../../utils/content";
 import { getImageSource } from "../../utils/imageImports";
+import { Icon } from "astro-icon/components";
+import { formatDate } from "../../utils/date";
+import YukinaConfig from "../../../yukina.config";
 
 // Corrigindo o parâmetro para 'category'
 export async function getStaticPaths() {
@@ -46,14 +49,29 @@ const posts = categoryData?.posts || [];
                 <Image 
                   src={getImageSource(entry.data.attraction_image || entry.data.image)}
                   alt={entry.data.title}
-                  width={300}
-                  height={200}
+                  width={400}
+                  height={300}
                   class="city-background-image"
                 />
+                <div class="city-overlay"></div>
+              </div>
+              <div class="post-meta">
+                <div class="post-date">
+                  <Icon name="line-md:calendar" class="meta-icon" />
+                  <span>
+                    {formatDate(entry.date, YukinaConfig.locale)}
+                  </span>
+                </div>
               </div>
               <a href={entry.id} class="city-link">
-                <h3 class="city-title">{entry.data.title}</h3>
-                <p class="city-description">{entry.data.description}</p>
+                <div class="city-content">
+                  <h3 class="city-title">{entry.data.title}</h3>
+                  <p class="city-description">{entry.data.description}</p>
+                  <div class="read-more">
+                    <span>Leia mais</span>
+                    <Icon name="line-md:arrow-right-circle" class="arrow-icon" />
+                  </div>
+                </div>
               </a>
             </div>
           ))
@@ -70,24 +88,22 @@ const posts = categoryData?.posts || [];
 <style>
   .cities-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
     padding: 20px;
   }
 
   .city-card {
     background-color: #f9f9f9;
-    padding: 10px;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
     transition:
-      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      box-shadow 0.3s ease;
-    height: 200px;
+      transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.4s ease;
+    height: 320px;
     color: white;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
     position: relative;
     overflow: hidden;
     z-index: 0;
@@ -107,152 +123,177 @@ const posts = categoryData?.posts || [];
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transition: transform 0.6s ease;
   }
 
-  .city-card::before {
-    content: "";
+  .city-overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.6) 70%,
+      rgba(0, 0, 0, 0.8) 100%
+    );
     z-index: 1;
+    transition: opacity 0.4s ease;
+  }
+  
+  .post-meta {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 5;
+    display: flex;
+    gap: 10px;
+    font-size: 0.8rem;
+  }
+  
+  .post-date, .post-tag {
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .meta-icon {
+    width: 16px;
+    height: 16px;
   }
 
   .city-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  .city-card:hover .city-background-image {
+    transform: scale(1.08);
   }
 
   .city-link {
+    position: relative;
     text-decoration: none;
     color: inherit;
     z-index: 2;
-    padding: 15px;
-    bottom: 15px;
-    box-sizing: border-box;
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.3) 0%,
-      rgba(0, 0, 0, 0.5) 100%
-    );
-    border-radius: 15px; /* Bordas mais arredondadas */
-    backdrop-filter: blur(1px);
-    margin: auto; /* Centraliza o bloco */
-    width: 90%; /* Largura do bloco de texto */
-    max-width: 300px; /* Largura máxima */
-    text-align: center; /* Alinhamento centralizado */
-    position: absolute;
-    left: 50%;
-    bottom: 38px;
-    transform: translateX(-50%); /* Centralização precisa */
+    height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Alinhamento vertical */
-    transition: all 0.3s ease;
+    justify-content: flex-end;
+  }
+
+  .city-content {
+    padding: 25px;
+    margin-top: auto;
+    transition: transform 0.3s ease;
   }
 
   .city-title {
     font-size: 1.5rem;
     margin: 0 0 10px 0;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
     font-weight: 700;
-    line-height: 1.2;
-    width: 100%;
-    /* Novas regras */
-    max-width: 100%; /* Impede overflow horizontal */
-    overflow: hidden;
-    white-space: normal;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Limita a 2 linhas */
-    -webkit-box-orient: vertical;
-  }
-
-  .city-title::after {
-    content: "";
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.7);
-    transition: width 0.3s ease;
-  }
-
-  .city-description {
-    font-size: 0.9rem;
-    margin: 0;
-    color: rgba(255, 255, 255, 0.95);
-    line-height: 1.4;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-    opacity: 0.9;
+    line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    transition: transform 0.3s ease;
   }
 
-  .city-card:hover .city-title::after {
-    width: 60px;
+  .city-description {
+    font-size: 0.95rem;
+    margin: 0 0 15px 0;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.5;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: opacity 0.3s ease;
   }
-
-  .city-card:hover .city-description {
-    opacity: 0.95;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  
+  .read-more {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 5px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: 
+      transform 0.4s ease,
+      opacity 0.4s ease;
+  }
+  
+  .arrow-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
   }
 
   .space-y-8 {
     space-y: 2rem;
   }
 
-  .city-card:hover .city-link {
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.8) 0%,
-      rgba(0, 0, 0, 0.4) 100%
-    );
-    transform: translateX(-50%) scale(1.05); /* Efeito de zoom suave */
+  /* Hover effects */
+  .city-card:hover .city-title {
+    transform: translateY(-5px);
+  }
+  
+  .city-card:hover .city-description {
+    opacity: 1;
+  }
+  
+  .city-card:hover .read-more {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .city-card:hover .arrow-icon {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 768px) {
+    .cities-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 15px;
+    }
+    
+    .city-card {
+      height: 300px;
+    }
   }
 
   @media (max-width: 480px) {
+    .cities-grid {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    
+    .city-card {
+      height: 280px;
+    }
+    
     .city-title {
-      font-size: 1.2rem;
-      -webkit-line-clamp: 2;
+      font-size: 1.3rem;
     }
-
+    
     .city-description {
-      font-size: 0.8rem;
-      -webkit-line-clamp: 2;
+      font-size: 0.9rem;
     }
-
-    .city-link {
-      text-decoration: none;
-      color: inherit;
-      z-index: 2;
-      padding: 15px;
-      bottom: 15px;
-      box-sizing: border-box;
-      background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.3) 0%,
-        rgba(0, 0, 0, 0.5) 100%
-      );
-      border-radius: 15px; /* Bordas mais arredondadas */
-      backdrop-filter: blur(1px);
-      margin: auto; /* Centraliza o bloco */
-      width: 90%; /* Largura do bloco de texto */
-      max-width: 300px; /* Largura máxima */
-      text-align: center; /* Alinhamento centralizado */
-      position: absolute;
-      left: 50%;
-      bottom: 55px;
-      transform: translateX(-50%); /* Centralização precisa */
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* Alinhamento vertical */
-      transition: all 0.3s ease;
+    
+    .post-meta {
+      top: 10px;
+      left: 10px;
     }
   }
 </style>

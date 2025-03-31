@@ -24,206 +24,514 @@ draft: false
 
 ## 10 Destinos Incríveis no Brasil para Visitar em 2025
 
-No sul da Bahia, Itacaré une praias selvagens e Mata Atlântica preservada. Destino ideal para surfistas (especialmente na Praia da Tiririca) e amantes de ecoturismo, oferece trilhas como a da Cachoeira do Tijuípe e a charmosa vila de pescadores com gastronomia à base de frutos do mar. Em 2025, a região investe em hospedagens sustentáveis, reforçando seu compromisso com o turismo consciente.
 
-Dica: Visite entre maio e setembro para ondas perfeitas e menos chuvas.
-
-### 🌴 **Itacaré, Bahia** 
-
-<img src="/src/images/itacare.jpg" alt="Praia de Itacaré" style="width: 1080px; height: 720px; object-fit: cover;">
-
- 
+## 🌴 **Itacaré, Bahia**  
+<img src="/src/images/itacare.jpg" alt="Praias e Mata Atlântica em Itacaré" style="width: 1080px; height: 720px; object-fit: cover;">  
 
 ### 🌟 **Por que ir?**  
-No sul da Bahia, Itacaré é um santuário onde a **Mata Atlântica encontra o mar**. Além das praias famosas, como:  
-- **Praia da Concha** (perfeita para banho)  
-- **Praia da Tiririca** (ponto de surf),  
-
-a região é cortada por rios e cachoeiras. A **Trilha das 4 Praias** (Resende, Havaizinho, Camboinha e Engenhoca) é um roteiro clássico, passando por coqueirais e piscinas naturais.  
+Itacaré une **praias selvagens** e **Mata Atlântica preservada**, oferecendo:  
+- **Praia da Concha** (mar calmo para banho)  
+- **Praia da Tiririca** (ondas para surfistas)  
+- **Trilha das 4 Praias** (Resende, Havaizinho, Camboinha e Engenhoca)  
+- **Cachoeira do Tijuípe** (trilha de 40 minutos pela floresta)  
 
 ---
 
 ### 🆕 **Novidades em 2025**  
 ✅ **Eco Parque Itacaré**  
-- Tirolesa sobre a mata  
-- Circuito de arvorismo  
+- Tirolesa de 800m sobre a copa das árvores  
+- Circuito de arvorismo noturno com iluminação sustentável  
 
-✅ **Pousadas Eco-Chic**  
-- **Txai Resort**: Spa ayurvédico + gastronomia orgânica  
+✅ **Expansão de Hospedagem**  
+- **Txai Resort**: Novas vilas sobre palafitas com piscina infinita  
+- **Pousada Vila Trijunção**: Arquitetura bioclimática com energia solar  
 
 ---
 
 ### 🍽️ **Cultura e Gastronomia**  
 **📍 Toca da Coruja**  
-➡️ Experimente a **moqueca de arraia** (peixe fresco + leite de coco da região)  
+➡️ **Moqueca de arraia** com leite de coco fresco e dendê  
 
-**🎉 Festival de Chocolate** (junho)  
-➡️ Celebração do cacau orgânico local  
+**🎉 Eventos**  
+- **Festival de Chocolate** (junho): Degustação de cacau orgânico  
+- **Surf Music Festival** (julho): Shows na praia  
 
 ---
 
 ### ✈️ **Como chegar?**  
-1. **Voo** até Ilhéus (1h30 de São Paulo)  
-2. **Carro** (1h de viagem)  
+1. **Voo direto** para Ilhéus (1h30 de SP / 2h do RJ)  
+2. **Transfer terrestre** (1h de carro pela BA-001)  
+3. **Ônibus executivo** (saídas diárias de Salvador)  
 
+---
 
+### 💡 **Dica Local**  
+"Visite a **Feira Livre** aos sábados para comprar cacau in natura e artesanato em piaçava!"  
 
 
-### 2. Capitólio, Minas Gerais
-<img src="/src/images/capitolio.jpg" alt="Capitólio" style="width: 1080px; height: 720px; object-fit: cover;">
 
-Por que ir: Conhecida como o "Grand Canyon brasileiro", a região abriga o Lago de Furnas, formado por represa em 1960. Os cânions esculpidos em quartzito, como o Cânion do Escorrega Macaco, são acessíveis por passeios de barco que incluem paradas para nadar em águas cristalinas.
 
-Destaques em 2025:
+## ⛰️ **Capitólio, Minas Gerais**
 
-Novos mirantes com passarelas de vidro, como o Sky View, oferecendo vistas panorâmicas.
+<img src="/src/images/capitolio.jpg" alt="Cânions de Capitólio" style="width: 1080px; height: 720px; object-fit: cover;">
 
-Circuito gastronômico focado em pratos mineiros com toque contemporâneo, como o risoto de pequi com queijo canastra.
+### 🌟 **Por que ir?**  
+Conhecida como o **"Grand Canyon brasileiro"**, a região abriga o Lago de Furnas (1960) e cânions de quartzito. Destaques:  
+- **Cânion do Escorrega Macaco** (passeios de barco com paradas para nadar)  
+- **Cachoeira Cascatinha** (24m de altura com poços naturais)  
 
-Aventuras:
+---
 
-Canyoning na Cachoeira Cascatinha (20 metros de rapel).
+### 🆕 **Destaques em 2025**  
+✅ **Novos mirantes**  
+- Passarela de vidro **Sky View** (vistas panorâmicas a 100m de altura)  
+- **Trilha do Mirante Escondido** (acesso a duas cachoeiras)  
 
-Trilha noturna até o Véu da Noiva, cachoeira iluminada por luzes LED sustentáveis.
+✅ **Circuito Gastronômico**  
+- **Risoto de pequi com queijo canastra**  
+- Degustação em fazendas da Serra da Canastra  
 
-Melhor época: Abril a outubro (período seco).
+---
 
-### 3. Alter do Chão, Pará
-![Alter](/src/images/default-image.jpg)
+### 🧗 **Aventuras**  
+1. **Canyoning na Cascatinha** (15m de rapel)  
+2. **Trilha noturna no Mirante dos Cânions** (tirolesa de 600m)  
+3. **Passeio de barco** (3h a 7h pelo Lago de Furnas)  
 
-Por que ir: No coração da Amazônia, essa vila ribeirinha é famosa pela Ilha do Amor, uma praia de água doce que emerge na seca (agosto a dezembro). Em 2025, o turismo comunitário ganha força: visite a Comunidade do Saracá para aprender sobre medicina tradicional e artesanato com fibras naturais.
+---
 
-Experiências únicas:
+### 📅 **Melhor época**  
+- **Abril a outubro** (período seco)  
+- Evite feriados para evitar multidões  
 
-Passeio de barco até o Encontro das Águas do Tapajós e Arapiuns, com mergulho em águas escuras e claras lado a lado.
+---
 
-Observação noturna de jacarés com guias locais.
+### ✈️ **Como explorar?**  
+1. Contrate operadoras credenciadas (ex: FM.S Capitólio)  
+2. Partida de **São Paulo**: 380km (6h de carro)  
+3. Aeroporto mais próximo: **Varginha** (150km)  
 
-Novidades:
 
-Lançamento de roteiros de "glamping" em áreas remotas da floresta, com estrutura luxuosa e mínimo impacto ambiental.
 
-Dica: Prove o tacacá (caldo de tucupi com camarão seco) no mercado municipal.
 
-### 4. Jalapão, Tocantins
-![Jalapão](/src/images/default-image.jpg)
+## 🌿 **Alter do Chão, Pará**  
+![Alter do Chão](/src/images/default-image.jpg)  
 
-Por que ir: Um dos últimos redutos de natureza intocada no Brasil, Jalapão mistura dunas douradas, rios de águas transparentes e formações rochosas surreais. Os fervedouros (nascentes com pressão subterrânea que impedem o afundamento) são fenômenos imperdíveis.
+### 🌟 **Por que ir?**  
+No coração da Amazônia, essa vila ribeirinha encanta com:  
+- **Ilha do Amor** (praia de água doce que emerge na seca: agosto a dezembro)  
+- **Turismo comunitário** na Comunidade do Saracá (medicina tradicional + artesanato em fibras)  
 
-Roteiro essencial:
+---
 
-Duna do Pôr do Sol: Subida descalço para ver o céu em tons de laranja e roxo.
+### 🆕 **Novidades em 2025**  
+✅ **Glamping na Floresta**  
+- Estruturas luxuosas com energia solar em áreas remotas  
+- Roteiros com comunidades indígenas  
 
-Cachoeira da Velha: Queda de 15 metros com piscina natural para banho.
+✅ **Novo Centro Cultural**  
+- Exposições de arte ribeirinha  
+- Oficinas de biojoias com sementes amazônicas  
 
-Sustentabilidade em 2025:
+---
 
-Projeto Capim Dourado Sustentável treina artesãos para evitar colheita predatória.
+### 🛶 **Experiências Únicas**  
+1. **Passeio fluvial** ao **Encontro das Águas** (Tapajós x Arapiuns)  
+   - Mergulho simultâneo nos dois rios (águas escuras e claras)  
+2. **Safari noturno** de jacarés com guias locais  
+3. **Trilha da Lua Cheia** na Floresta Nacional do Tapajós  
 
-Limite diário de visitantes em áreas sensíveis, como a Pedra Furada.
+---
 
-Como chegar: Voo até Palmas, seguido de 4h de carro (4x4 recomendado).
+### 🍲 **Cultura e Gastronomia**  
+**📍 Mercado Municipal**  
+➡️ Prove o **tacacá** (caldo de tucupi com camarão seco e jambu)  
 
-### 5. São Miguel dos Milagres, Alagoas
-![São Miguel](/src/images/default-image.jpg)
+**🎨 Artesanato:**  
+- Cestarias em cipó titica na **Associação Arte Bora**  
 
-Por que ir: Na Costa dos Corais, este refúgio tem piscinas naturais protegidas por recifes. A Praia do Patacho é ideal para famílias, enquanto o Recife da Barra atrai mergulhadores com sua vida marinha (peixes-papagaio, estrelas-do-mar).
+---
 
-Novidades em 2025:
+### ✈️ **Como chegar?**  
+1. **Voo** até Santarém (2h de Belém)  
+2. **Barco** ou carro (40min até Alter do Chão)  
 
-Snorkel noturno com luzes subaquáticas para observar polvos e lagostas.
+---
 
-Roteiro de bike pela orla, conectando São Miguel a Maragogi.
+### 💡 **Dica do Guia**  
+"Para a melhor foto da Ilha do Amor, vá ao **Mirante do Pescador** ao pôr do sol!"  
 
-Gastronomia:
+## 🌵 **Jalapão, Tocantins**  
+![Jalapão](/src/images/jalapao.jpg)  
 
-Ostra fresca servida na barraca Tropicália, à beira-mar.
+### 🌟 **Por que ir?**  
+Último reduto de natureza intocada no Brasil, onde você encontrará:  
+- **Fervedouros** (nascentes com água cristalina que "flutuam" os visitantes)  
+- **Dunas douradas** contrastando com rios de águas esmeraldas  
+- Formações rochosas únicas como a **Pedra Furada**  
+---
 
-Workshop de culinária regional no Sítio Frutas do Coração, com frutas exóticas como mangaba e cajá.
+### 🆕 **Novidades em 2025**  
+✅ **Turismo Regulado**  
+- Limite de 150 visitantes/dia nos fervedouros principais  
+- Novas trilhas sinalizadas na **Serra do Espírito Santo**  
 
-Dica: Visite entre janeiro e março para ver desovas de tartarugas marinhas.
+✅ **Projeto Capim Dourado Vivo**  
+- Oficinas para artesãos locais (colheita sustentável do capim)  
+- Lojas certificadas em Ponte Alta do Tocantins  
 
-### 6. Chapada das Mesas, Maranhão
-![Chapada das Mesas](/src/images/default-image.jpg)
-Por que ir: Um cenário de ficção científica com cachoeiras monumentais e formações rochosas esculpidas pelo vento. A Cachoeira Pedra Caída (186 metros de altura) tem plataforma de observação e poço para banho.
+---
 
-Roteiro de aventura:
+### 🏜️ **Roteiro Essencial**  
+1. **Duna do Pôr do Sol**  
+   - Caminhada descalço até o topo para ver cores alaranjadas  
+2. **Cachoeira da Velha**  
+   - Queda de 18m (não 15m) com piscina natural  
+3. **Fervedouro do Ceiça**  
+   - Experiência de flutuação natural  
 
-Portal da Chapada: Trekking de 8 km até o cânion com paredes de 60 metros.
+---
 
-Poço Azul: Mergulhe em águas azul-turquesa (melhor luz entre 10h e 14h).
+### 🚙 **Como Explorar?**  
+1. **Voo** até Palmas + 4h de **4x4** (estradas de terra)  
+2. Roteiros com agências credenciadas:  
+   - **Jalapão Adventure** (roteiros 5 dias)  
+   - **EcoJalapão** (foco em comunidades quilombolas)  
 
-Cultura local:
+---
 
-Festival Junino das Mesas (junho), com comidas típicas e danças de quadrilha estilizada.
+### 🛎️ **Dicas Cruciais**  
+- Leve **tanque de combustível extra** (postos raros)  
+- Melhor época: **Maio a setembro** (período seco)  
+- Hospedagem recomendada: **Acampamento Serra Dourada**  
 
-Artesanato em cerâmica inspirado em pinturas rupestres.
+---
 
-Infraestrutura 2025: Novas pousadas com arquitetura integrada à paisagem, usando pedras locais.
+### 🍴 **Cultura Local**  
+**📍 Restaurante Dona Miúda**  
+➡️ Prove o **pirão de pequi** com arroz selvagem  
 
-### 7. Praia de Pipa, Rio Grande do Norte
-![Praia da Pipa](/src/images/default-image.jpg)
-Por que ir: Além das falésias coloridas e praias como a Baía dos Golfinhos, Pipa é um polo de turismo consciente. Em 2025, o projeto Pipa Livre de Plástico promete eliminar descartáveis na orla.
+**🎁 Artesanato:**  
+- Pulseiras e cestos em capim dourado na **Casa do Artesão de Mateiros**
 
-O que fazer:
+## 🐚 **São Miguel dos Milagres, Alagoas**  
+<img src="/src/images/sao-miguel.jpg" alt="Praias de São Miguel dos Milagres" style="width: 1080px; height: 720px; object-fit: cover;">  
 
-Stand-up paddle na Lagoa de Guaraíras, habitat de cavalos-marinhos.
+### 🌟 **Por que ir?**  
+Na **Costa dos Corais**, este refúgio oferece:  
+- **Piscinas naturais** protegidas por recifes  
+- **Praia do Patacho** (ideal para famílias)  
+- **Recife da Barra** (mergulho com peixes-papagaio e estrelas-do-mar)  
 
-Aula de surf na Praia do Amor com instrutores locais.
+---
 
-Vida noturna:
+### 🆕 **Novidades em 2025**  
+✅ **Snorkel Noturno**  
+- Observação de polvos e lagostas com iluminação subaquática  
+- Equipamento com câmera GoPro inclusa  
 
-Bares eco-friendly: Casa de Taipa oferece drinks com cajuína e música ao vivo.
+✅ **Roteiro Ciclístico**  
+- Trilha de 18km ligando São Miguel a Maragogi  
+- Paradas em mirantes e vilas de pescadores  
 
-Feirinha de Pipa: Artesanato em renda renascença e biojóias.
+---
 
-Dica: Alugue um buggy para explorar praias vizinhas como Sibaúma e Barra de Cunhaú.
+### 🍽️ **Cultura e Gastronomia**  
+**📍 Barraca Tropicália**  
+➡️ **Ostras frescas** servidas com limão-siciliano  
 
-### 8. Serra da Capivara, Piauí
-![Serra da Capivara](/src/images/default-image.jpg)
+**📍 Sítio Frutas do Coração**  
+➡️ Workshop de culinária com frutas exóticas:  
+- Mangaba  
+- Cajá  
+- Siriguela  
 
-Por que ir: Patrimônio da Humanidade pela UNESCO, o parque guarda mais de 1.300 sítios arqueológicos com pinturas de 12 mil anos. Em 2025, o novo Museu Interativo da Pré-História usa realidade aumentada para recriar cenas cotidianas dos primeiros habitantes.
+---
 
-Trilhas imperdíveis:
+### 🐢 **Dica de Conservação**  
+- Temporada de desova de tartarugas: **janeiro a março**  
+- Passeios monitorados pelo Projeto Tamar  
 
-Baixão da Pedra Furada: Pinturas de rituais e animais extintos.
+---
 
-Toca do Boqueirão da Pedra Furada: Considerado um dos sítios mais importantes das Américas.
+### ✈️ **Como chegar?**  
+1. **Voo** até Maceió (1h de Recife)  
+2. **Carro** pela AL-101 Norte (1h30 de viagem)  
+3. **Transfer náutico** a partir de Porto de Pedras  
 
-Como apoiar: Contrate guias da FUMDHAM (Fundação Museu do Homem Americano), que reinveste em pesquisas.
+---
 
-### 9. Ilha do Mel, Paraná
-![Ilha do Mel](/src/images/default-image.jpg)
-Por que ir: Sem carros e com energia solar em 80% das pousadas, a ilha é um exemplo de turismo de baixo impacto. A Fortaleza Nossa Senhora dos Prazeres (século XVIII) oferece vistas espetaculares do mar.
+### 🌅 **Melhor Experiência**  
+"Caminhe na maré baixa até o **Recife da Barra** – um aquário natural a céu aberto!"  
 
-Atividades:
+## 🏞️ **Chapada das Mesas, Maranhão**  
+<img src="/src/images/chapada-mesas.jpg" alt="Cachoeiras da Chapada das Mesas" style="width: 1080px; height: 720px; object-fit: cover;">  
 
-Trilha das Encantadas: 3 km passando por grutas e lendas locais.
+### 🌟 **Por que ir?**  
+Cenário surreal com formações rochosas esculpidas pelo vento e:  
+- **Cachoeira Pedra Caída** (186m de queda livre)  
+- **Poço Encantado** (águas cristalinas em cânion de quartzito)  
+- **Morro das Figuras** (pinturas rupestres de 6.000 anos)  
 
-Surf na Praia de Fora: Ondas consistentes para iniciantes.
+---
 
-Novidades 2025:
+### 🆕 **Novidades em 2025**  
+✅ **Hospedagem Sustentável**  
+- Pousadas de arquitetura orgânica com pedras locais  
+- Chalés com energia solar no **Eco Parque Portal da Chapada**  
 
-Restauração do Farol das Conchas com exposição sobre navegação histórica.
+✅ **Novo Mirante Suspenso**  
+- Plataforma de vidro sobre a Cachoeira Pedra Caída  
+- Acesso por teleférico ecológico  
 
-Lançamento de passeios de barco elétrico para observar botos-cinza.
+---
 
-Dica: Leve repelente – mosquitos são comuns ao entardecer.
+### 🧗 **Roteiro de Aventura**  
+1. **Trilha do Portal**  
+   - Trekking de 8km até cânion de 60m de altura  
+   - Banho no **Poço Azul** (melhor luz: 10h-14h)  
+2. **Rapel na Cachoeira do Prata** (45m de descida)  
+3. **Off-road** até a **Serra do Penitente**  
 
-### 10. Paraty, Rio de Janeiro
-![Paraty](/src/images/default-image.jpg)
-Por que ir: Além do centro histórico colonial, Paraty em 2025 se reinventa com foco em turismo literário e aventura. A FLIP (Festa Literária Internacional) terá edição especial sobre culturas indígenas, com autores globais.
+---
 
-Roteiros:
+### 🎭 **Cultura Local**  
+**🎉 Festival Junino das Mesas**  
+- Quadrilhas estilizadas + pratos típicos:  
+  - Arroz de cuxá  
+  - Carne-de-sol com macaxeira  
 
-Trilha do Ouro: Caminhe por calçamentos do século XVIII na Serra da Bocaina.
+**🎨 Artesanato**  
+- Cerâmicas com padrões indígenas na **Casa do Mestre Zé Paulo**  
 
-Mergulho nas Ilhas Alcatrazas: Reserva marinha com naufrágios históricos.
+---
 
-Sustentabilidade:
+### ✈️ **Como chegar?**  
+1. **Voo** até Imperatriz (aeroporto mais próximo)  
+2. **Carro** 4x4 (3h de viagem pela MA-230)  
+3. **Tour guiado** saindo de Carolina (MA)  
 
-Projeto Paraty Carbono Zero incentiva hotéis a compensar emissões com reflorestamento.
+---
 
-Feira orgânica aos sábados na Praça do Chafariz, com produtos caiçaras.
+### 📸 **Dica Fotográfica**  
+"Para o melhor ângulo da Pedra Caída, chegue às 9h30 – luz perfeita nas águas!"  
 
-Como chegar: Voo até Rio de Janeiro (1h) + 3h de carro ou ônibus.
+## 🌊 **Praia de Pipa, Rio Grande do Norte**  
+<img src="/src/images/praia-pipa.jpg" alt="Falésias e praias de Pipa" style="width: 1080px; height: 720px; object-fit: cover;">  
+
+### 🌟 **Por que ir?**  
+Destino que combina **belezas naturais** e **turismo sustentável**, destacando-se por:  
+- **Baía dos Golfinhos** (avistamento de botos-cinza)  
+- Falésias coloridas em tons de laranja e branco  
+- Projeto **Pipa Zero Plástico** (orla 100% livre de descartáveis em 2025)  
+
+---
+
+### 🆕 **Novidades em 2025**  
+✅ **Praia Certificada**  
+- Selo internacional **Blue Flag** para a Praia do Madeiro  
+- Novas estações de recarga de garrafas ecológicas  
+
+✅ **Expansão do Parque Natural**  
+- Trilha suspensa nas falésias com mirantes panorâmicos  
+
+---
+
+### 🏄 **O que fazer?**  
+1. **Stand-up paddle na Lagoa de Guaraíras**  
+   - Observação de cavalos-marinhos em habitat natural  
+2. **Aula de surf na Praia do Amor**  
+   - Escolas certificadas (ex: **Pipa Surf School**)  
+3. **Passeio de buggy** até:  
+   - **Praia de Sibaúma** (piscinas naturais)  
+   - **Barra de Cunhaú** (manguezais preservados)  
+
+---
+
+### 🌙 **Vida Noturna**  
+**📍 Casa de Taipa**  
+➡️ Drinks com cajuína orgânica + música regional ao vivo  
+
+**🛍️ Feirinha de Pipa**  
+- Biojóias em sementes nativas  
+- Renda renascença feita por artesãs locais  
+
+---
+
+### 🚗 **Como chegar?**  
+1. **Voo** até Natal (aeroporto mais próximo)  
+2. **Carro** pela RN-003 (1h20 de viagem)  
+3. **Transfer compartilhado** (saídas diárias do Centro de Natal)  
+
+---
+
+### 🌅 **Dica Essencial**  
+"Para o pôr do sol mais fotogênico, vá ao **Mirante do Chapadão** 1h antes do crepúsculo!"  
+
+## 🏜️ **Serra da Capivara, Piauí**  
+<img src="/src/images/serra-capivara.jpg" alt="Pinturas rupestres na Serra da Capivara" style="width: 1080px; height: 720px; object-fit: cover;">  
+
+### 🌟 **Por que ir?**  
+Patrimônio da Humanidade pela UNESCO, este parque arqueológico guarda:  
+- **1.354 sítios** com pinturas de até **12 mil anos**  
+- **Novo Museu da Pré-História** (2025): experiências em realidade aumentada  
+- Cenários de cinema: locações de documentários internacionais  
+
+---
+
+### 🆕 **Novidades em 2025**  
+✅ **Museu Interativo**  
+- Recriação 3D de povos pré-históricos  
+- Sala de realidade virtual com cenários de 10.000 a.C.  
+
+✅ **Trilhas Temáticas**  
+- Rota dos Caçadores-Coletores (8km)  
+- Circuito Noturno com projeções nas rochas  
+
+---
+
+### 🥾 **Trilhas Imperdíveis**  
+1. **Baixão da Pedra Furada**  
+   - Pinturas de megafauna extinta e rituais ancestrais  
+2. **Toca do Boqueirão**  
+   - Considerado "a Capela Sistina da Pré-História Brasileira"  
+3. **Trilha do Sítio do Meio**  
+   - Arte rupestre com cenas de caça em movimento  
+
+---
+
+### 🏺 **Como Apoiar**  
+- Contrate **guias da FUMDHAM** (fundação que mantém o parque)  
+- Compre artesanato em **cerâmica inspirada em arte rupestre**  
+
+---
+
+### ✈️ **Como chegar?**  
+1. **Voo** até Petrolina (PE) ou Teresina (PI)  
+2. **Carro** até São Raimundo Nonato (base do parque):  
+   - De Petrolina: 300km (4h30)  
+   - De Teresina: 530km (6h)  
+
+---
+
+### 🌞 **Dica do Local**  
+"Leve chapéu, água e tênis antiderrapante – o sol é intenso e o terreno pedregoso!"  
+
+---
+
+### 📚 **Dica Cultural**  
+Visite o **Museu do Homem Americano** antes do parque para contextualizar as pinturas.  
+
+## 🏝️ **Ilha do Mel, Paraná**  
+<img src="/src/images/ilha-do-mel.jpg" alt="Vista aérea da Ilha do Mel" style="width: 1080px; height: 720px; object-fit: cover;">  
+
+### 🌟 **Por que ir?**  
+Refúgio ecológico com:  
+- **Zero carros** (só transporte a pé ou de barco)  
+- **Energia solar** em 85% das pousadas (dados 2025)  
+- **Fortaleza N. S. dos Prazeres** (século XVIII com vista panorâmica)  
+
+---
+
+### 🆕 **Novidades em 2025**  
+✅ **Farol das Conchas Restaurado**  
+- Exposição interativa sobre navegação histórica  
+- Mirante 360° no topo  
+
+✅ **Turismo Sustentável**  
+- Barcos elétricos para avistar botos-cinza  
+- Novas trilhas sinalizadas com QR codes explicativos  
+
+---
+
+### 🥾 **Atividades**  
+1. **Trilha das Encantadas** (3km)  
+   - Passa por grutas e sítios históricos  
+   - Lendas locais narradas por guias  
+
+2. **Surf na Praia de Fora**  
+   - Aulas para iniciantes com equipamento ecológico  
+
+3. **Passeio de barco** até a **Praia da Gruta**  
+
+---
+
+### 🛥️ **Como chegar?**  
+1. **Partida de Paranaguá:**  
+   - Balsa (40min) ou lancha rápida (20min)  
+2. **De Curitiba:**  
+   - Carro até Pontal do Sul (1h30) + travessia  
+
+---
+
+### 🌿 **Dica Essencial**  
+- Leve **repelente** (mosquitos ao entardecer)  
+- Calçado ideal: tênis ou sandália de trilha  
+
+---
+
+### 🍴 **Culinária Local**  
+**📍 Restaurante Tartaruga**  
+➡️ **Camarão na moranga** com ingredientes orgânicos  
+
+**🛍️ Artesanato:**  
+- Rede de pesca transformada em biojoias na **Casa das Rendias**  
+
+## 📚 **Paraty, Rio de Janeiro**  
+<img src="/src/images/paraty.jpg" alt="Centro Histórico de Paraty" style="width: 1080px; height: 720px; object-fit: cover;">  
+
+### 🌟 **Por que ir?**  
+Paraty combina **patrimônio histórico** e **natureza exuberante** com:  
+- Centro colonial com calçamento pé-de-moleque  
+- **FLIP 2025**: Edição especial sobre culturas indígenas com autores globais  
+- Reservas ecológicas da **Serra da Bocaina** e **Ilhas Alcatrazes**  
+
+---
+
+### 🆕 **Novidades em 2025**  
+✅ **Turismo Literário**  
+- Roteiros inspirados no livro "O Alienista" (Machado de Assis)  
+- Biblioteca flutuante na Baía de Paraty  
+
+✅ **Expansão Sustentável**  
+- 30 novos hotéis com selo **Carbono Zero**  
+- Ciclovia ligando o centro à Praia do Sono  
+
+---
+
+### 🏞️ **Roteiros Imperdíveis**  
+1. **Trilha do Ouro**  
+   - Caminhada por calçamentos do século XVIII (7km)  
+   - Vista panorâmica da Serra do Mar  
+
+2. **Mergulho nas Ilhas Alcatrazes**  
+   - Naufrágios históricos + vida marinha protegida  
+   - Necessário credenciamento do ICMBio  
+
+---
+
+### 🌿 **Sustentabilidade**  
+✅ **Projeto Carbono Zero**  
+- Compensação via reflorestamento da Mata Atlântica  
+
+✅ **Feira Caiçara**  
+- Produtos orgânicos aos sábados na **Praça do Chafariz**  
+- Artesanato em madeira de reflorestamento  
+
+---
+
+### ✈️ **Como chegar?**  
+1. **Voo** até Rio de Janeiro (1h de SP) ou São Paulo (1h40)  
+2. **Carro** pela BR-101 (3h do RJ)  
+3. **Ônibus executivo** (saídas diárias do Rio)  
+
+---
+
+### 🎭 **Dica Cultural**  
+"Visite a **Casa da Cultura** para ver exposições de autores indígenas durante a FLIP!"  
+
+---
+
+### 🍹 **Vida Noturna**  
+**📍 Armazém da Cachaça**  
+➡️ Deguste 500 tipos de cachaça artesanal + petiscos locais  

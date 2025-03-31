@@ -7,7 +7,7 @@ import { i18n } from "../locales/translation";
 import I18nKeys from "../locales/keys";
 import YukinaConfig from "../../yukina.config";
 import { formatDate } from "../utils/date";
-import { Image } from "astro:assets";
+import OptimizedImage from "./OptimizedImage.astro";
 import { getImageSource } from "../utils/imageImports";
 
 export interface Props {
@@ -35,12 +35,17 @@ const { time, wordCount } = props.readingMetadata;
     href={contentUrl}
     class="relative h-[128px] transition-all hover:brightness-75 lg:hidden"
   >
-    <Image
-      src={getImageSource(props.attraction_image || props.image) || GetCoverURLForUnspecifiedEntry(entryID)}
+    <OptimizedImage
+      src={props.attraction_image || props.image || GetCoverURLForUnspecifiedEntry(entryID)}
       width={400}
       height={300}
       class="absolute left-0 top-0 h-full w-full rounded-t-3xl object-cover lg:hidden"
       alt={`Imagem de capa para o post: ${props.title}`}
+      loading="lazy"
+      format="webp"
+      quality={80}
+      sizes="(max-width: 640px) 100vw, 400px"
+      fallbackImage="images/default-attraction.jpg"
     />
     <div class="absolute bottom-2 w-full">
       <div class="mx-2 flex flex-row justify-between">
@@ -151,12 +156,17 @@ const { time, wordCount } = props.readingMetadata;
     <div class="cover-container">
       <a href={contentUrl} class="cover-wrapper">
         <Icon class="right-icon" name="cuida:caret-right-outline" size={96} />
-        <Image
-          src={getImageSource(props.attraction_image || props.image) || GetCoverURLForUnspecifiedEntry(entryID)}
+        <OptimizedImage
+          src={props.attraction_image || props.image || GetCoverURLForUnspecifiedEntry(entryID)}
           width={404}
           height={212}
           class="h-[212px] w-[404px] select-none rounded-r-3xl object-cover dark:brightness-90"
           alt={`Imagem de capa para o post: ${props.title}`}
+          loading="lazy"
+          format="webp"
+          quality={80}
+          sizes="(min-width: 1024px) 404px, 100vw"
+          fallbackImage="images/default-attraction.jpg"
         />
       </a>
     </div>

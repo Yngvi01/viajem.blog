@@ -1,5 +1,6 @@
 // Importação dinâmica de todas as imagens disponíveis
 import defaultAttraction from '../images/default-attraction.jpg';
+import defaultImage from '../images/default-image.jpg';
 import logoImage from '../images/logo.png';
 
 // Importação automática de todas as imagens na pasta src/images
@@ -23,24 +24,28 @@ Object.entries(imageModules).forEach(([path, module]) => {
 
 // Garante que imagens essenciais estejam sempre disponíveis
 imageMap['images/default-attraction.jpg'] = defaultAttraction;
+imageMap['images/default-image.jpg'] = defaultImage;
 imageMap['logo.png'] = logoImage;
 imageMap['images/logo.png'] = logoImage;
 
 /**
  * Função para obter a imagem importada corretamente
  * @param imagePath Caminho da imagem (pode ser um caminho relativo ou URL)
+ * @param fallbackImage Imagem padrão a ser usada se a imagem principal não for encontrada
  * @returns A imagem importada ou o caminho original se for uma URL externa
  */
-export function getImageSource(imagePath: string | undefined) {
-  if (!imagePath) return defaultAttraction;
+export function getImageSource(imagePath: string | undefined, fallbackImage: string = 'images/default-attraction.jpg') {
+  if (!imagePath) {
+    return imageMap[fallbackImage] || defaultAttraction;
+  }
   
   // Se for uma URL externa, retorna o caminho diretamente
-  if (imagePath && (imagePath.startsWith('http') || imagePath.startsWith('data:'))) {
+  if (imagePath.startsWith('http') || imagePath.startsWith('data:')) {
     return imagePath;
   }
   
   // Verificação direta no mapa de imagens
-  if (imagePath && imageMap[imagePath]) {
+  if (imageMap[imagePath]) {
     return imageMap[imagePath];
   }
   
@@ -73,63 +78,27 @@ export function getImageSource(imagePath: string | undefined) {
       .replace(/^\//, ''); // Remove a barra inicial se existir
   };
   
-  // Tratamento para caminhos absolutos
-  if (imagePath.startsWith('/')) {
-    // Se o caminho contém '/src/images/', normalizamos para o formato 'images/nome-do-arquivo'
-    if (imagePath.includes('/src/images/')) {
-      const normalizedPath = normalizeToImagesPath(imagePath);
-      if (normalizedPath in imageMap) {
-        return imageMap[normalizedPath];
-      }
-      return '/' + normalizedPath;
-    }
-    
-    // Para outros caminhos absolutos, retornamos como está
-    return imagePath;
-  }
+  // Lista de tentativas de normalização de caminho para encontrar a imagem
+  const attemptPaths = [
+    imagePath,
+    'images/' + extractImageName(imagePath),
+    normalizeToImagesPath(imagePath),
+    imagePath.replace('src/', ''),
+    imagePath.startsWith('/') ? imagePath.substring(1) : imagePath
+  ];
   
-  // Tratamento para caminhos que começam com 'src/images/'
-  if (imagePath.startsWith('src/images/')) {
-    const normalizedPath = imagePath.replace('src/', '');
-    if (normalizedPath in imageMap) {
-      return imageMap[normalizedPath];
-    }
-    return '/' + normalizedPath;
-  }
-  
-  // Tratamento para caminhos que contêm 'src/images/' em qualquer posição
-  if (imagePath.includes('src/images/')) {
-    const normalizedPath = normalizeToImagesPath(imagePath);
-    if (normalizedPath in imageMap) {
-      return imageMap[normalizedPath];
-    }
-    return '/' + normalizedPath;
-  }
-  
-  // Tentativa final: verificar se o caminho existe no mapa após normalização
-  const normalizedPath = normalizeToImagesPath(imagePath);
-  if (normalizedPath in imageMap) {
-    return imageMap[normalizedPath];
-  }
-  
-  // Tenta verificar se existe com o caminho completo (para compatibilidade)
-  if (imagePath in imageMap) {
-    return imageMap[imagePath];
-  }
-  
-  // Tenta encontrar a imagem removendo barras iniciais
-  if (imagePath && imagePath.startsWith('/')) {
-    const pathWithoutSlash = imagePath.substring(1);
-    if (imageMap[pathWithoutSlash]) {
-      return imageMap[pathWithoutSlash];
+  // Tenta cada uma das opções de caminho
+  for (const path of attemptPaths) {
+    if (path in imageMap) {
+      return imageMap[path];
     }
   }
   
   // Log para debug (apenas em desenvolvimento)
   if (import.meta.env.DEV) {
-    console.log(`Imagem não encontrada: ${imagePath}`);
+    console.log(`Imagem não encontrada: ${imagePath}, usando imagem padrão.`);
   }
   
   // Fallback para imagem padrão
-  return defaultAttraction;
+  return imageMap[fallbackImage] || defaultAttraction;
 }

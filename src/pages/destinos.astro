@@ -4,8 +4,7 @@ import I18nKeys from "../locales/keys";
 import { i18n } from "../locales/translation";
 import Link from "../components/Link.astro";
 import MainLayout from "../layouts/MainLayout.astro";
-import { Image } from "astro:assets";
-import { getImageSource } from "../utils/imageImports";
+import OptimizedImage from "../components/OptimizedImage.astro";
 import { Icon } from "astro-icon/components";
 
 const categories = await GetCategories();
@@ -28,12 +27,16 @@ const destinosBanner = {
       Array.from(categories.values()).map((category) => (
         <div class="city-card" data-pagefind-body data-pagefind-weight="10" data-pagefind-meta="title">
           <div class="city-image-container">
-            <Image 
-              src={getImageSource(category.image) || "/images/default-category-banner.svg"}
+            <OptimizedImage 
+              src={category.image}
               alt={category.name}
               width={400}
               height={300}
               class="city-background-image"
+              format="webp"
+              quality={85}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              fallbackImage="images/default-category-banner.svg"
             />
             <div class="city-overlay"></div>
           </div>

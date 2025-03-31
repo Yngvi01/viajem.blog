@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import { getImageSource } from '../utils/imageImports';
 
 export interface Props {
-  src: string;
+  src?: string;
   alt: string;
   width?: number;
   height?: number;
@@ -14,6 +14,8 @@ export interface Props {
   sizes?: string;
   priority?: boolean;
   fetchpriority?: 'high' | 'low' | 'auto';
+  fallbackImage?: string;
+  decoding?: 'async' | 'sync' | 'auto';
 }
 
 const { 
@@ -27,10 +29,12 @@ const {
   format = 'webp',
   sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px',
   priority = false,
-  fetchpriority = 'auto'
+  fetchpriority = 'auto',
+  fallbackImage = 'images/default-attraction.jpg',
+  decoding = 'async'
 } = Astro.props;
 
-const imageSrc = getImageSource(src);
+const imageSrc = getImageSource(src, fallbackImage);
 const actualLoading = priority ? 'eager' : loading;
 const actualFetchPriority = priority ? 'high' : fetchpriority;
 ---
@@ -46,4 +50,5 @@ const actualFetchPriority = priority ? 'high' : fetchpriority;
   format={format}
   sizes={sizes}
   fetchpriority={actualFetchPriority}
+  decoding={decoding}
 />

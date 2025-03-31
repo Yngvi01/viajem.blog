@@ -2,7 +2,7 @@
 title: 10 Destinos Incríveis no Brasil para Visitar em 2025
 slug: destinos-incriveis-brasil-2025
 date: 2025-03-31
-published: true
+published: 2025-03-21
 description: Descubra dez destinos emergentes no Brasil que prometem experiências únicas e inesquecíveis em 2025.
 keywords:
   - destinos emergentes brasil 2025

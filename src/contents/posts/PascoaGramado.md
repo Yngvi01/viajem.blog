@@ -17,8 +17,8 @@ tags:
 category: Gramado
 author: emn178
 sourceLink: "https://www.gramado.rs.gov.br/turismo"
-image: src/images/gramasdo.png
-attraction_image: src/images/gscoa.png
+image: src/images/gramado.png
+attraction_image: src/images/gramadopascoa.png
 meta_image: src/images/gramadopascoa.png
 draft: false
 ---

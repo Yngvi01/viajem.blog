@@ -30,6 +30,8 @@ Dica: Visite entre maio e setembro para ondas perfeitas e menos chuvas.
 
 ### 1. Itacaré, Bahia
 
+![Praia de Itacaré](/src/images/default-image.jpg)
+
 Por que ir: No sul da Bahia, Itacaré é um santuário onde a Mata Atlântica encontra o mar. Além das praias famosas, como Praia da Concha (perfeita para banho) e Praia da Tiririca (ponto de surf), a região é cortada por rios e cachoeiras. A Trilha das 4 Praias (Resende, Havaizinho, Camboinha e Engenhoca) é um roteiro clássico, passando por coqueirais e piscinas naturais.
 
 Novidades em 2025:
@@ -49,6 +51,7 @@ Como chegar: Voo até Ilhéus (1h30 de São Paulo), seguido de 1h de carro.
 
 
 ### 2. Capitólio, Minas Gerais
+![Capitólio](/src/images/default-image.jpg)
 
 Por que ir: Conhecida como o "Grand Canyon brasileiro", a região abriga o Lago de Furnas, formado por represa em 1960. Os cânions esculpidos em quartzito, como o Cânion do Escorrega Macaco, são acessíveis por passeios de barco que incluem paradas para nadar em águas cristalinas.
 
@@ -67,6 +70,7 @@ Trilha noturna até o Véu da Noiva, cachoeira iluminada por luzes LED sustentá
 Melhor época: Abril a outubro (período seco).
 
 ### 3. Alter do Chão, Pará
+![Alter](/src/images/default-image.jpg)
 
 Por que ir: No coração da Amazônia, essa vila ribeirinha é famosa pela Ilha do Amor, uma praia de água doce que emerge na seca (agosto a dezembro). Em 2025, o turismo comunitário ganha força: visite a Comunidade do Saracá para aprender sobre medicina tradicional e artesanato com fibras naturais.
 
@@ -83,6 +87,7 @@ Lançamento de roteiros de "glamping" em áreas remotas da floresta, com estrutu
 Dica: Prove o tacacá (caldo de tucupi com camarão seco) no mercado municipal.
 
 ### 4. Jalapão, Tocantins
+![Jalapão](/src/images/default-image.jpg)
 
 Por que ir: Um dos últimos redutos de natureza intocada no Brasil, Jalapão mistura dunas douradas, rios de águas transparentes e formações rochosas surreais. Os fervedouros (nascentes com pressão subterrânea que impedem o afundamento) são fenômenos imperdíveis.
 
@@ -101,6 +106,7 @@ Limite diário de visitantes em áreas sensíveis, como a Pedra Furada.
 Como chegar: Voo até Palmas, seguido de 4h de carro (4x4 recomendado).
 
 ### 5. São Miguel dos Milagres, Alagoas
+![São Miguel](/src/images/default-image.jpg)
 
 Por que ir: Na Costa dos Corais, este refúgio tem piscinas naturais protegidas por recifes. A Praia do Patacho é ideal para famílias, enquanto o Recife da Barra atrai mergulhadores com sua vida marinha (peixes-papagaio, estrelas-do-mar).
 
@@ -119,7 +125,7 @@ Workshop de culinária regional no Sítio Frutas do Coração, com frutas exóti
 Dica: Visite entre janeiro e março para ver desovas de tartarugas marinhas.
 
 ### 6. Chapada das Mesas, Maranhão
-
+![Chapada das Mesas](/src/images/default-image.jpg)
 Por que ir: Um cenário de ficção científica com cachoeiras monumentais e formações rochosas esculpidas pelo vento. A Cachoeira Pedra Caída (186 metros de altura) tem plataforma de observação e poço para banho.
 
 Roteiro de aventura:
@@ -137,7 +143,7 @@ Artesanato em cerâmica inspirado em pinturas rupestres.
 Infraestrutura 2025: Novas pousadas com arquitetura integrada à paisagem, usando pedras locais.
 
 ### 7. Praia de Pipa, Rio Grande do Norte
-
+![Praia da Pipa](/src/images/default-image.jpg)
 Por que ir: Além das falésias coloridas e praias como a Baía dos Golfinhos, Pipa é um polo de turismo consciente. Em 2025, o projeto Pipa Livre de Plástico promete eliminar descartáveis na orla.
 
 O que fazer:
@@ -155,6 +161,7 @@ Feirinha de Pipa: Artesanato em renda renascença e biojóias.
 Dica: Alugue um buggy para explorar praias vizinhas como Sibaúma e Barra de Cunhaú.
 
 ### 8. Serra da Capivara, Piauí
+![Serra da Capivara](/src/images/default-image.jpg)
 
 Por que ir: Patrimônio da Humanidade pela UNESCO, o parque guarda mais de 1.300 sítios arqueológicos com pinturas de 12 mil anos. Em 2025, o novo Museu Interativo da Pré-História usa realidade aumentada para recriar cenas cotidianas dos primeiros habitantes.
 
@@ -167,7 +174,7 @@ Toca do Boqueirão da Pedra Furada: Considerado um dos sítios mais importantes 
 Como apoiar: Contrate guias da FUMDHAM (Fundação Museu do Homem Americano), que reinveste em pesquisas.
 
 ### 9. Ilha do Mel, Paraná
-
+![Ilha do Mel](/src/images/default-image.jpg)
 Por que ir: Sem carros e com energia solar em 80% das pousadas, a ilha é um exemplo de turismo de baixo impacto. A Fortaleza Nossa Senhora dos Prazeres (século XVIII) oferece vistas espetaculares do mar.
 
 Atividades:

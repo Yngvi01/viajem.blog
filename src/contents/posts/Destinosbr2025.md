@@ -28,30 +28,49 @@ No sul da Bahia, Itacaré une praias selvagens e Mata Atlântica preservada. Des
 
 Dica: Visite entre maio e setembro para ondas perfeitas e menos chuvas.
 
-### 1. Itacaré, Bahia
+### 🌴 **Itacaré, Bahia** 
 
-![Praia de Itacaré](/src/images/default-image.jpg)
+<img src="/src/images/itacare.jpg" alt="Praia de Itacaré" style="width: 1080px; height: 720px; object-fit: cover;">
 
-Por que ir: No sul da Bahia, Itacaré é um santuário onde a Mata Atlântica encontra o mar. Além das praias famosas, como Praia da Concha (perfeita para banho) e Praia da Tiririca (ponto de surf), a região é cortada por rios e cachoeiras. A Trilha das 4 Praias (Resende, Havaizinho, Camboinha e Engenhoca) é um roteiro clássico, passando por coqueirais e piscinas naturais.
+ 
 
-Novidades em 2025:
+### 🌟 **Por que ir?**  
+No sul da Bahia, Itacaré é um santuário onde a **Mata Atlântica encontra o mar**. Além das praias famosas, como:  
+- **Praia da Concha** (perfeita para banho)  
+- **Praia da Tiririca** (ponto de surf),  
 
-Inauguração do Eco Parque Itacaré, com tirolesa sobre a mata e circuito de arvorismo.
+a região é cortada por rios e cachoeiras. A **Trilha das 4 Praias** (Resende, Havaizinho, Camboinha e Engenhoca) é um roteiro clássico, passando por coqueirais e piscinas naturais.  
 
-Expansão de pousadas eco-chic, como a Txai Resort, que integra spa ayurvédico e gastronomia orgânica.
+---
 
-Cultura e Gastronomia:
+### 🆕 **Novidades em 2025**  
+✅ **Eco Parque Itacaré**  
+- Tirolesa sobre a mata  
+- Circuito de arvorismo  
 
-Experimente o moqueca de arraia no restaurante Toca da Coruja, feito com peixe fresco e leite de coco da região.
+✅ **Pousadas Eco-Chic**  
+- **Txai Resort**: Spa ayurvédico + gastronomia orgânica  
 
-Participe do Festival de Chocolate (junho), celebrando a produção local de cacau orgânico.
+---
 
-Como chegar: Voo até Ilhéus (1h30 de São Paulo), seguido de 1h de carro.
+### 🍽️ **Cultura e Gastronomia**  
+**📍 Toca da Coruja**  
+➡️ Experimente a **moqueca de arraia** (peixe fresco + leite de coco da região)  
+
+**🎉 Festival de Chocolate** (junho)  
+➡️ Celebração do cacau orgânico local  
+
+---
+
+### ✈️ **Como chegar?**  
+1. **Voo** até Ilhéus (1h30 de São Paulo)  
+2. **Carro** (1h de viagem)  
+
 
 
 
 ### 2. Capitólio, Minas Gerais
-![Capitólio](/src/images/default-image.jpg)
+<img src="/src/images/capitolio.jpg" alt="Capitólio" style="width: 1080px; height: 720px; object-fit: cover;">
 
 Por que ir: Conhecida como o "Grand Canyon brasileiro", a região abriga o Lago de Furnas, formado por represa em 1960. Os cânions esculpidos em quartzito, como o Cânion do Escorrega Macaco, são acessíveis por passeios de barco que incluem paradas para nadar em águas cristalinas.
 
@@ -192,7 +211,7 @@ Lançamento de passeios de barco elétrico para observar botos-cinza.
 Dica: Leve repelente – mosquitos são comuns ao entardecer.
 
 ### 10. Paraty, Rio de Janeiro
-
+![Paraty](/src/images/default-image.jpg)
 Por que ir: Além do centro histórico colonial, Paraty em 2025 se reinventa com foco em turismo literário e aventura. A FLIP (Festa Literária Internacional) terá edição especial sobre culturas indígenas, com autores globais.
 
 Roteiros:

@@ -1,8 +1,7 @@
 ---
 import Main from "../../layouts/MainLayout.astro";
-import { Image } from "astro:assets";
+import OptimizedImage from "../../components/OptimizedImage.astro";
 import { GetCategories } from "../../utils/content";
-import { getImageSource } from "../../utils/imageImports";
 import { Icon } from "astro-icon/components";
 import { formatDate } from "../../utils/date";
 import YukinaConfig from "../../../yukina.config";
@@ -23,7 +22,7 @@ const categoryData = categorias.get(category);
 const categoryBanner = {
   title: categoryData?.name || "Categoria",
   subTitle: "Escolha o seu artigo:",
-  bannerImage: categoryData?.image ? (categoryData.image.startsWith("src/") ? "/" + categoryData.image : categoryData.image) : "/images/default-category-banner.svg",
+  bannerImage: categoryData?.image || "/images/default-category-banner.svg",
 };
 
 const posts = categoryData?.posts || [];
@@ -46,12 +45,16 @@ const posts = categoryData?.posts || [];
               data-pagefind-meta="title"
             >
               <div class="city-image-container">
-                <Image 
-                  src={getImageSource(entry.data.attraction_image || entry.data.image)}
+                <OptimizedImage 
+                  src={entry.data.attraction_image || entry.data.image}
                   alt={entry.data.title}
                   width={400}
                   height={300}
                   class="city-background-image"
+                  format="webp"
+                  quality={85}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  fallbackImage="images/default-attraction.jpg"
                 />
                 <div class="city-overlay"></div>
               </div>

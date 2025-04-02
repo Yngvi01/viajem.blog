@@ -1,0 +1,26 @@
+---
+import { Image } from 'astro:assets';
+import { getImageSource } from '../utils/imageImports';
+
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+}
+
+const { src, alt, width = 1080, height = 720, class: className = '' } = Astro.props;
+const imageSrc = getImageSource(src);
+---
+
+<Image 
+  src={imageSrc} 
+  alt={alt} 
+  width={width} 
+  height={height} 
+  class={className}
+  loading="lazy"
+  format="webp"
+  quality={80}
+/> 

@@ -5,7 +5,6 @@ import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import svelte from "@astrojs/svelte";
 import swup from "@swup/astro";
-import { defineConfig as defineImageConfig } from 'astro/config';
 import compress from "astro-compress";
 
 import rehypeSlug from "rehype-slug";
@@ -13,6 +12,7 @@ import rehypeKatex from "rehype-katex";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import remarkMath from "remark-math";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
+import { rehypeAstroImage } from "./src/plugins/rehype-astro-image.mjs";
 
 import YukinaConfig from "./yukina.config";
 
@@ -65,6 +65,7 @@ export default defineConfig({
     rehypePlugins: [
       rehypeSlug,
       rehypeKatex,
+      rehypeAstroImage,
       [
         rehypeAutolinkHeadings,
         {

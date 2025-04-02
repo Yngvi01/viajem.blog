@@ -49,7 +49,7 @@ const posts = categoryData?.posts || [];
                   src={entry.data.attraction_image || entry.data.image}
                   alt={entry.data.title}
                   width={400}
-                  height={300}
+                  height={400}
                   class="city-background-image"
                   format="webp"
                   quality={85}
@@ -103,7 +103,7 @@ const posts = categoryData?.posts || [];
     transition:
       transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
       box-shadow 0.4s ease;
-    height: 320px;
+    aspect-ratio: 1/1;
     color: white;
     display: flex;
     flex-direction: column;
@@ -272,7 +272,7 @@ const posts = categoryData?.posts || [];
     }
     
     .city-card {
-      height: 300px;
+      aspect-ratio: 1/1;
     }
   }
 
@@ -283,7 +283,7 @@ const posts = categoryData?.posts || [];
     }
     
     .city-card {
-      height: 280px;
+      aspect-ratio: 1/1;
     }
     
     .city-title {

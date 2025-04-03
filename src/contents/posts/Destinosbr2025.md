@@ -26,7 +26,7 @@ draft: false
 
 
 ## 🌴 **Itacaré, Bahia**  
-<img src="/src/images/itacare.jpg" alt="Praias e Mata Atlântica em Itacaré" style="width: 1080px; height: 720px; object-fit: cover;">  
+![itacaré](../../assets/images/itacare.jpg)  
 
 ### 🌟 **Por que ir?**  
 Itacaré une **praias selvagens** e **Mata Atlântica preservada**, oferecendo:  

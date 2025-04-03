@@ -8,9 +8,28 @@ interface Props {
   width?: number;
   height?: number;
   class?: string;
+  quality?: number;
+  loading?: 'eager' | 'lazy';
+  format?: 'webp' | 'avif' | 'png' | 'jpg' | 'jpeg';
+  sizes?: string;
+  fetchpriority?: 'high' | 'low' | 'auto';
+  decoding?: 'async' | 'sync' | 'auto';
 }
 
-const { src, alt, width = 1080, height = 720, class: className = '' } = Astro.props;
+const { 
+  src, 
+  alt, 
+  width = 1080, 
+  height = 720, 
+  class: className = '', 
+  quality = 80,
+  loading = 'lazy',
+  format = 'webp',
+  sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 1080px',
+  fetchpriority = 'auto',
+  decoding = 'async'
+} = Astro.props;
+
 const imageSrc = getImageSource(src);
 ---
 
@@ -20,7 +39,10 @@ const imageSrc = getImageSource(src);
   width={width} 
   height={height} 
   class={className}
-  loading="lazy"
-  format="webp"
-  quality={80}
-/> 
+  quality={quality}
+  loading={loading}
+  format={format}
+  sizes={sizes}
+  fetchpriority={fetchpriority}
+  decoding={decoding}
+/>

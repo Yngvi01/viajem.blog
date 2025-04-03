@@ -44,7 +44,7 @@ export function getImageSource(imagePath: string | undefined, fallbackImage: str
     return imagePath;
   }
   
-  // Verificação direta no mapa de imagens
+  // Verificação direta no mapa de imagens 
   if (imageMap[imagePath]) {
     return imageMap[imagePath];
   }

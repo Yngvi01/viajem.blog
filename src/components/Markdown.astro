@@ -38,7 +38,9 @@ const { class: className } = Astro.props;
 
       wrapper.appendChild(codeBlock);
       wrapper.appendChild(copyButton);
-      codeBlock.parentNode.insertBefore(wrapper, codeBlock);
+      if (codeBlock.parentNode) {
+        codeBlock.parentNode.insertBefore(wrapper, codeBlock);
+      }
 
       copyButton.addEventListener("click", async () => {
         let text = codeBlock.querySelector("code")?.innerText;

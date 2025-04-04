@@ -47,7 +47,7 @@ const pageBanner = {
               image={entry.data.cover || entry.data.image}
               attraction_image={entry.data.attraction_image}
               readingMetadata={
-                (entry.rendered!.metadata as any).frontmatter.readingMetadata
+                entry.rendered?.metadata ? (entry.rendered.metadata as any).frontmatter.readingMetadata : undefined
               }
             />
           </div>

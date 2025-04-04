@@ -4,8 +4,10 @@ import icon from "astro-icon";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 import svelte from "@astrojs/svelte";
+import react from "@astrojs/react";
 import swup from "@swup/astro";
 import compress from "astro-compress";
+import mdx from "@astrojs/mdx";
 
 import rehypeSlug from "rehype-slug";
 import rehypeKatex from "rehype-katex";
@@ -35,7 +37,9 @@ export default defineConfig({
   integrations: [
     tailwind(),
     svelte(),
+    react(),
     icon(),
+    mdx(),
     swup({
       theme: false,
       containers: ["main", "footer", ".banner-inner"],
@@ -58,6 +62,23 @@ export default defineConfig({
     })
   ],
   markdown: {
+    shikiConfig: {
+      theme: "github-dark-default",
+    },
+    remarkPlugins: [remarkReadingTime, remarkMath],
+    rehypePlugins: [
+      rehypeSlug,
+      rehypeKatex,
+      rehypeAstroImage,
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: "prepend",
+        },
+      ],
+    ],
+  },
+  mdx: {
     shikiConfig: {
       theme: "github-dark-default",
     },

@@ -4,7 +4,7 @@ import { defineCollection, z } from "astro:content";
 // Definindo a coleção de posts
 const posts = defineCollection({
   loader: glob({
-    pattern: "**/*.md", // Padrão para buscar todos os arquivos Markdown
+    pattern: "**/*.{md,mdx}", // Padrão para buscar arquivos Markdown e MDX
     base: "src/contents/posts", // Diretório onde os posts estão localizados
   }),
   schema: z.object({
@@ -29,7 +29,7 @@ const posts = defineCollection({
 // Definindo a coleção de specs (se necessário)
 const specs = defineCollection({
   loader: glob({
-    pattern: "**/*.md", // Padrão para buscar todos os arquivos Markdown
+    pattern: "**/*.{md,mdx}", // Padrão para buscar arquivos Markdown e MDX
     base: "src/contents/specs", // Diretório onde as specs estão localizadas
   }),
 });

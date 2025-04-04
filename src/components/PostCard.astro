@@ -19,13 +19,13 @@ export interface Props {
   description?: string;
   image?: string;
   attraction_image?: string; // Adicionando a propriedade attraction_image
-  readingMetadata: { time: number; wordCount: number };
+  readingMetadata?: { time: number; wordCount: number };
 }
 
 const props = Astro.props;
 const entryID = IdToSlug(props.id);
 const contentUrl = `/posts/${entryID}`;
-const { time, wordCount } = props.readingMetadata;
+const { time = 1, wordCount = 0 } = props.readingMetadata || {};
 ---
 
 <div

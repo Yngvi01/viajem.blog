@@ -27,6 +27,15 @@ export default defineConfig({
   build: {
     inlineStylesheets: "auto",
   },
+  markdown: {
+    remarkPlugins: [remarkReadingTime],
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: "wrap" }],
+      rehypeKatex,
+      rehypeAstroImage,
+    ],
+  },
   image: {
     domains: ["cdn.pixabay.com"],
     remotePatterns: [{ protocol: "https" }],

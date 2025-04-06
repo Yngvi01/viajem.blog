@@ -8,9 +8,9 @@ export interface Props {
   width?: number;
   height?: number;
   class?: string;
+  format?: 'webp';
   quality?: number;
   loading?: 'eager' | 'lazy';
-  format?: 'webp' | 'avif' | 'png' | 'jpg' | 'jpeg';
   sizes?: string;
   fetchpriority?: 'high' | 'low' | 'auto';
   fallbackImage?: string | ImageMetadata;
@@ -26,7 +26,7 @@ const {
   class: className = '',
   quality = 80,
   loading = 'lazy',
-  format = 'webp', // corrigido: agora é string
+  format = 'webp',
   sizes,
   fetchpriority = 'auto',
   fallbackImage = 'assets/images/default-attraction.jpg',
@@ -34,7 +34,11 @@ const {
   style = ''
 } = Astro.props;
 
-const imageSrc = getImageSource(src, fallbackImage);
+const imageSrc = getImageSource(
+  typeof src === 'string' ? src : undefined,
+  typeof fallbackImage === 'string' ? fallbackImage : undefined
+);
+
 
 if (!imageSrc) {
   throw new Error(`Imagem inválida: src não definido e fallback '${fallbackImage}' falhou.`);

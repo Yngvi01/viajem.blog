@@ -1,6 +1,4 @@
-import type { ImageMetadata } from 'astro';
-
-// Importação direta de imagens essenciais
+// Importação dinâmica de todas as imagens disponíveis na pasta src/assets/images
 import defaultAttraction from '../assets/images/default-attraction.jpg';
 import defaultImage from '../assets/images/default-image.jpg';
 import logoImage from '../assets/images/logo.png';
@@ -8,69 +6,85 @@ import logoImage from '../assets/images/logo.png';
 // Importação automática de todas as imagens em src/assets/images
 const imageModules = import.meta.glob('../assets/images/**/*.{png,jpg,jpeg,gif,webp,avif,svg}', { eager: true });
 
-// Mapeamento de imagens
-const imageMap: Record<string, ImageMetadata> = {};
+// Mapa de imagens para acesso rápido
+const imageMap: Record<string, any> = {};
 
-// Preenche o mapa automaticamente
+// Preenche o mapa de imagens automaticamente
 Object.entries(imageModules).forEach(([path, module]) => {
+  // Normaliza o caminho removendo '../assets/' para manter a referência interna
   const normalizedPath = path.replace('../assets/', '');
-  const image = (module as any).default;
+  imageMap[normalizedPath] = (module as any).default;
 
-  imageMap[normalizedPath] = image;
-
+  // Adiciona versões sem o prefixo 'images/' para compatibilidade com referências anteriores
   if (normalizedPath.startsWith('images/')) {
-    const withoutPrefix = normalizedPath.replace('images/', '');
-    imageMap[withoutPrefix] = image;
+    const withoutImagesPrefix = normalizedPath.replace('images/', '');
+    imageMap[withoutImagesPrefix] = (module as any).default;
   }
 });
 
-// Imagens padrão garantidas
+// Garante que imagens essenciais estejam sempre disponíveis
 imageMap['images/default-attraction.jpg'] = defaultAttraction;
 imageMap['images/default-image.jpg'] = defaultImage;
 imageMap['logo.png'] = logoImage;
 imageMap['images/logo.png'] = logoImage;
 
 /**
- * Retorna uma imagem do sistema de importação estática ou externa
- * @param imagePath Caminho ou objeto da imagem
- * @param fallback Fallback em caso de imagem inválida
- * @returns Caminho da imagem otimizada (ImageMetadata ou string)
+ * Função para obter a imagem importada corretamente
+ * @param imagePath Caminho da imagem (nome do arquivo ou URL)
+ * @param fallbackImage Imagem padrão caso a principal não seja encontrada
+ * @returns Caminho da imagem otimizada ou fallback
  */
-export function getImageSource(
-  imagePath?: string | ImageMetadata,
-  fallback?: string | ImageMetadata
-): string | ImageMetadata {
-  // Se já for uma imagem processada
-  if (typeof imagePath === 'object' && imagePath?.src) return imagePath;
-  if (typeof fallback === 'object' && fallback?.src) return fallback;
+export function getImageSource(imagePath: string | undefined, fallbackImage: string = 'images/default-attraction.jpg') {
+  if (!imagePath) {
+    return imageMap[fallbackImage] || defaultAttraction;
+  }
 
-  // Se for externa ou base64
-  if (typeof imagePath === 'string' && (imagePath.startsWith('http') || imagePath.startsWith('data:'))) {
+  // Se for uma URL externa ou base64, retorna o caminho diretamente
+  if (imagePath.startsWith('http') || imagePath.startsWith('data:')) {
     return imagePath;
   }
 
-  const resolvePath = (path: string): ImageMetadata | undefined => {
-    if (imageMap[path]) return imageMap[path];
+  // Verifica diretamente no mapa de imagens
+  if (imageMap[imagePath]) {
+    return imageMap[imagePath];
+  }
 
-    const normalized = path.replace(/^\/?src\/assets\/images\//, 'images/');
-    const short = path.split('/').pop();
-    const attempts = [path, normalized, `images/${short}`, short];
-
-    for (const key of attempts) {
-      if (key && imageMap[key]) return imageMap[key];
+  // Normaliza caminho para garantir compatibilidade
+  const normalizeImagePath = (path: string) => {
+    if (path.includes('src/assets/images/')) {
+      return 'images/' + path.split('/').pop();
     }
-    
-    return undefined;
+
+    if (path.startsWith('images/')) {
+      return path;
+    }
+
+    if (path.startsWith('/images/')) {
+      return path.substring(1);
+    }
+
+    return 'images/' + path.split('/').pop();
   };
 
-  const resolvedImage = imagePath && typeof imagePath === 'string' ? resolvePath(imagePath) : undefined;
-  const resolvedFallback = fallback && typeof fallback === 'string' ? resolvePath(fallback) : defaultAttraction;
+  // Tenta encontrar a imagem com diferentes formatos de caminho
+  const attemptPaths = [
+    imagePath,
+    normalizeImagePath(imagePath),
+    imagePath.replace('src/', ''),
+    imagePath.startsWith('/') ? imagePath.substring(1) : imagePath
+  ];
 
-  if (!resolvedImage && import.meta.env.DEV && imagePath) {
+  for (const path of attemptPaths) {
+    if (imageMap[path]) {
+      return imageMap[path];
+    }
+  }
+
+  // Log de erro em ambiente de desenvolvimento
+  if (import.meta.env.DEV) {
     console.warn(`Imagem não encontrada: ${imagePath}, usando fallback.`);
   }
 
-  return resolvedImage ?? resolvedFallback ?? defaultAttraction;
-
-  
+  // Retorna a imagem padrão
+  return imageMap[fallbackImage] || defaultAttraction;
 }

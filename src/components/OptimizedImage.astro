@@ -3,52 +3,63 @@ import { Image } from 'astro:assets';
 import { getImageSource } from '../utils/imageImports';
 
 export interface Props {
-  src?: string;
+  src?: string | ImageMetadata;
   alt: string;
   width?: number;
   height?: number;
   class?: string;
+  format?: 'webp';
   quality?: number;
   loading?: 'eager' | 'lazy';
-  format?: 'webp' | 'avif' | 'png' | 'jpg' | 'jpeg';
   sizes?: string;
-  priority?: boolean;
   fetchpriority?: 'high' | 'low' | 'auto';
-  fallbackImage?: string;
+  fallbackImage?: string | ImageMetadata;
   decoding?: 'async' | 'sync' | 'auto';
+  style?: string;
 }
 
-const { 
-  src, 
-  alt, 
-  width = 800, 
-  height = 600, 
-  class: className = '', 
+const {
+  src,
+  alt,
+  width = 800,
+  height = 600,
+  class: className = '',
   quality = 80,
   loading = 'lazy',
   format = 'webp',
-  sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px',
-  priority = false,
+  sizes,
   fetchpriority = 'auto',
   fallbackImage = 'assets/images/default-attraction.jpg',
-  decoding = 'async'
+  decoding = 'async',
+  style = ''
 } = Astro.props;
 
-const imageSrc = getImageSource(src, fallbackImage);
-const actualLoading = priority ? 'eager' : loading;
-const actualFetchPriority = priority ? 'high' : fetchpriority;
+const imageSrc = getImageSource(
+  typeof src === 'string' ? src : undefined,
+  typeof fallbackImage === 'string' ? fallbackImage : undefined
+);
+
+
+if (!imageSrc) {
+  throw new Error(`Imagem inválida: src não definido e fallback '${fallbackImage}' falhou.`);
+}
+
+const defaultSizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px';
+const finalSizes = sizes ?? defaultSizes;
 ---
 
 <Image 
   src={imageSrc} 
   alt={alt} 
   width={width} 
-  height={height} 
+  height={height}
+  layout="fixed"
   class={className}
   quality={quality}
-  loading={actualLoading}
+  loading={loading}
   format={format}
-  sizes={sizes}
-  fetchpriority={actualFetchPriority}
+  sizes={finalSizes}
+  fetchpriority={fetchpriority}
   decoding={decoding}
+  style={style}
 />

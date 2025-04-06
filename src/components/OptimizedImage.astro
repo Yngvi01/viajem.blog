@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import { getImageSource } from '../utils/imageImports';
 
 export interface Props {
-  src?: string;
+  src?: string | ImageMetadata;
   alt: string;
   width?: number;
   height?: number;
@@ -12,31 +12,36 @@ export interface Props {
   loading?: 'eager' | 'lazy';
   format?: 'webp' | 'avif' | 'png' | 'jpg' | 'jpeg';
   sizes?: string;
-  priority?: boolean;
   fetchpriority?: 'high' | 'low' | 'auto';
-  fallbackImage?: string;
+  fallbackImage?: string | ImageMetadata;
   decoding?: 'async' | 'sync' | 'auto';
+  style?: string;
 }
 
-const { 
-  src, 
-  alt, 
-  width = 800, 
-  height = 600, 
-  class: className = '', 
+const {
+  src,
+  alt,
+  width = 800,
+  height = 600,
+  class: className = '',
   quality = 80,
   loading = 'lazy',
-  format = 'webp',
-  sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px',
-  priority = false,
+  format = 'webp', // corrigido: agora é string
+  sizes,
   fetchpriority = 'auto',
   fallbackImage = 'assets/images/default-attraction.jpg',
-  decoding = 'async'
+  decoding = 'async',
+  style = ''
 } = Astro.props;
 
 const imageSrc = getImageSource(src, fallbackImage);
-const actualLoading = priority ? 'eager' : loading;
-const actualFetchPriority = priority ? 'high' : fetchpriority;
+
+if (!imageSrc) {
+  throw new Error(`Imagem inválida: src não definido e fallback '${fallbackImage}' falhou.`);
+}
+
+const defaultSizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 800px';
+const finalSizes = sizes ?? defaultSizes;
 ---
 
 <Image 
@@ -44,12 +49,13 @@ const actualFetchPriority = priority ? 'high' : fetchpriority;
   alt={alt} 
   width={width} 
   height={height}
-  layout="responsive"
+  layout="fixed"
   class={className}
   quality={quality}
-  loading={actualLoading}
+  loading={loading}
   format={format}
-  sizes={sizes}
-  fetchpriority={actualFetchPriority}
+  sizes={finalSizes}
+  fetchpriority={fetchpriority}
   decoding={decoding}
+  style={style}
 />

@@ -126,15 +126,23 @@
       }, 250); // Debounce de 250ms
     };
     
-    // Separar a atualização visual da lógica de busca
+    // Separar a atualização visual da lógica de busca com otimizações
     const updateResultPanel = (shouldShow: boolean) => {
+      // Usar requestAnimationFrame para sincronizar com o ciclo de renderização
       requestAnimationFrame(() => {
+        // Aplicar transformações em vez de height/opacity para melhor performance
         if (shouldShow) {
-          resultPannel.style.height = `${Math.min(searchResult.length * 84 + 16, 436)}px`;
+          const newHeight = `${Math.min(searchResult.length * 84 + 16, 436)}px`;
+          // Verificar se a altura realmente mudou para evitar reflow desnecessário
+          if (resultPannel.style.height !== newHeight) {
+            resultPannel.style.height = newHeight;
+          }
           resultPannel.style.opacity = "100%";
+          resultPannel.style.transform = "translateY(0)";
         } else {
           resultPannel.style.height = "0px";
           resultPannel.style.opacity = "0";
+          resultPannel.style.transform = "translateY(-10px)";
         }
       });
     };

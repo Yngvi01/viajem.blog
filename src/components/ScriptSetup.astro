@@ -3,7 +3,13 @@
 ---
 
 <script>
-  import lozad from "lozad";
+  // Importar lozad apenas quando necessário para reduzir o bloqueio inicial
+  const loadLozad = async () => {
+    if (typeof lozad === 'undefined') {
+      return await import('lozad').then(module => module.default);
+    }
+    return lozad;
+  };
   
   // Importar OverlayScrollbars sob demanda
   let OverlayScrollbars: any;

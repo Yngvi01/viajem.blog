@@ -78,30 +78,47 @@
                 
                 // Processar resultados em lotes para reduzir bloqueio
                 const results = ret.results;
-                const batchSize = 5;
+                const batchSize = 3; // Reduzir tamanho do lote para melhor responsividade
                 
+                // Usar requestAnimationFrame para sincronizar com o ciclo de renderização
+                const processNextBatch = async (startIndex) => {
+                  return new Promise(resolve => {
+                    requestAnimationFrame(async () => {
+                      const endIndex = Math.min(startIndex + batchSize, results.length);
+                      const batch = results.slice(startIndex, endIndex);
+                      
+                      // Processar dados em paralelo
+                      const batchResults = await Promise.all(
+                        batch.map(item => item.data())
+                      );
+                      
+                      // Atualizar resultados
+                      searchResultArr = [...searchResultArr, ...batchResults];
+                      
+                      // Se for o primeiro lote, já atualizamos a UI para feedback mais rápido
+                      if (startIndex === 0) {
+                        searchResult = [...searchResultArr];
+                        updateResultPanel(true);
+                        
+                        // Inicializar scrollbars se temos resultados suficientes
+                        if (searchResultArr.length > 5) {
+                          // Adiar inicialização de scrollbars para não bloquear a UI
+                          setTimeout(initScrollbars, 50);
+                        }
+                      }
+                      
+                      resolve();
+                    });
+                  });
+                };
+                
+                // Processar todos os lotes sequencialmente
                 for (let i = 0; i < results.length; i += batchSize) {
-                  const batch = results.slice(i, i + batchSize);
-                  const batchResults = await Promise.all(
-                    batch.map(item => item.data())
-                  );
-                  
-                  searchResultArr = [...searchResultArr, ...batchResults];
-                  
-                  // Se for o primeiro lote, já atualizamos a UI para feedback mais rápido
-                  if (i === 0) {
-                    searchResult = [...searchResultArr];
-                    updateResultPanel(true);
-                    
-                    // Inicializar scrollbars se temos resultados suficientes
-                    if (searchResultArr.length > 5) {
-                      initScrollbars();
-                    }
-                  }
+                  await processNextBatch(i);
                   
                   // Pequena pausa entre lotes para permitir que a UI responda
                   if (i + batchSize < results.length) {
-                    await new Promise(r => setTimeout(r, 10));
+                    await new Promise(r => setTimeout(r, 5)); // Reduzir tempo de espera
                   }
                 }
                 

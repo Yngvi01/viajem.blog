@@ -25,6 +25,12 @@ import BaseHead from "../components/BaseHead.astro";
         <slot />
       </main>
     </div>
+    <!-- Scripts de otimização carregados em ordem de prioridade -->
+    <script src="/css-js-optimization.js" defer></script>
+    <script src="/performance-optimizations.js" defer></script>
+    <script src="/lazy-load.js" defer></script>
+    <script src="/image-optimization.js" defer></script>
+    <script src="/third-party-optimization.js" defer></script>
   </body>
 </html>
 

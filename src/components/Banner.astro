@@ -124,19 +124,33 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
   const carouselImgs = document.getElementById("carousel_imgs");
   const carouselImgsCount = carouselImgs?.children.length ?? 0;
   
-  // Pré-carregamento otimizado para a primeira imagem
-  if (carouselImgs && carouselImgs.children.length > 0) {
-    const firstImage = carouselImgs.children[0] as HTMLElement;
-    const imgUrl = firstImage.getAttribute('data-background-image');
-    if (imgUrl) {
-      // Pré-carregar a primeira imagem para renderização imediata
-      const preloadImg = new Image();
-      preloadImg.onload = () => {
-        firstImage.style.backgroundImage = `url(${imgUrl})`;
-        firstImage.classList.add('loaded');
-      };
-      preloadImg.src = imgUrl;
-    }
+  // Função para carregar todas as imagens do carrossel
+  const loadCarouselImages = () => {
+    if (!carouselImgs || carouselImgs.children.length === 0) return;
+    
+    // Carregar todas as imagens do carrossel
+    Array.from(carouselImgs.children).forEach((item, index) => {
+      const imgElement = item as HTMLElement;
+      const imgUrl = imgElement.getAttribute('data-background-image');
+      
+      if (imgUrl) {
+        // Definir a imagem de fundo diretamente
+        imgElement.style.backgroundImage = `url(${imgUrl})`;
+        
+        // Adicionar classe loaded após um pequeno atraso para permitir que a animação funcione
+        setTimeout(() => {
+          imgElement.classList.add('loaded');
+        }, 100);
+      }
+    });
+  };
+  
+  // Carregar imagens quando o DOM estiver pronto
+  document.addEventListener('DOMContentLoaded', loadCarouselImages);
+  
+  // Também tentar carregar imediatamente (caso o evento já tenha disparado)
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    loadCarouselImages();
   }
 
   const carouselAnimation = `
@@ -197,6 +211,12 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
       0s;
     backface-visibility: hidden;
     transform-style: preserve-3d;
+    will-change: opacity, transform; /* Otimizar para animações */
+  }
+  
+  /* Classe adicionada quando a imagem é carregada */
+  .carousel .item.loaded {
+    /* Não definir opacity aqui, deixar a animação controlar */
   }
 
   .cover {

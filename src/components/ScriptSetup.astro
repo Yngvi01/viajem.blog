@@ -2,6 +2,16 @@
 
 ---
 
+<!-- Scripts de otimização de performance -->
+<script is:inline src="/performance-optimizations.js" defer data-critical="true"></script>
+<script is:inline src="/critical-resource-optimization.js" defer data-critical="true"></script>
+<script is:inline src="/mobile-performance-critical.js" defer data-critical="true"></script>
+<script is:inline src="/banner-optimization.js" defer></script>
+<script is:inline src="/mobile-optimization.js" defer></script>
+<script is:inline src="/image-optimization-mobile.js" defer></script>
+<script is:inline src="/text-compression.js" defer></script>
+<script is:inline src="/text-compression-advanced.js" defer></script>
+
 <script>
   // Importar lozad apenas quando necessário para reduzir o bloqueio inicial
   const loadLozad = async () => {

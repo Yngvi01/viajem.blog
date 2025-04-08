@@ -3,6 +3,7 @@ import YukinaConfig from "../../yukina.config";
 import { GetCoverURLForUnspecifiedEntry } from "../utils/cover";
 import { Image } from "astro:assets";
 import { getImageSource } from "../utils/imageImports";
+import OptimizedImage from "./OptimizedImage.astro";
 
 export interface Props {
   title?: string;
@@ -34,6 +35,8 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
                 data-background-image={img.url}
                 data-width={img.width}
                 data-height={img.height}
+                data-srcset={`${img.url} ${img.width}w`}
+                data-sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw"
                 role="img"
                 aria-label={img.alt}
               />
@@ -45,14 +48,17 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
     {
       hasHeaderImg && (
         <div class="cover">
-          <Image
+          <OptimizedImage
             src={getImageSource(bannerImage) ?? GetCoverURLForUnspecifiedEntry(slug ?? "")}
-            width={1920}
-            height={1080}
+            width={1280}
+            height={720}
             class="item"
             alt={title ? `Imagem de capa para: ${title}` : "Imagem de capa do blog"}
             loading="eager"
             quality={80}
+            format="webp"
+            fetchpriority="high"
+            sizes="(max-width: 640px) 100vw, 1280px"
           />
         </div>
       )
@@ -119,71 +125,24 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
   </div>
 </div>
 
-<script>
-  const styleElement = document.createElement("style");
-  const carouselImgs = document.getElementById("carousel_imgs");
-  const carouselImgsCount = carouselImgs?.children.length ?? 0;
-  
-  // Pré-carregamento otimizado para a primeira imagem
-  if (carouselImgs && carouselImgs.children.length > 0) {
-    const firstImage = carouselImgs.children[0] as HTMLElement;
-    const imgUrl = firstImage.getAttribute('data-background-image');
-    if (imgUrl) {
-      // Pré-carregar a primeira imagem para renderização imediata
-      const preloadImg = new Image();
-      preloadImg.onload = () => {
-        firstImage.style.backgroundImage = `url(${imgUrl})`;
-        firstImage.classList.add('loaded');
-      };
-      preloadImg.src = imgUrl;
-    }
-  }
-
-  const carouselAnimation = `
-    @keyframes carousel-animation {
-      0% {
-        opacity: 0;
-        transform: scale(1);
-      }
-      3% {
-        opacity: 1;
-      }
-      8% {
-        opacity: 1;
-        animation-timing-function: ease-out;
-      }
-      ${100 / carouselImgsCount}% {
-        opacity: 1;
-      }
-      ${100 / carouselImgsCount + 50 / carouselImgsCount}% {
-        opacity: 0;
-        animation-timing-function: ease-out;
-      }
-      100% {
-        opacity: 0;
-        transform: scale(2);
-      }
-    }
-  `;
-  styleElement.textContent = carouselAnimation;
-  let bannerElement = document.getElementById("banner");
-  if (bannerElement && !bannerElement.querySelector("style"))
-    bannerElement.appendChild(styleElement);
-</script>
+<script src="/banner-optimization.js" defer></script>
 
 <style define:vars={{ carouselAnimationTime }}>
   .banner {
     @apply relative h-[calc(var(--banner-height)*3/4)] opacity-100 lg:h-[var(--banner-height)];
+    contain: layout paint; /* Melhorar performance de renderização */
   }
 
   .banner-inner {
     overflow: hidden;
     position: relative;
+    will-change: transform; /* Otimizar para animações */
   }
 
   .carousel {
     @apply absolute left-0 top-0 -z-10 block h-[calc(var(--banner-height)*3/4)] w-full overflow-hidden bg-white lg:h-[var(--banner-height)];
     animation-fill-mode: forwards;
+    contain: content; /* Melhorar performance de renderização */
   }
 
   .carousel::before {
@@ -197,6 +156,20 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
       0s;
     backface-visibility: hidden;
     transform-style: preserve-3d;
+    will-change: opacity, transform; /* Otimizar para animações */
+  }
+  
+  /* Classe adicionada quando a imagem é carregada */
+  .carousel .item.loaded {
+    @apply opacity-0; /* Mantém a opacidade controlada pela animação */
+  }
+  
+  /* Otimizações específicas para dispositivos móveis */
+  @media (max-width: 640px) {
+    .carousel .item {
+      background-size: cover; /* Garantir que a imagem cubra o elemento */
+      animation-duration: calc(var(--carouselAnimationTime) * 1.2); /* Animação mais lenta em dispositivos móveis */
+    }
   }
 
   .cover {

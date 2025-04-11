@@ -14,49 +14,32 @@ export interface Props {
 const { title, subTitle, bannerImage, slug } = Astro.props;
 
 const hasTitle = title !== undefined || subTitle !== undefined;
-// Sempre usar o slideshow, independentemente de haver uma imagem específica
-const hasHeaderImg = false;
-
-let carouselImgsList = YukinaConfig.banners;
+const carouselImgsList = YukinaConfig.banners.map(img => ({
+  ...img,
+  url: new URL(img.url.startsWith('http') ? img.url : img.url.startsWith('/') ? img.url : `/${img.url}`, Astro.url.origin).href
+}));
 const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 ---
 
-<div id="banner" class="banner onload-animation-fade-in" role="banner" aria-label="Site banner">
+<div id="banner" class="banner" role="banner" aria-label="Site banner">
   <div class="transition-main banner-inner h-full w-full">
-    {
-      !hasHeaderImg && (
-        <div class="carousel" role="region" aria-label="Image carousel">
-          <ul id="carousel_imgs" aria-live="polite">
-            {carouselImgsList.map((img, index) => (
-              <li
-                class={`item lozad ${index === 0 ? 'first-banner' : ''}`}
-                style={{ animationDelay: `${index * 6}s` }}
-                data-background-image={img.url}
-                data-width={img.width}
-                data-height={img.height}
-                role="img"
-                aria-label={img.alt}
-              />
-            ))}
-          </ul>
-        </div>
-      )
-    }
-    {
-      hasHeaderImg && (
-        <div class="cover">
-          <Image
-            src={getImageSource(bannerImage) ?? GetCoverURLForUnspecifiedEntry(slug ?? "")}
-            width={1920}
-            height={1080}
-            class="item"
-            alt={title ? `Imagem de capa para: ${title}` : "Imagem de capa do blog"}
-            loading="eager"
-            quality={80}
+    <div class="carousel" role="region" aria-label="Image carousel">
+      <ul id="carousel_imgs" aria-live="polite">
+        {carouselImgsList.map((img, index) => (
+          <li
+            class={`item ${index === 0 ? 'first-banner' : ''}`}
+            style={{
+              animationDelay: `${index * 6}s`,
+              backgroundImage: `url("${img.url}")`
+            }}
+            data-width={img.width}
+            data-height={img.height}
+            role="img"
+            aria-label={img.alt}
           />
-        </div>
-      )
-    }
+        ))}
+      </ul>
+    </div>
     <div class="relative h-[95%] w-full">
       <div
         class="absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 lg:w-3/4"
@@ -120,74 +103,140 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 </div>
 
 <script>
-  const styleElement = document.createElement("style");
-  const carouselImgs = document.getElementById("carousel_imgs");
-  const carouselImgsCount = carouselImgs?.children.length ?? 0;
-  
-  // Função para carregar todas as imagens do carrossel
-  const loadCarouselImages = () => {
-    if (!carouselImgs || carouselImgs.children.length === 0) return;
-    
-    // Carregar todas as imagens do carrossel
-    Array.from(carouselImgs.children).forEach((item, index) => {
-      const imgElement = item as HTMLElement;
-      const imgUrl = imgElement.getAttribute('data-background-image');
-      
-      if (imgUrl) {
-        // Definir a imagem de fundo diretamente
-        imgElement.style.backgroundImage = `url(${imgUrl})`;
-        
-        // Adicionar classe loaded após um pequeno atraso para permitir que a animação funcione
-        setTimeout(() => {
-          imgElement.classList.add('loaded');
-        }, 100);
+  class BannerManager {
+    private static instance: BannerManager | null = null;
+    private isInitialized: boolean = false;
+    private animationStyles: HTMLStyleElement | null = null;
+    private bannerElement: HTMLElement | null = null;
+    private carouselImgs: HTMLElement | null = null;
+
+    private constructor() {
+      this.initEventListeners();
+    }
+
+    public static getInstance(): BannerManager {
+      if (!BannerManager.instance) {
+        BannerManager.instance = new BannerManager();
       }
-    });
-  };
-  
-  // Carregar imagens quando o DOM estiver pronto
-  document.addEventListener('DOMContentLoaded', loadCarouselImages);
-  
-  // Também tentar carregar imediatamente (caso o evento já tenha disparado)
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    loadCarouselImages();
+      return BannerManager.instance;
+    }
+
+    private initEventListeners(): void {
+      document.addEventListener('DOMContentLoaded', () => this.initBanner());
+      document.addEventListener('swup:contentReplaced', () => {
+        this.cleanupBanner();
+        requestAnimationFrame(() => this.initBanner());
+      });
+      document.addEventListener('astro:after-swap', () => {
+        this.cleanupBanner();
+        requestAnimationFrame(() => this.initBanner());
+      });
+      document.addEventListener('astro:page-load', () => {
+        this.cleanupBanner();
+        requestAnimationFrame(() => this.initBanner());
+      });
+    }
+
+    private cleanupBanner(): void {
+      if (this.animationStyles) {
+        this.animationStyles.remove();
+        this.animationStyles = null;
+      }
+      this.isInitialized = false;
+      this.bannerElement = null;
+      this.carouselImgs = null;
+    }
+
+    private initBanner(): void {
+      if (this.isInitialized) return;
+
+      this.bannerElement = document.getElementById('banner');
+      if (!this.bannerElement) return;
+
+      this.carouselImgs = document.getElementById('carousel_imgs');
+      if (!this.carouselImgs) return;
+
+      this.setupCarouselAnimation();
+      this.loadCarouselImages();
+      
+      requestAnimationFrame(() => {
+        if (this.bannerElement) {
+          this.bannerElement.classList.add('banner-initialized');
+          // Forçar um reflow para garantir que as animações sejam reiniciadas
+          void this.bannerElement.offsetHeight;
+        }
+      });
+
+      this.isInitialized = true;
+    }
+
+    private setupCarouselAnimation(): void {
+      const carouselImgsCount = this.carouselImgs?.children.length ?? 0;
+      if (carouselImgsCount === 0) return;
+
+      this.animationStyles = document.createElement('style');
+      this.animationStyles.textContent = `
+        @keyframes carousel-animation {
+          0% {
+            opacity: 0;
+            transform: scale(1) translateZ(0);
+          }
+          3% {
+            opacity: 1;
+          }
+          8% {
+            opacity: 1;
+            animation-timing-function: ease-out;
+          }
+          ${100 / carouselImgsCount}% {
+            opacity: 1;
+          }
+          ${100 / carouselImgsCount + 50 / carouselImgsCount}% {
+            opacity: 0;
+            transform: scale(1.1) translateZ(0);
+            animation-timing-function: ease-out;
+          }
+          100% {
+            opacity: 0;
+            transform: scale(1) translateZ(0);
+          }
+        }
+      `;
+
+      document.head.appendChild(this.animationStyles);
+    }
+
+    private loadCarouselImages(): void {
+      if (!this.carouselImgs || this.carouselImgs.children.length === 0) return;
+
+      Array.from(this.carouselImgs.children).forEach((item, index) => {
+        const imgElement = item as HTMLElement;
+        // Pré-carregar as imagens
+        const imgUrl = imgElement.style.backgroundImage.slice(5, -2);
+        const img = new Image();
+        img.src = imgUrl;
+        img.onload = () => {
+          imgElement.classList.add('loaded');
+          if (index === 0) {
+            imgElement.classList.add('active');
+          }
+        };
+      });
+    }
   }
 
-  const carouselAnimation = `
-    @keyframes carousel-animation {
-      0% {
-        opacity: 0;
-        transform: scale(1);
-      }
-      3% {
-        opacity: 1;
-      }
-      8% {
-        opacity: 1;
-        animation-timing-function: ease-out;
-      }
-      ${100 / carouselImgsCount}% {
-        opacity: 1;
-      }
-      ${100 / carouselImgsCount + 50 / carouselImgsCount}% {
-        opacity: 0;
-        animation-timing-function: ease-out;
-      }
-      100% {
-        opacity: 0;
-        transform: scale(2);
-      }
-    }
-  `;
-  styleElement.textContent = carouselAnimation;
-  let bannerElement = document.getElementById("banner");
-  if (bannerElement && !bannerElement.querySelector("style"))
-    bannerElement.appendChild(styleElement);
+  // Iniciar o gerenciador do banner
+  BannerManager.getInstance();
 </script>
 
 <style define:vars={{ carouselAnimationTime }}>
   .banner {
-    @apply relative h-[calc(var(--banner-height)*3/4)] opacity-100 lg:h-[var(--banner-height)];
+    @apply relative h-[calc(var(--banner-height)*3/4)] opacity-0 lg:h-[var(--banner-height)];
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  .banner.banner-initialized {
+    opacity: 1;
   }
 
   .banner-inner {
@@ -197,7 +246,6 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 
   .carousel {
     @apply absolute left-0 top-0 -z-10 block h-[calc(var(--banner-height)*3/4)] w-full overflow-hidden bg-white lg:h-[var(--banner-height)];
-    animation-fill-mode: forwards;
   }
 
   .carousel::before {
@@ -207,33 +255,18 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 
   .carousel .item {
     @apply absolute left-0 top-0 z-0 h-full w-full origin-center bg-cover bg-center bg-no-repeat opacity-0;
-    animation: carousel-animation var(--carouselAnimationTime) linear infinite
-      0s;
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
-    will-change: opacity, transform; /* Otimizar para animações */
+    animation: carousel-animation var(--carouselAnimationTime) linear infinite 0s;
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    visibility: hidden;
   }
   
-  /* Classe adicionada quando a imagem é carregada */
   .carousel .item.loaded {
-    /* Não definir opacity aqui, deixar a animação controlar */
+    visibility: visible;
   }
 
-  .cover {
-    @apply absolute left-0 top-0 z-0 block h-[var(--banner-height)] w-full overflow-hidden bg-white;
-  }
-
-  .cover::before {
-    @apply absolute left-0 top-0 z-10 block h-full w-full bg-black/25 transition-all content-[''];
-    @apply dark:bg-black/30;
-  }
-
-  .cover .item {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    background-size: cover;
-    background-position: center;
+  .carousel .item.active {
+    opacity: 1;
   }
 
   .title {
@@ -281,8 +314,12 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
       height: 12vh;
     }
     .banner {
-      @apply relative opacity-100;
+      @apply relative;
       height: 100%;
+    }
+
+    .banner.banner-initialized {
+      opacity: 1;
     }
 
     .waves > .parallax use {
@@ -328,3 +365,4 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
     }
   }
 </style>
+

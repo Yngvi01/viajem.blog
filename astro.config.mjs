@@ -17,7 +17,6 @@ import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { rehypeAstroImage } from "./src/plugins/rehype-astro-image.mjs";
 
 import YukinaConfig from "./yukina.config";
-
 import pagefind from "astro-pagefind";
 
 // https://astro.build/config
@@ -28,12 +27,20 @@ export default defineConfig({
     inlineStylesheets: "auto",
   },
   markdown: {
-    remarkPlugins: [remarkReadingTime],
+    shikiConfig: {
+      theme: "github-dark-default",
+    },
+    remarkPlugins: [remarkReadingTime, remarkMath],
     rehypePlugins: [
       rehypeSlug,
-      [rehypeAutolinkHeadings, { behavior: "wrap" }],
       rehypeKatex,
       rehypeAstroImage,
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: "prepend",
+        },
+      ],
     ],
   },
   image: {
@@ -48,17 +55,30 @@ export default defineConfig({
     svelte(),
     react(),
     icon(),
-    mdx(),
+    mdx({
+      remarkPlugins: [remarkReadingTime, remarkMath],
+      rehypePlugins: [
+        rehypeSlug,
+        rehypeKatex,
+        rehypeAstroImage,
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: "prepend",
+          },
+        ],
+      ],
+    }),
     swup({
       theme: false,
-      containers: ["main", "footer", ".banner-inner"],
-      smoothScrolling: true,
-      progress: true,
+      containers: ["#banner", "main", "footer"],
+      animateHistoryBrowsing: true,
       cache: true,
       preload: true,
-      updateHead: true,
-      updateBodyClass: false,
       globalInstance: true,
+      animationSelector: '[class*="transition-"]',
+      plugins: [],
+      linkSelector: 'a[href^="/"]:not([data-no-swup]), a[href^="' + YukinaConfig.site + '"]:not([data-no-swup])',
     }),
     sitemap(),
     pagefind(),
@@ -70,38 +90,4 @@ export default defineConfig({
       svg: true,
     })
   ],
-  markdown: {
-    shikiConfig: {
-      theme: "github-dark-default",
-    },
-    remarkPlugins: [remarkReadingTime, remarkMath],
-    rehypePlugins: [
-      rehypeSlug,
-      rehypeKatex,
-      rehypeAstroImage,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "prepend",
-        },
-      ],
-    ],
-  },
-  mdx: {
-    shikiConfig: {
-      theme: "github-dark-default",
-    },
-    remarkPlugins: [remarkReadingTime, remarkMath],
-    rehypePlugins: [
-      rehypeSlug,
-      rehypeKatex,
-      rehypeAstroImage,
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: "prepend",
-        },
-      ],
-    ],
-  },
 });

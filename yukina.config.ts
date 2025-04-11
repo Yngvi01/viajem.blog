@@ -47,31 +47,31 @@ const YukinaConfig: Configuration = {
 
   banners: [
     {
-      url: "src/assets/images/banner/banner1.jpg",
+      url: "/images/banner/banner1.jpg",
       alt: "Vista panorâmica do Rio de Janeiro com o Cristo Redentor e a Baía de Guanabara",
       width: 1280,
       height: 853
     },
     {
-      url: "src/assets/images/banner/banner2.jpg",
+      url: "/images/banner/banner2.jpg",
       alt: "Praia tropical brasileira com coqueiros e águas cristalinas",
       width: 1280,
       height: 853
     },
     {
-      url: "src/assets/images/banner/banner3.jpg",
+      url: "/images/banner/banner3.jpg",
       alt: "Centro histórico de Ouro Preto com suas igrejas e arquitetura colonial",
       width: 960,
       height: 720
     },
     {
-      url: "src/assets/images/banner/banner4.jpg",
+      url: "/images/banner/banner4.jpg",
       alt: "Vista do Pão de Açúcar no Rio de Janeiro ao entardecer",
       width: 960,
       height: 720
     },
     {
-      url: "src/assets/images/banner/banner5.jpg",
+      url: "/images/banner/banner5.jpg",
       alt: "Cataratas do Iguaçu com sua impressionante queda d'água",
       width: 960,
       height: 720

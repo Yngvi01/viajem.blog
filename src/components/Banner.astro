@@ -1,8 +1,13 @@
 ---
 import YukinaConfig from "../../yukina.config";
-import { GetCoverURLForUnspecifiedEntry } from "../utils/cover";
 import { Image } from "astro:assets";
-import { getImageSource } from "../utils/imageImports";
+
+// Importar as imagens diretamente
+import banner1 from "../assets/images/banner/banner1.jpg";
+import banner2 from "../assets/images/banner/banner2.jpg";
+import banner3 from "../assets/images/banner/banner3.jpg";
+import banner4 from "../assets/images/banner/banner4.jpg";
+import banner5 from "../assets/images/banner/banner5.jpg";
 
 export interface Props {
   title?: string;
@@ -14,29 +19,46 @@ export interface Props {
 const { title, subTitle, bannerImage, slug } = Astro.props;
 
 const hasTitle = title !== undefined || subTitle !== undefined;
-const carouselImgsList = YukinaConfig.banners.map(img => ({
-  ...img,
-  url: new URL(img.url.startsWith('http') ? img.url : img.url.startsWith('/') ? img.url : `/${img.url}`, Astro.url.origin).href
-}));
-const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
+
+// Mapear as imagens importadas para o formato do carrossel
+const bannerImages = [
+  { image: banner1, alt: YukinaConfig.banners[0].alt },
+  { image: banner2, alt: YukinaConfig.banners[1].alt },
+  { image: banner3, alt: YukinaConfig.banners[2].alt },
+  { image: banner4, alt: YukinaConfig.banners[3].alt },
+  { image: banner5, alt: YukinaConfig.banners[4].alt },
+];
+
+const carouselAnimationTime = `${bannerImages.length * 6}s`;
+
+// Log para debug (será removido em produção)
+if (import.meta.env.DEV) {
+  console.log('Banner Images URLs:', bannerImages.map(img => img.image));
+}
 ---
 
 <div id="banner" class="banner" role="banner" aria-label="Site banner">
   <div class="transition-main banner-inner h-full w-full">
     <div class="carousel" role="region" aria-label="Image carousel">
       <ul id="carousel_imgs" aria-live="polite">
-        {carouselImgsList.map((img, index) => (
+        {bannerImages.map((img, index) => (
           <li
             class={`item ${index === 0 ? 'first-banner' : ''}`}
             style={{
               animationDelay: `${index * 6}s`,
-              backgroundImage: `url("${img.url}")`
             }}
-            data-width={img.width}
-            data-height={img.height}
+            data-index={index}
             role="img"
             aria-label={img.alt}
-          />
+          >
+            <Image
+              src={img.image}
+              alt={img.alt}
+              class="banner-image"
+              loading={index === 0 ? "eager" : "lazy"}
+              quality={90}
+            />
+          </li>
         ))}
       </ul>
     </div>
@@ -162,7 +184,6 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
       requestAnimationFrame(() => {
         if (this.bannerElement) {
           this.bannerElement.classList.add('banner-initialized');
-          // Forçar um reflow para garantir que as animações sejam reiniciadas
           void this.bannerElement.offsetHeight;
         }
       });
@@ -211,16 +232,10 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 
       Array.from(this.carouselImgs.children).forEach((item, index) => {
         const imgElement = item as HTMLElement;
-        // Pré-carregar as imagens
-        const imgUrl = imgElement.style.backgroundImage.slice(5, -2);
-        const img = new Image();
-        img.src = imgUrl;
-        img.onload = () => {
-          imgElement.classList.add('loaded');
-          if (index === 0) {
-            imgElement.classList.add('active');
-          }
-        };
+        imgElement.classList.add('loaded');
+        if (index === 0) {
+          imgElement.classList.add('active');
+        }
       });
     }
   }
@@ -254,7 +269,7 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
   }
 
   .carousel .item {
-    @apply absolute left-0 top-0 z-0 h-full w-full origin-center bg-cover bg-center bg-no-repeat opacity-0;
+    @apply absolute left-0 top-0 z-0 h-full w-full origin-center opacity-0;
     animation: carousel-animation var(--carouselAnimationTime) linear infinite 0s;
     transform: translateZ(0);
     will-change: transform, opacity;
@@ -267,6 +282,10 @@ const carouselAnimationTime = `${carouselImgsList.length * 6}s`;
 
   .carousel .item.active {
     opacity: 1;
+  }
+
+  .banner-image {
+    @apply h-full w-full object-cover;
   }
 
   .title {

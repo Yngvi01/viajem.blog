@@ -8,13 +8,31 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 
 ---
 
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-W8FQBNKB');</script>
-  <!-- End Google Tag Manager -->
+<!-- Google Tag Manager - Adiado para não bloquear renderização -->
+<script>
+  // Carregar o GTM após o evento de carga da página para melhorar performance
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      var w = window;
+      var d = document;
+      var s = 'script';
+      var l = 'dataLayer';
+      var i = 'GTM-W8FQBNKB';
+      
+      w[l] = w[l] || [];
+      w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+      
+      var f = d.getElementsByTagName(s)[0];
+      var j = d.createElement(s);
+      
+      if (f && f.parentNode) {
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i;
+        f.parentNode.insertBefore(j, f);
+      }
+    }, 2000); // Atrasar carregamento para melhorar métricas iniciais
+  });
+</script>
 
 <!-- Preconnect para domínios importantes -->
 <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
@@ -150,9 +168,72 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
   })}></script>
 )}
 
-<!-- Carregamento Assíncrono de CSS -->
+<!-- Otimização de carregamento de CSS -->
 <link rel="preload" href="/assets/katex/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="/assets/katex/katex.min.css"></noscript>
+
+<!-- CSS crítico inline -->
+<style is:inline>
+  /* Estilos críticos para o primeiro carregamento */
+  :root {
+    --primary-color: #2563eb;
+    --primary-color-darken: #1d4ed8;
+    --primary-color-lighten: #dbeafe;
+    --background-color: #ffffff;
+    --card-color: #f9fafb;
+    --text-color: #374151;
+    --text-color-lighten: #6b7280;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background-color: #111827;
+      --card-color: #1f2937;
+      --text-color: #f9fafb;
+      --text-color-lighten: #d1d5db;
+    }
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+
+<!-- Otimização para imagens -->
+<script>
+  // Função para detectar conexão lenta e adaptar recursos
+  document.addEventListener('DOMContentLoaded', function() {
+    // Verificar conexão do dispositivo
+    try {
+      if (navigator && 'connection' in navigator) {
+        const connection = navigator.connection as any;
+        
+        if (connection && connection.saveData) {
+          // Modo economia de dados ativado - carregar versões de baixa qualidade
+          document.documentElement.classList.add('save-data');
+        }
+        
+        if (connection && connection.effectiveType && 
+            (connection.effectiveType.includes('2g') || 
+             connection.effectiveType.includes('slow'))) {
+          // Conexão lenta - reduzir qualidade de recursos
+          document.documentElement.classList.add('slow-connection');
+        }
+      }
+    } catch (e) {
+      // Ignore erros pois esta é apenas uma otimização extra
+    }
+  });
+</script>
 
 <GlobalStyles />
 <ScriptSetup />

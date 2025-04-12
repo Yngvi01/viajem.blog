@@ -1,92 +1,183 @@
 /**
- * Script de otimização de recursos de terceiros
- * Este script implementa técnicas para melhorar o carregamento de recursos de terceiros
- * sem afetar a funcionalidade ou SEO.
+ * Third-Party Resources Optimization
+ * Este script implementa técnicas para otimizar o carregamento de recursos de terceiros
  */
 
-// Função para otimizar recursos de terceiros
-function optimizeThirdPartyResources() {
-  // Lista de domínios de terceiros que são carregados no site
-  const thirdPartyDomains = [
-    'www.googletagmanager.com',
-    'pagead2.googlesyndication.com',
-    'cdn.pixabay.com'
-  ];
-  
-  // Pré-conectar a domínios de terceiros importantes
-  thirdPartyDomains.forEach(domain => {
-    // Verificar se já existe uma tag de preconnect para este domínio
-    const existingPreconnect = document.querySelector(`link[rel="preconnect"][href="https://${domain}"]`);
-    if (!existingPreconnect) {
-      const link = document.createElement('link');
-      link.rel = 'preconnect';
-      link.href = `https://${domain}`;
-      link.crossOrigin = 'anonymous';
-      document.head.appendChild(link);
-    }
-  });
-  
-  // Adiar carregamento de scripts de terceiros não críticos
-  const deferThirdPartyScripts = () => {
-    // Identificar scripts de terceiros pelo domínio
-    const scripts = document.querySelectorAll('script[src]');
-    scripts.forEach(script => {
-      const src = script.getAttribute('src');
-      // Verificar se o script é de um domínio de terceiros
-      if (src && thirdPartyDomains.some(domain => src.includes(domain))) {
-        // Se não for crítico e não tiver defer ou async
-        if (!script.hasAttribute('data-critical') && !script.defer && !script.async) {
-          script.defer = true;
-        }
-      }
-    });
-  };
-  
-  // Adiar carregamento de iframes de terceiros
-  const deferIframes = () => {
-    const iframes = document.querySelectorAll('iframe');
-    iframes.forEach(iframe => {
-      const src = iframe.getAttribute('src');
-      // Se o iframe tiver src e não estiver marcado como crítico
-      if (src && !iframe.hasAttribute('data-critical')) {
-        // Substituir src por data-src para carregar depois
-        iframe.setAttribute('data-src', src);
-        iframe.removeAttribute('src');
-        
-        // Adicionar um placeholder para manter o layout
-        iframe.style.backgroundColor = '#f1f1f1';
-      }
-    });
-    
-    // Carregar iframes quando estiverem próximos da viewport
-    if ('IntersectionObserver' in window) {
-      const iframeObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const iframe = entry.target;
-            if (iframe.hasAttribute('data-src')) {
-              iframe.src = iframe.getAttribute('data-src');
-              iframe.removeAttribute('data-src');
-              iframeObserver.unobserve(iframe);
+document.addEventListener('DOMContentLoaded', function() {
+  // Função para otimizar recursos de terceiros
+  const optimizeThirdPartyResources = () => {
+    // Adiar o carregamento de iframes
+    const lazyLoadIframes = () => {
+      const iframes = document.querySelectorAll('iframe[data-src]');
+      
+      if (!iframes.length) return;
+      
+      if ('IntersectionObserver' in window) {
+        const iframeObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const iframe = entry.target;
+              if (iframe.dataset.src) {
+                iframe.src = iframe.dataset.src;
+                iframe.removeAttribute('data-src');
+              }
+              observer.unobserve(iframe);
             }
+          });
+        }, { rootMargin: '200px 0px' });
+        
+        iframes.forEach(iframe => {
+          iframeObserver.observe(iframe);
+        });
+      } else {
+        // Fallback para navegadores sem suporte a IntersectionObserver
+        iframes.forEach(iframe => {
+          if (iframe.dataset.src) {
+            iframe.src = iframe.dataset.src;
+            iframe.removeAttribute('data-src');
           }
         });
-      }, { rootMargin: '200px 0px' });
+      }
+    };
+    
+    // Adicionar atributo de preconexão para domínios terceiros frequentemente utilizados
+    const addPreconnect = () => {
+      const thirdPartyDomains = new Set();
       
-      document.querySelectorAll('iframe[data-src]').forEach(iframe => {
-        iframeObserver.observe(iframe);
+      // Coletar domínios de terceiros de scripts, links, iframes, etc.
+      const elements = document.querySelectorAll('script[src], link[href], iframe[src], img[src]');
+      elements.forEach(el => {
+        const src = el.src || el.href;
+        if (!src) return;
+        
+        try {
+          const url = new URL(src);
+          if (url.hostname !== window.location.hostname) {
+            thirdPartyDomains.add(url.origin);
+          }
+        } catch {
+          // URL inválida, ignorar
+        }
       });
-    }
+      
+      // Adicionar links de preconexão para cada domínio de terceiros
+      thirdPartyDomains.forEach(domain => {
+        if (!document.querySelector(`link[rel="preconnect"][href="${domain}"]`)) {
+          const link = document.createElement('link');
+          link.rel = 'preconnect';
+          link.href = domain;
+          link.crossOrigin = 'anonymous';
+          document.head.appendChild(link);
+        }
+      });
+    };
+    
+    // Carregar recursos de terceiros sob demanda
+    const loadThirdPartyOnDemand = () => {
+      // Botões ou elementos que acionam carregamento de recursos de terceiros
+      const thirdPartyTriggers = document.querySelectorAll('[data-load-third-party]');
+      
+      thirdPartyTriggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const resourceId = trigger.dataset.loadThirdParty;
+          const resource = document.getElementById(resourceId);
+          
+          if (resource && resource.dataset.src) {
+            resource.src = resource.dataset.src;
+            resource.removeAttribute('data-src');
+            trigger.setAttribute('disabled', 'true');
+            trigger.classList.add('loaded');
+          }
+        });
+      });
+    };
+    
+    // Implementar carregamento condicional de scripts de terceiros
+    const conditionalThirdPartyLoad = () => {
+      // Para cada script de terceiros com carregamento condicional
+      document.querySelectorAll('script[data-condition]').forEach(script => {
+        const condition = script.dataset.condition;
+        
+        if (!condition) return;
+        
+        switch(condition) {
+          case 'visible':
+            // Carregar apenas quando o elemento associado estiver visível
+            if (script.dataset.element) {
+              const element = document.querySelector(script.dataset.element);
+              if (element) {
+                const observer = new IntersectionObserver((entries) => {
+                  if (entries[0].isIntersecting && script.dataset.src) {
+                    script.src = script.dataset.src;
+                    script.removeAttribute('data-src');
+                    script.removeAttribute('data-condition');
+                    script.removeAttribute('data-element');
+                    observer.disconnect();
+                  }
+                });
+                observer.observe(element);
+              }
+            }
+            break;
+            
+          case 'userInteraction':
+            // Carregar após a primeira interação do usuário
+            const loadOnInteraction = () => {
+              if (script.dataset.src) {
+                script.src = script.dataset.src;
+                script.removeAttribute('data-src');
+                script.removeAttribute('data-condition');
+                
+                // Remover os listeners após o carregamento
+                ['click', 'touchstart', 'scroll'].forEach(event => {
+                  document.removeEventListener(event, loadOnInteraction);
+                });
+              }
+            };
+            
+            ['click', 'touchstart', 'scroll'].forEach(event => {
+              document.addEventListener(event, loadOnInteraction, {once: true});
+            });
+            break;
+            
+          case 'idle':
+            // Carregar quando o navegador estiver ocioso
+            if (window.requestIdleCallback) {
+              window.requestIdleCallback(() => {
+                if (script.dataset.src) {
+                  script.src = script.dataset.src;
+                  script.removeAttribute('data-src');
+                  script.removeAttribute('data-condition');
+                }
+              });
+            } else {
+              setTimeout(() => {
+                if (script.dataset.src) {
+                  script.src = script.dataset.src;
+                  script.removeAttribute('data-src');
+                  script.removeAttribute('data-condition');
+                }
+              }, 5000); // Fallback, carregar após 5 segundos
+            }
+            break;
+        }
+      });
+    };
+    
+    // Executar as funções de otimização
+    lazyLoadIframes();
+    addPreconnect();
+    loadThirdPartyOnDemand();
+    conditionalThirdPartyLoad();
   };
   
-  // Executar otimizações
-  deferThirdPartyScripts();
-  deferIframes();
-}
-
-// Executar otimizações quando o DOM estiver pronto
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', optimizeThirdPartyResources);
-} else {
-  optimizeThirdPartyResources();
-}
+  // Executar otimizações após o carregamento principal
+  if (document.readyState === 'complete') {
+    optimizeThirdPartyResources();
+  } else {
+    window.addEventListener('load', () => {
+      // Adiar para não competir com o carregamento inicial
+      setTimeout(optimizeThirdPartyResources, 1000);
+    });
+  }
+});

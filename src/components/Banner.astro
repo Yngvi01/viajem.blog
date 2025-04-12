@@ -37,8 +37,8 @@ if (import.meta.env.DEV) {
 }
 ---
 
-<div id="banner" class="banner" role="banner" aria-label="Site banner">
-  <div class="transition-main banner-inner h-full w-full">
+<div id="banner" class="banner select-none" role="banner" aria-label="Site banner">
+  <div class="transition-main banner-inner h-full w-full select-none">
     <div class="carousel" role="region" aria-label="Image carousel">
       <ul id="carousel_imgs" aria-live="polite">
         {bannerImages.map((img, index) => (
@@ -62,11 +62,11 @@ if (import.meta.env.DEV) {
         ))}
       </ul>
     </div>
-    <div class="relative h-full w-full flex items-center justify-center">
+    <div class="relative h-full w-full flex items-center justify-center select-none">
       <div
-        class="w-4/5 lg:w-3/4 flex items-center justify-center my-auto"
+        class="w-4/5 lg:w-3/4 flex items-center justify-center my-auto select-none"
       >
-        <div class="flex flex-col items-center justify-center text-center">
+        <div class="flex flex-col items-center justify-center text-center select-none">
           <h1
             class:list={[hasTitle ? "title-normal" : "title-index"]}
             class="title hidden lg:block lg:mb-2"
@@ -78,9 +78,9 @@ if (import.meta.env.DEV) {
       </div>
     </div>
   </div>
-  <div class="waves" id="header-waves" aria-hidden="true">
+  <div class="waves select-none" id="header-waves" aria-hidden="true">
     <svg
-      class="waves"
+      class="waves select-none"
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       viewBox="0 24 150 28"
@@ -246,7 +246,7 @@ if (import.meta.env.DEV) {
 
 <style define:vars={{ carouselAnimationTime }}>
   .banner {
-    @apply relative h-[calc(var(--banner-height)*3/4)] opacity-0 lg:h-[var(--banner-height)];
+    @apply relative h-[calc(var(--banner-height)*3/4)] opacity-0 lg:h-[var(--banner-height)] select-none;
     transition: opacity 0.5s ease-in-out;
   }
 
@@ -257,6 +257,7 @@ if (import.meta.env.DEV) {
   .banner-inner {
     overflow: hidden;
     position: relative;
+    user-select: none;
   }
 
   .carousel {
@@ -289,9 +290,10 @@ if (import.meta.env.DEV) {
   }
 
   .title {
-    @apply mt-8 text-center font-bold text-[var(--title-color)] drop-shadow-lg lg:mt-4;
+    @apply mt-8 text-center font-bold text-[var(--title-color)] drop-shadow-lg lg:mt-4 select-none;
     font-family: var(--title-font);
     margin-bottom: 0.25rem;
+    user-select: none;
   }
 
   .title-index {
@@ -305,26 +307,29 @@ if (import.meta.env.DEV) {
   }
 
   .subtitle {
-    @apply text-center text-3xl lg:text-4xl text-[var(--subtitle-color)] drop-shadow-md;
+    @apply text-center text-3xl lg:text-4xl text-[var(--subtitle-color)] drop-shadow-md select-none;
     font-family: var(--subtitle-font);
     line-height: 1.4;
     margin: 0 auto;
     max-width: 90%;
     padding: 1.5rem 1rem;
+    user-select: none;
   }
 
   .waves {
-    @apply absolute bottom-0 left-0 right-0 w-full overflow-visible;
+    @apply absolute bottom-0 left-0 right-0 w-full overflow-visible select-none;
     height: 15vh;
     max-height: 10rem;
     min-height: 4rem;
     z-index: 5;
+    pointer-events: none;
   }
 
   .waves svg {
     @apply absolute bottom-0 left-0 w-full;
     height: 100%;
     display: block;
+    user-select: none;
   }
 
   .waves > .parallax use {

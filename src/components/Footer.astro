@@ -60,21 +60,25 @@ const tags = await GetTags();
             {YukinaConfig.sign}
           </p>
         </div>
-        <ul class="flex flex-row items-center justify-center space-x-6">
-          {
-            YukinaConfig.socialLinks.map((item) => (
-              <li>
-                <a
-                  href={item.link}
-                  class="text-[var(--primary-color)]"
-                  aria-label={item.label}
-                >
-                  <Icon name={item.icon} size={24} />
-                </a>
-              </li>
-            ))
-          }
-        </ul>
+        <nav aria-label="Redes Sociais">
+          <ul class="flex flex-row items-center justify-center space-x-6">
+            {
+              YukinaConfig.socialLinks.map((item) => (
+                <li>
+                  <a
+                    href={item.link}
+                    class="text-[var(--primary-color)] inline-flex p-2"
+                    aria-label={item.label}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <Icon name={item.icon} size={24} aria-hidden="true" />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
       </div>
     </div>
   </div>

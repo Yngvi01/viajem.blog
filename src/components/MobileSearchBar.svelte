@@ -75,8 +75,21 @@
             // Usar setTimeout de 0 para permitir que a UI responda enquanto processamos
             setTimeout(async () => {
               try {
-                // @ts-ignore
-                const ret = await pagefind.search(keyword);
+                // Garantir que o pagefind esteja carregado
+                let pagefindInstance;
+                if (typeof window.loadPagefind === 'function') {
+                  pagefindInstance = await window.loadPagefind();
+                  if (!pagefindInstance) {
+                    throw new Error("Não foi possível carregar o pagefind");
+                  }
+                } else {
+                  console.error("Função loadPagefind não encontrada");
+                  resolve();
+                  return;
+                }
+                
+                // Executar a pesquisa
+                const ret = await pagefindInstance.search(keyword);
                 
                 // Processar resultados em lotes para reduzir bloqueio
                 const results = ret.results;

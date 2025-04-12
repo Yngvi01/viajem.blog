@@ -314,11 +314,17 @@ if (import.meta.env.DEV) {
   }
 
   .waves {
-    @apply absolute bottom-0 left-0 right-0 w-full;
-    height: 12vh;
-    max-height: 9.375rem;
-    min-height: 3.125rem;
-    @apply lg:h-[18vh];
+    @apply absolute bottom-0 left-0 right-0 w-full overflow-visible;
+    height: 15vh;
+    max-height: 10rem;
+    min-height: 4rem;
+    z-index: 5;
+  }
+
+  .waves svg {
+    @apply absolute bottom-0 left-0 w-full;
+    height: 100%;
+    display: block;
   }
 
   .waves > .parallax use {
@@ -337,7 +343,9 @@ if (import.meta.env.DEV) {
 
   @media (min-width: 1024px) {
     .waves {
-      height: 12vh;
+      height: 20vh;
+      max-height: 15rem;
+      min-height: 7rem;
     }
     .banner {
       @apply relative;

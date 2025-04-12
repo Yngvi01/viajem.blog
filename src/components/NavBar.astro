@@ -351,7 +351,6 @@ const navCount = YukinaConfig.navigators.length;
 </script>
 
 <script is:inline>
-  // load pagefind somente quando necessário
   let pagefindLoaded = false;
   
   async function loadPagefind() {
@@ -372,29 +371,24 @@ const navCount = YukinaConfig.navigators.length;
     }
   }
   
-  // Carregar pagefind quando o usuário interage com a busca
+  // Exporta a função para o objeto window
+  window.loadPagefind = loadPagefind;
+  
+  // Inicializar pagefind quando o usuário interage com os inputs de busca
   document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.querySelector('input[name="query"]');
-    const searchButton = document.querySelector('#search-button');
-    
-    if (searchInput) {
-      searchInput.addEventListener('focus', () => {
+    // Carregar pagefind quando o usuário interage com qualquer campo de busca
+    document.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target && (
+          target.id === 'search-bar-input' || 
+          target.id === 'search-bar-input-mobile' ||
+          target.closest && (
+            target.closest('[for="search-bar-input"]') ||
+            target.closest('[for="search-bar-input-mobile"]')
+          )
+      )) {
         loadPagefind();
-      });
-    }
-    
-    if (searchButton) {
-      searchButton.addEventListener('click', () => {
-        loadPagefind();
-      });
-    }
-    
-    // Verificar se há parâmetro de busca na URL e carregar se necessário
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('q')) {
-      loadPagefind().then(pagefind => {
-        if (pagefind) pagefind.search(urlParams.get('q'));
-      });
-    }
+      }
+    });
   });
 </script>

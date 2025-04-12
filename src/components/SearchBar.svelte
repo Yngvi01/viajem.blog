@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  // Importar OverlayScrollbars sob demanda quando necessário
-  let OverlayScrollbars: any;
+  import { OverlayScrollbars } from "overlayscrollbars";
   import Icon from "@iconify/svelte";
 
   import I18nKeys from "../locales/keys";
@@ -9,9 +8,6 @@
 
   let searchKeyword = "";
   let searchResult: any[] = [];
-  let searchInitialized = false;
-  let isSearching = false;
-  let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
   let resultPannel: HTMLDivElement;
   let searchBar: HTMLDivElement;
@@ -19,26 +15,13 @@
   let search = (keyword: string) => {};
 
   onMount(async () => {
-    searchInitialized = true;
-    
-    // setup overlay scrollbars apenas quando houver resultados
-    const initScrollbars = async () => {
-      // Atrasar carregamento até ser realmente necessário
-      if (!OverlayScrollbars) {
-        const module = await import("overlayscrollbars");
-        OverlayScrollbars = module.OverlayScrollbars;
-      }
-      
-      // Usar requestAnimationFrame para sincronizar com a renderização
-      requestAnimationFrame(() => {
-        OverlayScrollbars(resultPannel, {
-          scrollbars: {
-            theme: "scrollbar-base scrollbar-auto py-1",
-            autoHide: "move",
-          },
-        });
-      });
-    };
+    // setup overlay scrollbars
+    OverlayScrollbars(resultPannel, {
+      scrollbars: {
+        theme: "scrollbar-base scrollbar-auto py-1",
+        autoHide: "move",
+      },
+    });
 
     /**
      * Asynchronously performs a search based on the provided keyword.
@@ -47,154 +30,59 @@
      * Toggles the visibility and height of the results panel based on the outcome.
      */
     search = async (keyword: string) => {
-      // Evitar buscas repetidas do mesmo termo
-      if (isSearching) return;
-      
-      // Cancelar busca anterior se estiver em progresso
-      if (searchTimeout) {
-        clearTimeout(searchTimeout);
+      if (!keyword.trim()) {
+        searchResult = [];
+        resultPannel.style.height = "0px";
+        resultPannel.style.opacity = "0";
+        return;
+      }
+
+      let searchResultArr = [];
+
+      try {
+        // Garantir que o pagefind esteja carregado
+        if (typeof window.loadPagefind === 'function') {
+          const pagefind = await window.loadPagefind();
+          if (!pagefind) {
+            throw new Error("Não foi possível carregar o pagefind");
+          }
+          
+          const ret = await pagefind.search(keyword);
+          for (const item of ret.results) {
+            searchResultArr.push(await item.data());
+          }
+        } else {
+          console.error("Função loadPagefind não encontrada");
+        }
+      } catch (error) {
+        console.error("Erro na busca:", error);
       }
       
-      // Debounce para evitar buscas enquanto o usuário digita
-      searchTimeout = setTimeout(async () => {
-        if (keyword.trim().length < 2) {
-          searchResult = [];
-          updateResultPanel(false);
-          return;
-        }
-        
-        isSearching = true;
-        
-        try {
-          let searchResultArr = [];
-          
-          // Envolver operação pesada em uma Promise e executeAsync para liberar a thread principal
-          await new Promise<void>(resolve => {
-            // Usar setTimeout de 0 para permitir que a UI responda enquanto processamos
-            setTimeout(async () => {
-              try {
-                // @ts-ignore
-                const ret = await pagefind.search(keyword);
-                
-                // Processar resultados em lotes para reduzir bloqueio
-                const results = ret.results;
-                const batchSize = 3; // Reduzir tamanho do lote para melhor responsividade
-                
-                // Usar requestAnimationFrame para sincronizar com o ciclo de renderização
-                const processNextBatch = async (startIndex) => {
-                  return new Promise(resolve => {
-                    requestAnimationFrame(async () => {
-                      const endIndex = Math.min(startIndex + batchSize, results.length);
-                      const batch = results.slice(startIndex, endIndex);
-                      
-                      // Processar dados em paralelo
-                      const batchResults = await Promise.all(
-                        batch.map(item => item.data())
-                      );
-                      
-                      // Atualizar resultados
-                      searchResultArr = [...searchResultArr, ...batchResults];
-                      
-                      // Se for o primeiro lote, já atualizamos a UI para feedback mais rápido
-                      if (startIndex === 0) {
-                        searchResult = [...searchResultArr];
-                        updateResultPanel(true);
-                        
-                        // Inicializar scrollbars se temos resultados suficientes
-                        if (searchResultArr.length > 5) {
-                          // Adiar inicialização de scrollbars para não bloquear a UI
-                          setTimeout(initScrollbars, 50);
-                        }
-                      }
-                      
-                      resolve();
-                    });
-                  });
-                };
-                
-                // Processar todos os lotes sequencialmente
-                for (let i = 0; i < results.length; i += batchSize) {
-                  await processNextBatch(i);
-                  
-                  // Pequena pausa entre lotes para permitir que a UI responda
-                  if (i + batchSize < results.length) {
-                    await new Promise(r => setTimeout(r, 5)); // Reduzir tempo de espera
-                  }
-                }
-                
-                // Atualizar com todos os resultados
-                searchResult = searchResultArr;
-                updateResultPanel(searchResultArr.length > 0);
-              } catch (error) {
-                console.error("Erro na busca:", error);
-                searchResult = [];
-                updateResultPanel(false);
-              }
-              
-              resolve();
-            }, 0);
-          });
-        } finally {
-          isSearching = false;
-          searchTimeout = null;
-        }
-      }, 250); // Debounce de 250ms
-    };
-    
-    // Separar a atualização visual da lógica de busca
-    const updateResultPanel = (shouldShow: boolean) => {
-      requestAnimationFrame(() => {
-        if (shouldShow) {
-          resultPannel.style.height = `${Math.min(searchResult.length * 84 + 16, 436)}px`;
-          resultPannel.style.opacity = "100%";
-        } else {
-          resultPannel.style.height = "0px";
-          resultPannel.style.opacity = "0";
-        }
-      });
+      searchResult = searchResultArr;
+
+      const searchResultVisable = keyword != "" && searchResult.length != 0;
+
+      if (searchResultVisable) {
+        resultPannel.style.height = `${searchResultArr.length * 84 + 16}px`;
+        resultPannel.style.opacity = "100%";
+      } else {
+        resultPannel.style.height = "0px";
+        resultPannel.style.opacity = "0";
+      }
     };
   });
 
-  // Usar evento delegado para capturar cliques fora e otimizar listeners
-  if (typeof document !== 'undefined') {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (!searchInitialized) return;
-      
-      const target = event.target as Node;
-      if (
-        resultPannel && 
-        searchBar &&
-        !resultPannel.contains(target) &&
-        !searchBar.contains(target)
-      ) {
-        if (searchTimeout) {
-          clearTimeout(searchTimeout);
-          searchTimeout = null;
-        }
-        searchResult = [];
-        requestAnimationFrame(() => {
-          resultPannel.style.height = "0px";
-          resultPannel.style.opacity = "0";
-        });
-      }
-    };
-    
-    document.addEventListener("click", handleOutsideClick);
-    
-    // Cleanup listener on component destruction
-    onMount(() => {
-      return () => {
-        document.removeEventListener("click", handleOutsideClick);
-      };
-    });
-  }
-
-  // Implementar debounce reativo para a busca
-  $: {
-    if (searchInitialized) {
-      search(searchKeyword);
+  // handle click outside to closed result pannel
+  document.addEventListener("click", (event) => {
+    if (
+      !resultPannel.contains(event.target as any) &&
+      !searchBar.contains(event.target as any)
+    ) {
+      search("");
     }
-  }
+  });
+
+  $: search(searchKeyword);
 </script>
 
 <!-- search bar -->
@@ -202,10 +90,9 @@
   <div class="bg-black/5 dark:bg-white/5 h-10 rounded-lg flex flex-row">
     <label
       for="search-bar-input"
-      aria-label="Pesquisar"
       class="w-10 h-10 flex flex-row justify-center items-center pl-2 pr-1 hover:cursor-text text-gray-400"
     >
-      <Icon icon="mingcute:search-line" width={24} height={24} aria-hidden="true" />
+      <Icon icon="mingcute:search-line" width={24} height={24} />
     </label>
     <input
       id="search-bar-input"
@@ -220,7 +107,6 @@
     />
   </div>
 </div>
-
 <!-- result pannel -->
 <div
   id="result-pannel"

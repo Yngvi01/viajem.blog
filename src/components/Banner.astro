@@ -62,18 +62,18 @@ if (import.meta.env.DEV) {
         ))}
       </ul>
     </div>
-    <div class="relative h-[95%] w-full">
+    <div class="relative h-full w-full flex items-center justify-center">
       <div
-        class="absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 lg:w-3/4"
+        class="w-4/5 lg:w-3/4 flex items-center justify-center my-auto"
       >
         <div class="flex flex-col items-center justify-center text-center">
           <h1
             class:list={[hasTitle ? "title-normal" : "title-index"]}
-            class="title"
+            class="title hidden lg:block lg:mb-2"
           >
             {title ?? YukinaConfig.title}
           </h1>
-          <h2 class="subtitle">{subTitle ?? YukinaConfig.subTitle}</h2>
+          <h2 class="subtitle lg:translate-y-0">{subTitle ?? YukinaConfig.subTitle}</h2>
         </div>
       </div>
     </div>
@@ -291,19 +291,26 @@ if (import.meta.env.DEV) {
   .title {
     @apply mt-8 text-center font-bold text-[var(--title-color)] drop-shadow-lg lg:mt-4;
     font-family: var(--title-font);
+    margin-bottom: 0.25rem;
   }
 
   .title-index {
-    @apply mb-0 text-5xl leading-[4rem] lg:text-6xl;
+    @apply mb-0 text-4xl leading-[3.5rem] md:text-5xl md:leading-[4rem] lg:text-6xl lg:leading-[5rem];
+    margin-bottom: 0.25rem;
   }
 
   .title-normal {
-    @apply mb-1 text-4xl lg:text-2xl;
+    @apply mb-1 text-3xl md:text-4xl lg:text-6xl;
+    margin-bottom: 0.25rem;
   }
 
   .subtitle {
-    @apply text-center text-2xl text-[var(--subtitle-color)] drop-shadow-md lg:text-3xl;
+    @apply text-center text-3xl lg:text-4xl text-[var(--subtitle-color)] drop-shadow-md;
     font-family: var(--subtitle-font);
+    line-height: 1.4;
+    margin: 0 auto;
+    max-width: 90%;
+    padding: 1.5rem 1rem;
   }
 
   .waves {
@@ -369,18 +376,52 @@ if (import.meta.env.DEV) {
       height: var(--banner-height);
     }
   }
-  @media (max-width: 640px) {
-    .title-index {
-      font-size: 2.5rem;
-      line-height: 3rem;
-    }
-    .title-normal {
-      font-size: 1.75rem;
-      line-height: 2.4rem;
-    }
+
+  @media (max-width: 1024px) {
     .subtitle {
-      font-size: 1.3rem;
-      line-height: 1.2rem;
+      font-size: min(1.75rem, 5vw);
+      line-height: 1.4;
+      padding: 1.5rem 1rem 2.5rem;
+      max-width: 85%;
+      margin: 0 auto;
+      transform: translateY(2rem);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .subtitle {
+      font-size: min(1.5rem, 5vw);
+      line-height: 1.4;
+      padding: 1.25rem 1rem 2.5rem;
+      max-width: 92%;
+      transform: translateY(1.5rem);
+    }
+  }
+
+  /* Ajuste para descrições longas */
+  @media (max-width: 1024px) {
+    .subtitle:not(:has(+ *)):not(:empty) {
+      font-size: min(1.5rem, 4.5vw);
+      line-height: 1.35;
+      padding: 1.25rem 1rem 3rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .subtitle:not(:has(+ *)):not(:empty) {
+      font-size: min(1.25rem, 4vw);
+      line-height: 1.35;
+      padding: 1rem 1rem 3rem;
+      max-width: 94%;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+  }
+
+  /* Ajuste específico para descrições muito longas */
+  @media (max-width: 640px) {
+    .subtitle:not(:has(+ *)):not(:empty) {
+      font-size: clamp(1rem, 3.8vw, 1.25rem);
     }
   }
 </style>

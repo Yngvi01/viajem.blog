@@ -33,12 +33,12 @@ const props = Astro.props;
     )
   }
 
-  <div class="main-container my-10">
+  <div class="main-container mt-6 mb-8 md:my-10">
     <div class="flex flex-row items-start xl:space-x-4">
       <aside class="side-bar" aria-label="Barra lateral">
         <SideBar />
       </aside>
-      <div class="transition-leaving w-full space-y-8">
+      <div class="transition-leaving w-full space-y-4 md:space-y-8">
         <main class="content onload-animation" id="main-content" role="main" aria-label="Conteúdo principal">
           <article>
             <slot />
@@ -68,8 +68,9 @@ const props = Astro.props;
   .banner-container {
     position: relative;
     width: 100%;
-    height: 300px; /* Ajuste conforme necessário */
-    overflow: hidden; /* Garantir que a imagem de fundo não ultrapasse a div */
+    height: 240px;
+    overflow: hidden;
+    @apply md:h-[300px] lg:h-[360px];
   }
 
   /* Ajuste da imagem de fundo no Banner */

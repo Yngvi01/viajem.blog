@@ -18,21 +18,14 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 <link rel="preload" href="/favicon.png" as="image" type="image/png" />
 
 <!-- Google Tag Manager - com carregamento assíncrono e otimizado -->
-<script type="text/javascript">
-  // Adiar a execução do GTM para não bloquear o carregamento inicial
-  window.addEventListener('load', function() {
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXX'); // Substitua pelo seu ID do Google Analytics, se tiver
-    
-    (function(w,d,s,l,i){
-      w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
-      var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-      j.async=true;j.defer=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-      f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-W8FQBNKB');
-  });
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0BZCXWFLJY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-0BZCXWFLJY');
 </script>
 <!-- End Google Tag Manager -->
 

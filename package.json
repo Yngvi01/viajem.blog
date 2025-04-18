@@ -32,6 +32,7 @@
     "js-yaml": "^4.1.0",
     "lozad": "^1.16.0",
     "overlayscrollbars": "^2.10.1",
+    "pnpm": "^10.8.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "sharp": "^0.33.5",

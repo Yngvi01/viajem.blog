@@ -67,8 +67,8 @@ const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
 <title>{Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title}</title>
 <meta name="title" content={Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title} />
 <meta name="description" content={Astro.props.description || YukinaConfig.description} />
-<meta name="keywords" content={YukinaConfig.keywords} />
-<meta name="news_keywords" content={YukinaConfig.keywords} />
+<meta name="keywords" content={(Astro.props.keywords || YukinaConfig.keywords).join(", ")} />
+<meta name="news_keywords" content={(Astro.props.keywords || YukinaConfig.keywords).join(", ")} />
 <meta name="language" content={YukinaConfig.locale.split('-')[0]} />
 <meta name="revisit-after" content="7 days" />
 <meta name="geo.region" content="BR" />

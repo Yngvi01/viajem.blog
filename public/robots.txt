@@ -1,54 +1,11 @@
-# Guia de Viagem - Regras para Robots (Arquivo Estático de Backup)
+# Guia de Viagem - Robots
 
 User-agent: *
-Allow: /  
-Allow: /_astro/
-Allow: /assets/
-Allow: /fonts/
-Allow: /images/
-Allow: /_slds/
+Allow: /
 Disallow: /api/
 Disallow: /admin/
 Disallow: /private/
 Disallow: /node_modules/
-Disallow: /404
-Disallow: /error
 
-# Google Bots
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 1
-
-User-agent: Googlebot-Image
-Allow: /
-Crawl-delay: 1
-
-User-agent: Googlebot-Mobile
-Allow: /
-Crawl-delay: 1
-
-User-agent: Googlebot-News
-Allow: /
-
-User-agent: AdsBot-Google
-Allow: /
-
-# Bing Bots
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 1
-
-# Yandex Bots
-User-agent: Yandex
-Allow: /
-Crawl-delay: 1
-
-# DuckDuckGo Bot
-User-agent: DuckDuckBot
-Allow: /
-
-# Sitemap
-Sitemap: https://www.guiadeviagem.blog/sitemap-index.xml
-
-# Host
-Host: www.guiadeviagem.blog
+Sitemap: https://guiadeviagem.blog/sitemap-index.xml
+Sitemap: https://guiadeviagem.blog/rss.xml

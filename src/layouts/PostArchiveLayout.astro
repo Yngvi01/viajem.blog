@@ -12,12 +12,21 @@ export interface Props {
   subTitle?: string;
   bannerImage?: string;
   slug?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
 }
 
 const { archiveMap, title, subTitle, bannerImage, slug } = Astro.props;
 ---
 
-<Main title={title} subTitle={subTitle} bannerImage={bannerImage} slug={slug}>
+<Main
+  {...Astro.props}
+  title={title}
+  subTitle={subTitle}
+  bannerImage={bannerImage}
+  slug={slug}
+>
   <div class="archives">
     {
       Array.from(archiveMap.keys()).map((year) => (

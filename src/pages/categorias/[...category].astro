@@ -10,7 +10,7 @@ import YukinaConfig from "../../../yukina.config";
 export async function getStaticPaths() {
   const categorias = await GetCategories();
   return Array.from(categorias.keys()).map((categorySlug) => ({
-    params: { category: categorySlug }, // Parâmetro correto
+    params: { category: categorySlug },
   }));
 }
 
@@ -26,12 +26,18 @@ const categoryBanner = {
 };
 
 const posts = categoryData?.posts || [];
+const categoryDescription = categoryData
+  ? `Artigos e roteiros sobre ${categoryData.name}.`
+  : "Categoria de artigos do Guia de Viagem.";
 ---
 
 <Main
   title={categoryBanner.title}
   subTitle={categoryBanner.subTitle}
   bannerImage={categoryBanner.bannerImage}
+  description={categoryDescription}
+  image={categoryData?.image}
+  noindex={!categoryData || posts.length === 0}
 >
   <div class="space-y-8">
     <div class="cities-grid" data-pagefind-body>

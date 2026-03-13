@@ -1,0 +1,67 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+
+const title = "Termos de Uso";
+const subTitle = "Condições para uso do conteúdo";
+const description =
+  "Consulte os Termos de Uso do Guia de Viagem para entender regras de navegação, conteúdo e responsabilidades.";
+const updatedAt = "13 de março de 2026";
+---
+
+<MainLayout title={title} subTitle={subTitle} description={description}>
+  <section class="page-card">
+    <h1>Termos de Uso</h1>
+    <p><strong>Última atualização:</strong> {updatedAt}</p>
+
+    <h2>1. Aceitação dos termos</h2>
+    <p>
+      Ao acessar o Guia de Viagem, você concorda com estes Termos de Uso e com a
+      <a href="/politica-de-privacidade">Política de Privacidade</a>.
+    </p>
+
+    <h2>2. Finalidade do conteúdo</h2>
+    <p>
+      Os conteúdos têm caráter informativo sobre turismo, destinos e planejamento de viagem. Preços, horários e
+      disponibilidade de serviços podem mudar sem aviso.
+    </p>
+
+    <h2>3. Propriedade intelectual</h2>
+    <p>
+      Textos, imagens e identidade visual do site são protegidos por direitos autorais. Reprodução total ou parcial
+      exige autorização prévia.
+    </p>
+
+    <h2>4. Responsabilidades</h2>
+    <p>
+      O usuário é responsável pelas decisões de viagem tomadas com base no conteúdo. Recomendamos sempre confirmar
+      informações diretamente com fornecedores oficiais.
+    </p>
+
+    <h2>5. Alterações</h2>
+    <p>
+      Estes termos podem ser atualizados periodicamente. A versão mais recente ficará sempre disponível nesta página.
+    </p>
+  </section>
+</MainLayout>
+
+<style>
+  .page-card {
+    @apply mx-3 rounded-2xl bg-[var(--card-color)] px-5 py-6 lg:mx-0 lg:px-10 lg:py-9;
+  }
+
+  h1 {
+    @apply mb-4 text-3xl font-semibold text-[var(--text-color)];
+  }
+
+  h2 {
+    @apply mb-2 mt-6 text-xl font-semibold text-[var(--text-color)];
+  }
+
+  p {
+    @apply mb-3 leading-7 text-[var(--text-color)];
+  }
+
+  a {
+    @apply text-[var(--primary-color)] underline-offset-2 hover:underline;
+  }
+</style>

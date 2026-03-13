@@ -1,5 +1,5 @@
 ---
-import { IdToSlug } from "../utils/hash";
+import { IdToSlug, NormalizeSlug } from "../utils/hash";
 import { Icon } from "astro-icon/components";
 import PostCardInfoIcon from "./widgets/PostCardInfoIcon.astro";
 import { GetCoverURLForUnspecifiedEntry } from "../utils/cover";
@@ -98,14 +98,14 @@ const { time = 1, wordCount = 0 } = props.readingMetadata || {};
           {
             props.category && (
               <li class="data space-x-1.5">
-                <PostCardInfoIcon name="dashicons:category" />
-                <a
-                  class="select-none rounded-md px-1.5 py-0.5 text-[var(--text-color-lighten)] transition-all hover:bg-[var(--primary-color-lighten)] hover:text-[var(--primary-color)]"
-                  href={`/categorias/${IdToSlug(props.category)}`}
-                >
-                  {props.category}
-                </a>
-              </li>
+                  <PostCardInfoIcon name="dashicons:category" />
+                  <a
+                    class="select-none rounded-md px-1.5 py-0.5 text-[var(--text-color-lighten)] transition-all hover:bg-[var(--primary-color-lighten)] hover:text-[var(--primary-color)]"
+                    href={`/categorias/${NormalizeSlug(props.category)}`}
+                  >
+                    {props.category}
+                  </a>
+                </li>
             )
           }
           <li
@@ -121,7 +121,7 @@ const { time = 1, wordCount = 0 } = props.readingMetadata || {};
                         {index > 0 && <span class="pr-1">/</span>}
                         <a
                           class="rounded-md px-1.5 py-0.5 transition-all hover:bg-[var(--primary-color-lighten)] hover:text-[var(--primary-color)]"
-                          href={`/tags/${IdToSlug(tag)}`}
+                          href={`/tags/${NormalizeSlug(tag)}`}
                         >
                           {tag}
                         </a>

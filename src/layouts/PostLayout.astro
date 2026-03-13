@@ -8,7 +8,12 @@ interface Props {
   title?: string;
   subTitle?: string;
   bannerImage?: string;
+  description?: string;
+  image?: string;
+  attractionImage?: string;
+  keywords?: string[];
   published?: Date;
+  lastModified?: Date;
   slug?: string;
   license?: {
     name: string;
@@ -22,7 +27,7 @@ const { title, subTitle, bannerImage, published, license, author, sourceLink } =
   Astro.props;
 ---
 
-<Main title={title} subTitle={subTitle} bannerImage={bannerImage}>
+<Main {...Astro.props} title={title} subTitle={subTitle} bannerImage={bannerImage}>
   <!-- <Fragment set:html={tocHTMLString} /> -->
   <div class="article-wrapper" itemscope itemtype="https://schema.org/Article">
     <div class="article">

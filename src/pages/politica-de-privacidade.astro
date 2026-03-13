@@ -1,0 +1,68 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+
+const title = "Política de Privacidade";
+const subTitle = "Como tratamos dados e cookies";
+const description =
+  "Leia a Política de Privacidade do Guia de Viagem e entenda como coletamos, usamos e protegemos informações.";
+const updatedAt = "13 de março de 2026";
+---
+
+<MainLayout title={title} subTitle={subTitle} description={description}>
+  <section class="page-card">
+    <h1>Política de Privacidade</h1>
+    <p><strong>Última atualização:</strong> {updatedAt}</p>
+
+    <h2>1. Coleta de dados</h2>
+    <p>
+      O Guia de Viagem pode coletar dados de navegação, como páginas visitadas, origem de tráfego e tempo de sessão
+      para melhorar a experiência no site.
+    </p>
+
+    <h2>2. Cookies e tecnologias similares</h2>
+    <p>
+      Utilizamos cookies para funcionamento do site, métricas de acesso e melhoria de conteúdo. Você pode bloquear
+      cookies no navegador, mas isso pode afetar algumas funcionalidades.
+    </p>
+
+    <h2>3. Uso das informações</h2>
+    <p>
+      As informações coletadas são usadas para análise de desempenho, produção de conteúdo relevante e manutenção da
+      segurança do site.
+    </p>
+
+    <h2>4. Compartilhamento</h2>
+    <p>
+      Não vendemos dados pessoais. Serviços de terceiros, como plataformas de análise, podem processar dados de forma
+      agregada para relatórios estatísticos.
+    </p>
+
+    <h2>5. Seus direitos</h2>
+    <p>
+      Você pode solicitar esclarecimentos sobre tratamento de dados pelos canais disponíveis na página de
+      <a href="/contato">contato</a>.
+    </p>
+  </section>
+</MainLayout>
+
+<style>
+  .page-card {
+    @apply mx-3 rounded-2xl bg-[var(--card-color)] px-5 py-6 lg:mx-0 lg:px-10 lg:py-9;
+  }
+
+  h1 {
+    @apply mb-4 text-3xl font-semibold text-[var(--text-color)];
+  }
+
+  h2 {
+    @apply mb-2 mt-6 text-xl font-semibold text-[var(--text-color)];
+  }
+
+  p {
+    @apply mb-3 leading-7 text-[var(--text-color)];
+  }
+
+  a {
+    @apply text-[var(--primary-color)] underline-offset-2 hover:underline;
+  }
+</style>

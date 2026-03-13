@@ -2,238 +2,193 @@
 import YukinaConfig from "../../yukina.config";
 import GlobalStyles from "./GlobalStyles.astro";
 import ScriptSetup from "./ScriptSetup.astro";
+import { getImageSource } from "../utils/imageImports";
 
-const { attractionImage, image = "src/images/logo.png", description } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, YukinaConfig.site);
+const {
+  title,
+  description,
+  keywords,
+  attractionImage,
+  image,
+  published,
+  lastModified,
+  noindex = false,
+} = Astro.props;
 
----
+const siteURL = new URL(YukinaConfig.site);
+const canonicalURL = new URL(Astro.url.pathname, siteURL).href;
+const seoTitle =
+  title && title !== YukinaConfig.title
+    ? `${title} | ${YukinaConfig.title}`
+    : YukinaConfig.title;
+const seoDescription = description || YukinaConfig.description;
+const seoKeywords = Array.isArray(keywords)
+  ? keywords.join(", ")
+  : YukinaConfig.keywords;
 
-<!-- Google Tag Manager - Adiado para não bloquear renderização -->
-<script>
-  // Carregar o GTM após o evento de carga da página para melhorar performance
-  window.addEventListener('load', function() {
-    setTimeout(function() {
-      var w = window;
-      var d = document;
-      var s = 'script';
-      var l = 'dataLayer';
-      var i = 'GTM-W8FQBNKB';
-      
-      w[l] = w[l] || [];
-      w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
-      
-      var f = d.getElementsByTagName(s)[0];
-      var j = d.createElement(s);
-      
-      if (f && f.parentNode) {
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i;
-        f.parentNode.insertBefore(j, f);
-      }
-    }, 2000); // Atrasar carregamento para melhorar métricas iniciais
-  });
-</script>
+const toAbsoluteUrl = (value: string) => {
+  if (/^https?:\/\//i.test(value)) return value;
+  return new URL(value.startsWith("/") ? value : `/${value}`, siteURL).href;
+};
 
-<!-- Preconnect para domínios importantes -->
-<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
-<link rel="preconnect" href="https://fastly.jsdelivr.net" crossorigin />
-<link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
-<link rel="preconnect" href="https://cdn.pixabay.com" />
+const rawSocialImage = attractionImage || image;
+const resolvedImage = rawSocialImage
+  ? getImageSource(rawSocialImage, "images/default-image.jpg")
+  : getImageSource(undefined, "images/default-image.jpg");
 
-<!-- Preload de recursos críticos -->
-<link rel="preload" href="/favicon.png" as="image" type="image/png" />
+const socialImagePath =
+  typeof resolvedImage === "string"
+    ? resolvedImage
+    : (resolvedImage?.src ?? "/favicon.png");
+const socialImageURL = toAbsoluteUrl(socialImagePath || "/favicon.png");
 
-<!-- Global Metadata -->
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" href="/favicon.png" type="image/x-icon" />
-<meta name="generator" content={Astro.generator} />
-<meta name="robots" content="index, follow" />
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
-<meta name="author" content={YukinaConfig.username} />
-<meta name="format-detection" content="telephone=no" />
-<meta name="color-scheme" content="light dark" />
+const isArticle = Boolean(published);
+const publishedISO = published ? new Date(published).toISOString() : undefined;
+const modifiedISO = lastModified
+  ? new Date(lastModified).toISOString()
+  : publishedISO;
+const robotsContent = noindex ? "noindex, nofollow" : "index, follow";
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION;
+const yandexSiteVerification = import.meta.env.PUBLIC_YANDEX_SITE_VERIFICATION;
 
-<!-- Security Headers -->
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-
-
-<!-- Canonical URL -->
-<link rel="canonical" href={canonicalURL} />
-
-<!-- Primary Meta Tags -->
-<title>{Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title}</title>
-<meta name="title" content={Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title} />
-<meta name="description" content={Astro.props.description || YukinaConfig.description} />
-<meta name="keywords" content={Astro.props.keywords?.join(", ") || YukinaConfig.keywords } />
-<meta name="news_keywords" content={Astro.props.keywords?.join(", ") || YukinaConfig.keywords } />
-<meta name="language" content={YukinaConfig.locale.split('-')[0]} />
-<meta name="revisit-after" content="7 days" />
-<meta name="geo.region" content="BR" />
-<meta name="geo.placename" content="Brasil" />
-<meta name="distribution" content="global" />
-<meta name="rating" content="general" />
-<meta name="copyright" content={`© ${new Date().getFullYear()} ${YukinaConfig.title}`} />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-<meta name="apple-mobile-web-app-title" content={YukinaConfig.title} />
-
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content={Astro.props.title ? "article" : "website"} />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title} />
-<meta property="og:description" content={Astro.props.description || YukinaConfig.description} />
-<meta property="og:image" content={new URL(attractionImage || image, Astro.url).href} />
-<meta property="og:image:alt" content={Astro.props.title || YukinaConfig.title} />
-<meta property="og:locale" content={YukinaConfig.locale} />
-<meta property="og:site_name" content={YukinaConfig.title} />
-
-<!-- Twitter / X -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:url" content={Astro.url} />
-<meta name="twitter:title" content={Astro.props.title ? `${Astro.props.title} | ${YukinaConfig.title}` : YukinaConfig.title} />
-<meta name="twitter:description" content={Astro.props.description || YukinaConfig.description} />
-<meta name="twitter:image" content={new URL(attractionImage || image, Astro.url).href} />
-<meta name="twitter:image:alt" content={Astro.props.title || YukinaConfig.title} />
-
-<!-- RSS AutoDiscovery -->
-<link rel="alternate" type="application/rss+xml" title={YukinaConfig.title} href={new URL("rss.xml", Astro.site)} />
-
-<!-- SiteMap -->
-<link rel="sitemap" href="/sitemap-index.xml" />
-
-<!-- Schema.org markup for Google -->
-<script type="application/ld+json" set:html={JSON.stringify({
+const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": YukinaConfig.title,
-  "url": YukinaConfig.site,
-  "description": YukinaConfig.description,
-  "inLanguage": YukinaConfig.locale,
-  "potentialAction": {
+  name: YukinaConfig.title,
+  url: YukinaConfig.site,
+  description: YukinaConfig.description,
+  inLanguage: YukinaConfig.locale,
+  potentialAction: {
     "@type": "SearchAction",
-    "target": `${YukinaConfig.site}/?q={search_term_string}`,
-    "query-input": "required name=search_term_string"
+    target: `${YukinaConfig.site}/?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
   },
-  "sameAs": YukinaConfig.socialLinks
-    .filter(link => link?.link)
-    .map(link => link.link),
-  "publisher": {
+  sameAs: YukinaConfig.socialLinks
+    .filter((link) => link?.link && /^https?:\/\//i.test(link.link))
+    .map((link) => link.link),
+  publisher: {
     "@type": "Organization",
-    "name": YukinaConfig.title,
-    "logo": {
+    name: YukinaConfig.title,
+    logo: {
       "@type": "ImageObject",
-      "url": new URL('src/images/logo.png', YukinaConfig.site).href
-    }
-  }
-})}></script>
+      url: toAbsoluteUrl("/favicon.png"),
+    },
+  },
+};
 
-{Astro.props.title && (
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": Astro.props.title,
-    "image": new URL(attractionImage || image, Astro.url).href,
-    "author": {
-      "@type": "Person",
-      "name": YukinaConfig.username
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": YukinaConfig.title,
-      "logo": {
-        "@type": "ImageObject",
-        "url": new URL('src/images/logo.png', YukinaConfig.site).href
+const articleSchema =
+  isArticle && title
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: title,
+        image: [socialImageURL],
+        author: {
+          "@type": "Person",
+          name: YukinaConfig.username,
+        },
+        publisher: {
+          "@type": "Organization",
+          name: YukinaConfig.title,
+          logo: {
+            "@type": "ImageObject",
+            url: toAbsoluteUrl("/favicon.png"),
+          },
+        },
+        datePublished: publishedISO,
+        dateModified: modifiedISO || publishedISO,
+        url: canonicalURL,
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": canonicalURL,
+        },
+        description: seoDescription,
+        inLanguage: YukinaConfig.locale,
+        keywords: seoKeywords,
       }
+    : undefined;
+---
+
+<script is:inline>
+  window.addEventListener(
+    "load",
+    () => {
+      window.setTimeout(() => {
+        const i = "GTM-W8FQBNKB";
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+
+        const f = document.getElementsByTagName("script")[0];
+        const j = document.createElement("script");
+        j.async = true;
+        j.src = `https://www.googletagmanager.com/gtm.js?id=${i}`;
+        if (f && f.parentNode) f.parentNode.insertBefore(j, f);
+      }, 1500);
     },
-    "datePublished": Astro.props.published ? new Date(Astro.props.published).toISOString() : new Date().toISOString(),
-    "dateModified": Astro.props.lastModified ? new Date(Astro.props.lastModified).toISOString() : new Date().toISOString(),
-    "url": Astro.url,
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": Astro.url
-    },
-    "description": Astro.props.description || YukinaConfig.description,
-    "inLanguage": YukinaConfig.locale,
-    "keywords": YukinaConfig.keywords,
-    "articleSection": "Viagem e Turismo",
-    "speakable": {
-      "@type": "SpeakableSpecification",
-      "cssSelector": ["h1", "h2", ".article-body"]
-    },
-    "isAccessibleForFree": "True"
-  })}></script>
+    { once: true }
+  );
+</script>
+
+<link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+<link rel="preconnect" href="https://cdn.pixabay.com" />
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" href="/favicon.png" type="image/png" />
+<meta name="generator" content={Astro.generator} />
+<meta name="robots" content={robotsContent} />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#111827" media="(prefers-color-scheme: dark)" />
+<meta name="author" content={YukinaConfig.username} />
+<meta name="format-detection" content="telephone=no" />
+{googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
+{bingSiteVerification && <meta name="msvalidate.01" content={bingSiteVerification} />}
+{yandexSiteVerification && <meta name="yandex-verification" content={yandexSiteVerification} />}
+
+<link rel="canonical" href={canonicalURL} />
+
+<title>{seoTitle}</title>
+<meta name="description" content={seoDescription} />
+<meta name="keywords" content={seoKeywords} />
+
+<meta property="og:type" content={isArticle ? "article" : "website"} />
+<meta property="og:site_name" content={YukinaConfig.title} />
+<meta property="og:locale" content={YukinaConfig.locale} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={seoTitle} />
+<meta property="og:description" content={seoDescription} />
+<meta property="og:image" content={socialImageURL} />
+{typeof resolvedImage !== "string" && resolvedImage?.width && (
+  <meta property="og:image:width" content={String(resolvedImage.width)} />
+)}
+{typeof resolvedImage !== "string" && resolvedImage?.height && (
+  <meta property="og:image:height" content={String(resolvedImage.height)} />
 )}
 
-<!-- Otimização de carregamento de CSS -->
-<link rel="preload" href="/assets/katex/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="/assets/katex/katex.min.css"></noscript>
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={seoTitle} />
+<meta name="twitter:description" content={seoDescription} />
+<meta name="twitter:image" content={socialImageURL} />
 
-<!-- CSS crítico inline -->
-<style is:inline>
-  /* Estilos críticos para o primeiro carregamento */
-  :root {
-    --primary-color: #2563eb;
-    --primary-color-darken: #1d4ed8;
-    --primary-color-lighten: #dbeafe;
-    --background-color: #ffffff;
-    --card-color: #f9fafb;
-    --text-color: #374151;
-    --text-color-lighten: #6b7280;
-  }
-  
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --background-color: #111827;
-      --card-color: #1f2937;
-      --text-color: #f9fafb;
-      --text-color-lighten: #d1d5db;
-    }
-  }
-  
-  body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  }
-  
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-</style>
+{isArticle && publishedISO && <meta property="article:published_time" content={publishedISO} />}
+{isArticle && modifiedISO && <meta property="article:modified_time" content={modifiedISO} />}
 
-<!-- Otimização para imagens -->
-<script>
-  // Função para detectar conexão lenta e adaptar recursos
-  document.addEventListener('DOMContentLoaded', function() {
-    // Verificar conexão do dispositivo
-    try {
-      if (navigator && 'connection' in navigator) {
-        const connection = navigator.connection as any;
-        
-        if (connection && connection.saveData) {
-          // Modo economia de dados ativado - carregar versões de baixa qualidade
-          document.documentElement.classList.add('save-data');
-        }
-        
-        if (connection && connection.effectiveType && 
-            (connection.effectiveType.includes('2g') || 
-             connection.effectiveType.includes('slow'))) {
-          // Conexão lenta - reduzir qualidade de recursos
-          document.documentElement.classList.add('slow-connection');
-        }
-      }
-    } catch (e) {
-      // Ignore erros pois esta é apenas uma otimização extra
-    }
-  });
-</script>
+<link rel="alternate" type="application/rss+xml" title={YukinaConfig.title} href="/rss.xml" />
+
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)}></script>
+{articleSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)}></script>
+)}
+
+<link
+  rel="preload"
+  href="/assets/katex/katex.min.css"
+  as="style"
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript><link rel="stylesheet" href="/assets/katex/katex.min.css" /></noscript>
 
 <GlobalStyles />
 <ScriptSetup />

@@ -1,60 +1,18 @@
 import type { APIRoute } from "astro";
 
 const getRobotsTxt = (sitemapURL: URL) => `
-# Guia de Viagem - Regras para Robots
+# Guia de Viagem - Robots
 
 User-agent: *
-Allow: /  
-Allow: /_astro/
-Allow: /assets/
-Allow: /fonts/
-Allow: /images/
-Allow: /_slds/
+Allow: /
 Disallow: /api/
 Disallow: /admin/
 Disallow: /private/
 Disallow: /node_modules/
-Disallow: /404
-Disallow: /error
 
-# Google Bots
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 1
-
-User-agent: Googlebot-Image
-Allow: /
-Crawl-delay: 1
-
-User-agent: Googlebot-Mobile
-Allow: /
-Crawl-delay: 1
-
-User-agent: Googlebot-News
-Allow: /
-
-User-agent: AdsBot-Google
-Allow: /
-
-# Bing Bots
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 1
-
-# Yandex Bots
-User-agent: Yandex
-Allow: /
-Crawl-delay: 1
-
-# DuckDuckGo Bot
-User-agent: DuckDuckBot
-Allow: /
-
-# Sitemap
+# Sitemaps
 Sitemap: ${sitemapURL.href}
-
-# Host
-Host: ${new URL(sitemapURL).hostname}
+Sitemap: ${new URL("rss.xml", sitemapURL).href}
 `;
 
 export const GET: APIRoute = ({ site }) => {

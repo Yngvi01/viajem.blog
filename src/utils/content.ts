@@ -1,5 +1,5 @@
 import { getCollection } from "astro:content";
-import { IdToSlug } from "./hash";
+import { IdToSlug, NormalizeSlug } from "./hash";
 
 /**
  * Represents an archive item with a title, slug, date, and optional tags.
@@ -77,7 +77,7 @@ export async function GetCategories() {
   for (const post of allBlogPosts) {
     if (!post.data.category) continue;
 
-    const categorySlug = IdToSlug(post.data.category);
+    const categorySlug = NormalizeSlug(post.data.category);
 
     if (!categorias.has(categorySlug)) {
       categorias.set(categorySlug, {
@@ -161,7 +161,7 @@ export async function GetTags() {
 
   for (const post of allBlogPosts) {
     post.data.tags?.forEach((tag: string) => {
-      const tagSlug = IdToSlug(tag);
+      const tagSlug = NormalizeSlug(tag);
 
       if (!tags.has(tagSlug)) {
         tags.set(tagSlug, {

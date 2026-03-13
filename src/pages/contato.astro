@@ -1,0 +1,47 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+
+const title = "Contato";
+const subTitle = "Fale com o Guia de Viagem";
+const description =
+  "Entre em contato com o Guia de Viagem para dúvidas, parcerias e sugestões de conteúdo.";
+---
+
+<MainLayout title={title} subTitle={subTitle} description={description}>
+  <section class="page-card">
+    <h1>Contato</h1>
+    <p>
+      Quer sugerir um destino, corrigir uma informação ou propor parceria? Entre em contato pelos canais abaixo.
+    </p>
+    <ul>
+      <li>
+        Instagram: <a href="https://www.instagram.com/guiadeviagem.blog/" target="_blank" rel="noopener noreferrer">@guiadeviagem.blog</a>
+      </li>
+    </ul>
+    <p>
+      Respondemos o mais rápido possível, priorizando temas relacionados aos conteúdos publicados no site.
+    </p>
+  </section>
+</MainLayout>
+
+<style>
+  .page-card {
+    @apply mx-3 rounded-2xl bg-[var(--card-color)] px-5 py-6 lg:mx-0 lg:px-10 lg:py-9;
+  }
+
+  h1 {
+    @apply mb-4 text-3xl font-semibold text-[var(--text-color)];
+  }
+
+  p {
+    @apply mb-4 leading-7 text-[var(--text-color)];
+  }
+
+  ul {
+    @apply mb-4 list-disc space-y-2 pl-6 text-[var(--text-color)];
+  }
+
+  a {
+    @apply text-[var(--primary-color)] underline-offset-2 hover:underline;
+  }
+</style>

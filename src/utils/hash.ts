@@ -1,5 +1,19 @@
 import YukinaConfig from "../../yukina.config";
 
+/**
+ * Normaliza uma string para URL amigável (slug SEO).
+ */
+export function NormalizeSlug(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, " e ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 // Armazenar a instância CryptoJS após ser carregada
 let CryptoJS: any = null;
 

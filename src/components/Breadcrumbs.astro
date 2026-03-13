@@ -1,27 +1,42 @@
 ---
-// Componente de Breadcrumbs para melhorar SEO
-const { currentPage, title } = Astro.props;
 import YukinaConfig from "../../yukina.config";
 
-// Função para gerar os breadcrumbs com base na URL atual
-const generateBreadcrumbs = (currentPath: string, pageTitle?: string) => {
-  const segments = currentPath.split('/').filter(Boolean);
-  const breadcrumbs = [
-    { name: 'Início', url: '/' }
-  ];
+const { title } = Astro.props;
 
-  let currentUrl = '';
+const segmentLabelMap: Record<string, string> = {
+  categorias: "Categorias",
+  tags: "Tags",
+  posts: "Posts",
+  destinos: "Destinos",
+  sobre: "Sobre",
+  contato: "Contato",
+  "politica-de-privacidade": "Política de Privacidade",
+  "termos-de-uso": "Termos de Uso",
+};
+
+const prettifySegment = (segment: string) => {
+  const decoded = decodeURIComponent(segment).trim();
+  const mapped = segmentLabelMap[decoded.toLowerCase()];
+  if (mapped) return mapped;
+
+  return decoded
+    .replace(/-/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
+const generateBreadcrumbs = (currentPath: string, pageTitle?: string) => {
+  const segments = currentPath.split("/").filter(Boolean);
+  const breadcrumbs = [{ name: "Início", url: "/" }];
+  let currentUrl = "";
+
   segments.forEach((segment, index) => {
     currentUrl += `/${segment}`;
-    
-    // Formatar o nome do segmento para exibição
-    let name = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
-    
-    // Se for o último segmento e temos um título específico, use-o
+
+    let name = prettifySegment(segment);
     if (index === segments.length - 1 && pageTitle) {
       name = pageTitle;
     }
-    
+
     breadcrumbs.push({ name, url: currentUrl });
   });
 
@@ -31,40 +46,48 @@ const generateBreadcrumbs = (currentPath: string, pageTitle?: string) => {
 const breadcrumbs = generateBreadcrumbs(Astro.url.pathname, title);
 ---
 
-<nav aria-label="Breadcrumb" class="breadcrumbs-container">
-  <ol itemscope itemtype="https://schema.org/BreadcrumbList" class="breadcrumbs">
-    {breadcrumbs.map((crumb, index) => (
-      <li 
-        itemprop="itemListElement" 
-        itemscope 
-        itemtype="https://schema.org/ListItem"
-        class={index === breadcrumbs.length - 1 ? 'breadcrumb-item current' : 'breadcrumb-item'}
-      >
-        {index < breadcrumbs.length - 1 ? (
-          <a itemprop="item" href={crumb.url}>
-            <span itemprop="name">{crumb.name}</span>
-          </a>
-        ) : (
-          <span itemprop="name">{crumb.name}</span>
-        )}
-        <meta itemprop="position" content={`${index + 1}`} />
-        {index < breadcrumbs.length - 1 && <span class="separator"> / </span>}
-      </li>
-    ))}
-  </ol>
-</nav>
+{
+  breadcrumbs.length > 1 && (
+    <>
+      <nav aria-label="Breadcrumb" class="breadcrumbs-container">
+        <ol itemscope itemtype="https://schema.org/BreadcrumbList" class="breadcrumbs">
+          {breadcrumbs.map((crumb, index) => (
+            <li
+              itemprop="itemListElement"
+              itemscope
+              itemtype="https://schema.org/ListItem"
+              class={index === breadcrumbs.length - 1 ? "breadcrumb-item current" : "breadcrumb-item"}
+            >
+              {index < breadcrumbs.length - 1 ? (
+                <a itemprop="item" href={crumb.url}>
+                  <span itemprop="name">{crumb.name}</span>
+                </a>
+              ) : (
+                <span itemprop="name">{crumb.name}</span>
+              )}
+              <meta itemprop="position" content={`${index + 1}`} />
+              {index < breadcrumbs.length - 1 && <span class="separator"> / </span>}
+            </li>
+          ))}
+        </ol>
+      </nav>
 
-<!-- Script para gerar dados estruturados de breadcrumbs para SEO -->
-<script type="application/ld+json" set:html={JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": breadcrumbs.map((crumb, index) => ({
-    "@type": "ListItem",
-    "position": index + 1,
-    "name": crumb.name,
-    "item": new URL(crumb.url, YukinaConfig.site).href
-  }))
-})}></script>
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: breadcrumbs.map((crumb, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            name: crumb.name,
+            item: new URL(crumb.url, YukinaConfig.site).href,
+          })),
+        })}
+      ></script>
+    </>
+  )
+}
 
 <style>
   .breadcrumbs-container {

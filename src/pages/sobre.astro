@@ -11,9 +11,11 @@ const { Content } = await render(aboutPost);
 const { title, date } = aboutPost.data;
 const published = new Date(date);
 const subTitle = "Conheça um pouco o Guia de Viagem";
+const description =
+  "Conheça a proposta do Guia de Viagem, nossa missão e como produzimos roteiros e dicas de turismo.";
 ---
 
-<Main title="Sobre" subTitle={subTitle}>
+<Main title="Sobre" subTitle={subTitle} description={description}>
   <!-- <Fragment set:html={tocHTMLString} /> -->
   <div class="article-wrapper">
     <div class="article">

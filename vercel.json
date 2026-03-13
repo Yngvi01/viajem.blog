@@ -5,10 +5,90 @@
       "has": [
         {
           "type": "host",
-          "value": "https://www.guiadeviagem.blog"
+          "value": "www.guiadeviagem.blog"
         }
       ],
       "destination": "https://guiadeviagem.blog/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/categorias/Ecoturismo",
+      "destination": "/categorias/ecoturismo",
+      "permanent": true
+    },
+    {
+      "source": "/categorias/Destinos",
+      "destination": "/categorias/destinos",
+      "permanent": true
+    },
+    {
+      "source": "/categorias/Rio%20Grande%20do%20Sul",
+      "destination": "/categorias/rio-grande-do-sul",
+      "permanent": true
+    },
+    {
+      "source": "/categorias/Rio%20de%20Janeiro",
+      "destination": "/categorias/rio-de-janeiro",
+      "permanent": true
+    },
+    {
+      "source": "/tags/Brasil",
+      "destination": "/tags/brasil",
+      "permanent": true
+    },
+    {
+      "source": "/tags/Tocantins",
+      "destination": "/tags/tocantins",
+      "permanent": true
+    },
+    {
+      "source": "/tags/Maranh%C3%A3o",
+      "destination": "/tags/maranhao",
+      "permanent": true
+    },
+    {
+      "source": "/tags/turismo%20sustent%C3%A1vel",
+      "destination": "/tags/turismo-sustentavel",
+      "permanent": true
+    },
+    {
+      "source": "/tags/religi%C3%A3o",
+      "destination": "/tags/religiao",
+      "permanent": true
+    },
+    {
+      "source": "/tags/patrim%C3%B4nio%20hist%C3%B3rico",
+      "destination": "/tags/patrimonio-historico",
+      "permanent": true
+    },
+    {
+      "source": "/tags/arte%20sacra",
+      "destination": "/tags/arte-sacra",
+      "permanent": true
+    },
+    {
+      "source": "/tags/paisagens%20incr%C3%ADveis",
+      "destination": "/tags/paisagens-incriveis",
+      "permanent": true
+    },
+    {
+      "source": "/tags/serra%20ga%C3%BAcha",
+      "destination": "/tags/serra-gaucha",
+      "permanent": true
+    },
+    {
+      "source": "/tags/hist%C3%B3ria",
+      "destination": "/tags/historia",
+      "permanent": true
+    },
+    {
+      "source": "/tags/rio%20de%20janeiro",
+      "destination": "/tags/rio-de-janeiro",
+      "permanent": true
+    },
+    {
+      "source": "/tags/roteiro%20de%20viagem",
+      "destination": "/tags/roteiro-de-viagem",
       "permanent": true
     }
   ]

@@ -1,0 +1,44 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+
+const title = "Página não encontrada";
+const subTitle = "Erro 404";
+const description =
+  "A página que você tentou acessar não foi encontrada. Volte para a página inicial e continue explorando o Guia de Viagem.";
+---
+
+<MainLayout title={title} subTitle={subTitle} description={description} noindex={true}>
+  <section class="page-card">
+    <h1>Página não encontrada</h1>
+    <p>
+      O link pode estar desatualizado ou o conteúdo pode ter sido movido. Você pode continuar navegando pelos caminhos
+      abaixo:
+    </p>
+    <div class="actions">
+      <a href="/">Ir para a página inicial</a>
+      <a href="/destinos">Explorar destinos</a>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .page-card {
+    @apply mx-3 rounded-2xl bg-[var(--card-color)] px-5 py-6 lg:mx-0 lg:px-10 lg:py-9;
+  }
+
+  h1 {
+    @apply mb-4 text-3xl font-semibold text-[var(--text-color)];
+  }
+
+  p {
+    @apply mb-5 leading-7 text-[var(--text-color)];
+  }
+
+  .actions {
+    @apply flex flex-wrap gap-3;
+  }
+
+  .actions a {
+    @apply rounded-lg bg-[var(--primary-color)] px-4 py-2 font-medium text-white transition hover:brightness-95;
+  }
+</style>

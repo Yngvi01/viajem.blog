@@ -2,6 +2,7 @@
 import Base from "./BaseLayout.astro";
 import NavBar from "../components/NavBar.astro";
 import Banner from "../components/Banner.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 
 import YukinaConfig from "../../yukina.config";
 import Footer from "../components/Footer.astro";
@@ -12,12 +13,20 @@ export interface Props {
   subTitle?: string;
   bannerImage?: string;
   slug?: string;
+  description?: string;
+  image?: string;
+  attractionImage?: string;
+  keywords?: string[];
+  published?: Date;
+  lastModified?: Date;
+  noindex?: boolean;
 }
 
 const props = Astro.props;
+const shouldShowBreadcrumbs = Astro.url.pathname !== "/";
 ---
 
-<Base>
+<Base {...Astro.props}>
   <NavBar />
 
   {
@@ -34,16 +43,17 @@ const props = Astro.props;
   }
 
   <div class="main-container mt-6 mb-8 md:my-10">
+    {shouldShowBreadcrumbs && <Breadcrumbs title={props.title} />}
     <div class="flex flex-row items-start xl:space-x-4">
       <aside class="side-bar" aria-label="Barra lateral">
         <SideBar />
       </aside>
       <div class="transition-leaving w-full space-y-4 md:space-y-8">
-        <main class="content onload-animation" id="main-content" role="main" aria-label="Conteúdo principal">
+        <section class="content onload-animation" aria-label="Conteúdo principal">
           <article>
             <slot />
           </article>
-        </main>
+        </section>
         <Footer />
       </div>
     </div>

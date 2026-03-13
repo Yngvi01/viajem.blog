@@ -28,10 +28,16 @@ async function FormatArchiveMap() {
 }
 
 const { archiveMap, tagName } = await FormatArchiveMap();
+const tagPostsCount = Array.from(archiveMap.values()).reduce(
+  (total, entries) => total + entries.length,
+  0,
+);
 ---
 
 <PostArchiveLayout
   archiveMap={archiveMap}
   title={tagName}
   subTitle={i18n(I18nKeys.pages_tags_archive)}
+  description={`Posts marcados com ${tagName}.`}
+  noindex={tagPostsCount === 0}
 />

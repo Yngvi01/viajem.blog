@@ -1,0 +1,67 @@
+---
+import { GetSanityOffers } from "../../utils/sanity";
+
+const safeUrl = (value: string | undefined): string | undefined => {
+  if (!value) return undefined;
+  return /^https?:\/\//i.test(value) ? value : undefined;
+};
+
+export async function getStaticPaths() {
+  const offers = await GetSanityOffers({ includeInactive: true });
+  const paths: Array<{
+    params: { slug: string };
+    props: {
+      offer: (typeof offers)[number];
+      isLegacySlug: boolean;
+    };
+  }> = [];
+  const seen = new Set<string>();
+
+  for (const offer of offers) {
+    if (!seen.has(offer.slug)) {
+      paths.push({
+        params: { slug: offer.slug },
+        props: { offer, isLegacySlug: false },
+      });
+      seen.add(offer.slug);
+    }
+
+    for (const rawLegacySlug of offer.legacySlugs || []) {
+      const legacySlug = rawLegacySlug.trim().replace(/^\/+|\/+$/g, "");
+      if (!legacySlug || seen.has(legacySlug) || legacySlug === offer.slug) continue;
+      paths.push({
+        params: { slug: legacySlug },
+        props: { offer, isLegacySlug: true },
+      });
+      seen.add(legacySlug);
+    }
+  }
+
+  return paths;
+}
+
+const { offer, isLegacySlug } = Astro.props;
+const destination = safeUrl(offer?.finalUrl) || "/";
+const canonicalUrl = `/go/${offer?.slug || ""}`;
+const redirectTarget = isLegacySlug ? canonicalUrl : destination;
+---
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="refresh" content={`0;url=${redirectTarget}`} />
+    <link rel="canonical" href={canonicalUrl} />
+    <title>Redirecionando...</title>
+    <script is:inline>{`window.location.replace(${JSON.stringify(redirectTarget)});`}</script>
+  </head>
+  <body>
+    <p>
+      Redirecionando para{" "}
+      <a href={redirectTarget} rel="nofollow sponsored noopener noreferrer">
+        {redirectTarget}
+      </a>.
+    </p>
+  </body>
+</html>

@@ -7,6 +7,7 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /admin/
+Disallow: /go/
 Disallow: /private/
 Disallow: /node_modules/
 

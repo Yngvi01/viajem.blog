@@ -1,0 +1,47 @@
+---
+import {
+  GetSanityAdSlots,
+  type SanityAdPlacement,
+  type SanityAdSlot,
+} from "../utils/sanity";
+
+export interface Props {
+  placement: SanityAdPlacement;
+  class?: string;
+}
+
+const { placement, class: className = "" } = Astro.props;
+const slots = await GetSanityAdSlots(placement);
+const slot = slots[0] as SanityAdSlot | undefined;
+---
+
+{
+  slot && (
+    <section
+      class={`ad-slot ${className}`.trim()}
+      aria-label="Publicidade"
+      data-ad-placement={placement}
+      data-ad-slot={slot.slug}
+    >
+      <p class="ad-label">Publicidade</p>
+      {slot.scriptUrl && (
+        <script async={slot.scriptAsync} src={slot.scriptUrl}></script>
+      )}
+      {slot.htmlCode && <div class="ad-content" set:html={slot.htmlCode}></div>}
+    </section>
+  )
+}
+
+<style>
+  .ad-slot {
+    @apply my-4 rounded-xl border border-dashed border-black/20 bg-[var(--card-color)] p-3 dark:border-white/20;
+  }
+
+  .ad-label {
+    @apply mb-2 text-xs uppercase tracking-wide text-[var(--text-color-lighten)];
+  }
+
+  .ad-content {
+    @apply w-full overflow-x-auto;
+  }
+</style>

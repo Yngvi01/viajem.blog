@@ -2,6 +2,7 @@
 import Main from "../layouts/MainLayout.astro";
 import Markdown from "../components/Markdown.astro";
 import CopyRight from "../components/misc/CopyRight.astro";
+import AdSlot from "../components/AdSlot.astro";
 
 
 interface Props {
@@ -31,11 +32,13 @@ const { title, subTitle, bannerImage, published, license, author, sourceLink } =
   <!-- <Fragment set:html={tocHTMLString} /> -->
   <div class="article-wrapper" itemscope itemtype="https://schema.org/Article">
     <div class="article">
+      <AdSlot placement="post_inline" />
       <div itemprop="articleBody" class="article-content">
         <Markdown>
           <slot />
         </Markdown>
       </div>
+      <AdSlot placement="post_bottom" />
       {
         published && title && (
           <footer>

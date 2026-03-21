@@ -90,6 +90,61 @@
       "source": "/tags/roteiro%20de%20viagem",
       "destination": "/tags/roteiro-de-viagem",
       "permanent": true
+    },
+    {
+      "source": "/posts/7destinosecologicos",
+      "destination": "/posts/destinos-ecologicos-brasil",
+      "permanent": true
+    },
+    {
+      "source": "/posts/catedralsaopedro",
+      "destination": "/posts/paroquia-sao-pedro-gramado",
+      "permanent": true
+    },
+    {
+      "source": "/posts/destinosbr2025",
+      "destination": "/posts/destinos-incriveis-brasil-2025",
+      "permanent": true
+    },
+    {
+      "source": "/posts/jalapao",
+      "destination": "/posts/jalapao-fervedouros-ecoturismo",
+      "permanent": true
+    },
+    {
+      "source": "/posts/lencois",
+      "destination": "/posts/lencois-maranhenses-guia-completo",
+      "permanent": true
+    },
+    {
+      "source": "/posts/pascoagramado",
+      "destination": "/posts/pascoa-em-gramado-2025",
+      "permanent": true
+    },
+    {
+      "source": "/posts/praias2025",
+      "destination": "/posts/praias-imperdiveis-brasil-2025",
+      "permanent": true
+    },
+    {
+      "source": "/posts/rio2025",
+      "destination": "/posts/roteiro-rio-de-janeiro-2025",
+      "permanent": true
+    },
+    {
+      "source": "/posts/saboresdaserra",
+      "destination": "/posts/roteiro-gastronomico-serra-gaucha",
+      "permanent": true
+    },
+    {
+      "source": "/posts/turismocultural",
+      "destination": "/posts/turismo-cultural-historico-brasil",
+      "permanent": true
+    },
+    {
+      "source": "/posts/urubici",
+      "destination": "/posts/urubici-ecoturismo-aventura",
+      "permanent": true
     }
   ]
 }

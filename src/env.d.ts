@@ -8,3 +8,19 @@ declare global {
     swup: AstroIntegration;
   }
 }
+
+interface ImportMetaEnv {
+  readonly SANITY_PROJECT_ID?: string;
+  readonly SANITY_DATASET?: string;
+  readonly SANITY_API_VERSION?: string;
+  readonly SANITY_API_TOKEN?: string;
+  readonly SANITY_STUDIO_PROJECT_ID?: string;
+  readonly SANITY_STUDIO_DATASET?: string;
+  readonly PUBLIC_GOOGLE_SITE_VERIFICATION?: string;
+  readonly PUBLIC_BING_SITE_VERIFICATION?: string;
+  readonly PUBLIC_YANDEX_SITE_VERIFICATION?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}

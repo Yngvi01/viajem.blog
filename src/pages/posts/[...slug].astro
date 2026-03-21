@@ -1,27 +1,65 @@
 ---
-import { getCollection } from "astro:content";
-import { IdToSlug } from "../../utils/hash";
-import PostLayout from "../../layouts/PostLayout.astro";
 import { render } from "astro:content";
+import PostLayout from "../../layouts/PostLayout.astro";
+import { IdToSlug } from "../../utils/hash";
+import { GetSortedPosts, type BlogPostEntry } from "../../utils/content";
 
 export async function getStaticPaths() {
-  const postEntries = await getCollection("posts", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
-  return postEntries.map((entry) => ({
-    params: { slug: IdToSlug(entry.id) },
-    props: { entry },
-  }));
+  const postEntries = await GetSortedPosts();
+  const paths: Array<{
+    params: { slug: string };
+    props: {
+      entry: BlogPostEntry;
+      canonicalSlug: string;
+      isLegacySlug: boolean;
+    };
+  }> = [];
+  const seen = new Set<string>();
+
+  for (const entry of postEntries) {
+    const canonicalSlug = IdToSlug(entry.id);
+    if (!seen.has(canonicalSlug)) {
+      paths.push({
+        params: { slug: canonicalSlug },
+        props: { entry, canonicalSlug, isLegacySlug: false },
+      });
+      seen.add(canonicalSlug);
+    }
+
+    const legacySlugs = entry.data.legacySlugs || [];
+    for (const rawSlug of legacySlugs) {
+      const legacySlug = rawSlug.trim().replace(/^\/+|\/+$/g, "");
+      if (!legacySlug || legacySlug === canonicalSlug || seen.has(legacySlug)) continue;
+
+      paths.push({
+        params: { slug: legacySlug },
+        props: { entry, canonicalSlug, isLegacySlug: true },
+      });
+      seen.add(legacySlug);
+    }
+  }
+
+  return paths;
 }
 
-const { entry } = Astro.props;
-const { Content } = await render(entry);
+interface Props {
+  entry: BlogPostEntry;
+  canonicalSlug: string;
+  isLegacySlug: boolean;
+}
 
-// Configurações padrão
+const { entry, canonicalSlug, isLegacySlug } = Astro.props as Props;
+
+let LocalContent: any = null;
+if (!isLegacySlug && entry.source === "local" && entry.rawEntry) {
+  const { Content } = await render(entry.rawEntry);
+  LocalContent = Content;
+}
+
 const DEFAULT_BANNER = "/images/default-banner.jpg";
-const DEFAULT_IMAGE = "/images/default-image.jpg";
+const postSlug = canonicalSlug;
+const redirectDestination = `/posts/${canonicalSlug}`;
 
-// Extrair metadados condicionais
 const licenseData = entry.data.licenseName && {
   license: {
     name: entry.data.licenseName,
@@ -31,7 +69,6 @@ const licenseData = entry.data.licenseName && {
   sourceLink: entry.data.sourceLink,
 };
 
-// Configuração do banner para a página de post
 const postBanner = {
   title: entry.data.title,
   subTitle: entry.data.description || "Sua próxima aventura começa aqui!",
@@ -39,34 +76,65 @@ const postBanner = {
     ? entry.data.cover || DEFAULT_BANNER
     : entry.data.attraction_image || DEFAULT_BANNER,
 };
+
+const hasSanityContent = entry.source === "sanity" && Boolean(entry.contentHtml);
 ---
 
-<PostLayout
-  title={entry.data.title}
-  subTitle={postBanner.subTitle}
-  bannerImage={postBanner.bannerImage}
-  description={entry.data.description}
-  image={entry.data.meta_image || entry.data.attraction_image || entry.data.cover || entry.data.image}
-  attractionImage={entry.data.attraction_image}
-  keywords={entry.data.keywords}
-  published={entry.data.published}
-  lastModified={entry.data.published}
-  slug={IdToSlug(entry.id)}
-  {...licenseData}
->
-  <div
-    class="hidden"
-    data-pagefind-body
-    data-pagefind-weight="10"
-    data-pagefind-meta="title"
-  >
-    {entry.data.title}
-  </div>
+{
+  isLegacySlug ? (
+    <html lang="pt-BR">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="robots" content="noindex, follow" />
+        <meta http-equiv="refresh" content={`0;url=${redirectDestination}`} />
+        <link rel="canonical" href={redirectDestination} />
+        <title>Redirecionando...</title>
+        <script is:inline>{`window.location.replace(${JSON.stringify(redirectDestination)});`}</script>
+      </head>
+      <body>
+        <p>
+          Redirecionando para{" "}
+          <a href={redirectDestination}>{redirectDestination}</a>.
+        </p>
+      </body>
+    </html>
+  ) : (
+    <PostLayout
+      title={entry.data.title}
+      subTitle={postBanner.subTitle}
+      bannerImage={postBanner.bannerImage}
+      description={entry.data.description}
+      image={entry.data.meta_image || entry.data.attraction_image || entry.data.cover || entry.data.image}
+      attractionImage={entry.data.attraction_image}
+      keywords={entry.data.keywords}
+      published={entry.data.published}
+      lastModified={entry.data.lastModified || entry.data.published}
+      slug={postSlug}
+      {...licenseData}
+    >
+      <div
+        class="hidden"
+        data-pagefind-body
+        data-pagefind-weight="10"
+        data-pagefind-meta="title"
+      >
+        {entry.data.title}
+      </div>
 
-  <div data-pagefind-body>
-    <Content />
-  </div>
-</PostLayout>
+      <div data-pagefind-body>
+        {
+          hasSanityContent ? (
+            <div set:html={entry.contentHtml} />
+          ) : entry.source === "sanity" ? (
+            <p>Conteúdo em atualização.</p>
+          ) : (
+            LocalContent && <LocalContent />
+          )
+        }
+      </div>
+    </PostLayout>
+  )
+}
 
 <style>
   .attraction-image {

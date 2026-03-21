@@ -1,0 +1,93 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { GetSanityOffers } from "../utils/sanity";
+
+const offers = await GetSanityOffers();
+
+const pageTitle = "Ofertas de Viagem";
+const pageDescription =
+  "Ofertas e links afiliados selecionados para passeios, destinos e experiências de viagem.";
+---
+
+<MainLayout
+  title={pageTitle}
+  subTitle="Passeios e experiências em destaque"
+  description={pageDescription}
+  noindex={offers.length === 0}
+>
+  <section class="offers-wrapper" data-pagefind-body>
+    {offers.length === 0 ? (
+      <p class="empty-state">Nenhuma oferta ativa no momento.</p>
+    ) : (
+      <div class="offers-grid">
+        {offers.map((offer) => (
+          <article class="offer-card">
+            {offer.image && (
+              <img
+                src={offer.image}
+                alt={offer.title}
+                loading="lazy"
+                decoding="async"
+                class="offer-image"
+              />
+            )}
+            <div class="offer-content">
+              <h2>{offer.title}</h2>
+              {offer.destinationName && <p class="destination">{offer.destinationName}</p>}
+              {offer.description && <p class="description">{offer.description}</p>}
+              <a
+                href={`/go/${offer.slug}`}
+                rel="nofollow sponsored"
+                class="offer-link"
+              >
+                {offer.ctaText || "Ver oferta"}
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+  </section>
+</MainLayout>
+
+<style>
+  .offers-wrapper {
+    @apply mx-3 rounded-2xl bg-[var(--card-color)] px-5 py-6 lg:mx-0 lg:px-8 lg:py-8;
+  }
+
+  .offers-grid {
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2;
+  }
+
+  .offer-card {
+    @apply overflow-hidden rounded-xl border border-black/10 bg-[var(--background-color)] dark:border-white/10;
+  }
+
+  .offer-image {
+    @apply h-40 w-full object-cover;
+  }
+
+  .offer-content {
+    @apply space-y-2 p-4;
+  }
+
+  .offer-content h2 {
+    @apply text-lg font-semibold text-[var(--text-color)];
+  }
+
+  .destination {
+    @apply text-sm text-[var(--text-color-lighten)];
+  }
+
+  .description {
+    @apply text-sm text-[var(--text-color)];
+  }
+
+  .offer-link {
+    @apply inline-block rounded-lg bg-[var(--primary-color)] px-4 py-2 text-sm font-semibold text-white transition hover:brightness-95;
+  }
+
+  .empty-state {
+    @apply text-[var(--text-color-lighten)];
+  }
+</style>

@@ -1,9 +1,7 @@
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import { IdToSlug, NormalizeSlug } from "./hash";
+import { GetSanityPosts, IsSanityEnabled } from "./sanity";
 
-/**
- * Represents an archive item with a title, slug, date, and optional tags.
- */
 export interface Archive {
   id: string;
   title: string;
@@ -18,18 +16,12 @@ export interface Archive {
   };
 }
 
-/**
- * Represents a tag used to categorize content.
- */
 export interface Tag {
   name: string;
   slug: string;
   posts: Archive[];
 }
 
-/**
- * Represents a category of content.
- */
 export interface Category {
   name: string;
   slug: string;
@@ -38,86 +30,201 @@ export interface Category {
   description: string;
 }
 
-/**
- * Retrieves and sorts blog posts by their published date.
- */
-export async function GetSortedPosts() {
-  const allBlogPosts = await getCollection("posts", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
-
-  const sorted = allBlogPosts.sort((a, b) => {
-    const dateA = new Date(a.data.published);
-    const dateB = new Date(b.data.published);
-    return dateA > dateB ? -1 : 1;
-  });
-
-  for (let i = 1; i < sorted.length; i++) {
-    (sorted[i].data as any).nextSlug = (sorted[i - 1] as any).slug;
-    (sorted[i].data as any).nextTitle = sorted[i - 1].data.title;
-  }
-  for (let i = 0; i < sorted.length - 1; i++) {
-    (sorted[i].data as any).prevSlug = (sorted[i + 1] as any).slug;
-    (sorted[i].data as any).prevTitle = sorted[i + 1].data.title;
-  }
-
-  return sorted;
+export interface PostData {
+  title: string;
+  published: Date;
+  lastModified?: Date;
+  draft?: boolean;
+  legacySlugs?: string[];
+  description?: string;
+  excerpt?: string;
+  cover?: string;
+  tags?: string[];
+  tagSlugs?: string[];
+  category?: string;
+  categorySlug?: string;
+  categoryImage?: string;
+  categoryDescription?: string;
+  author?: string;
+  sourceLink?: string;
+  licenseName?: string;
+  licenseUrl?: string;
+  attraction_image?: string;
+  image?: string;
+  meta_image?: string;
+  keywords?: string[];
 }
 
-/**
- * Retrieves all blog post categories and their associated posts.
- */
-export async function GetCategories() {
-  const allBlogPosts = await getCollection("posts", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
+export interface BlogPostEntry {
+  id: string;
+  source: "sanity" | "local";
+  data: PostData;
+  rawEntry?: CollectionEntry<"posts">;
+  contentHtml?: string;
+}
+
+let postEntriesCache: Promise<BlogPostEntry[]> | undefined;
+
+const toDate = (value: Date | string | undefined): Date => {
+  if (!value) return new Date(0);
+  return value instanceof Date ? value : new Date(value);
+};
+
+async function GetLocalPosts(): Promise<BlogPostEntry[]> {
+  const includeDrafts = !import.meta.env.PROD;
+  const localEntries = await getCollection("posts", ({ data }) => {
+    return includeDrafts || data.draft !== true;
   });
 
+  return localEntries.map((entry) => ({
+    id: entry.id,
+    source: "local",
+    rawEntry: entry,
+    data: {
+      title: entry.data.title,
+      published: toDate(entry.data.published),
+      lastModified: toDate(entry.data.published),
+      draft: entry.data.draft,
+      legacySlugs: (entry.data as any).legacySlugs || [],
+      description: entry.data.description,
+      excerpt: entry.data.description,
+      cover: entry.data.cover,
+      tags: entry.data.tags || [],
+      tagSlugs: (entry.data.tags || []).map((tag) => NormalizeSlug(tag)),
+      category: entry.data.category,
+      categorySlug: entry.data.category
+        ? NormalizeSlug(entry.data.category)
+        : undefined,
+      categoryImage: entry.data.image,
+      categoryDescription: entry.data.category || "",
+      author: entry.data.author,
+      sourceLink: entry.data.sourceLink,
+      licenseName: entry.data.licenseName,
+      licenseUrl: entry.data.licenseUrl,
+      attraction_image: entry.data.attraction_image,
+      image: entry.data.image,
+      meta_image: entry.data.meta_image,
+      keywords: entry.data.keywords || [],
+    },
+  }));
+}
+
+async function GetSanityPostEntries(): Promise<BlogPostEntry[]> {
+  const includeDrafts = !import.meta.env.PROD;
+  const sanityPosts = await GetSanityPosts({ includeDrafts });
+
+  return sanityPosts.map((post) => ({
+    id: post.id,
+    source: "sanity",
+    contentHtml: post.contentHtml,
+    data: {
+      title: post.title,
+      published: toDate(post.published),
+      lastModified: post.lastModified ? toDate(post.lastModified) : toDate(post.published),
+      draft: post.draft,
+      legacySlugs: post.legacySlugs,
+      description: post.description,
+      excerpt: post.excerpt,
+      cover: post.cover,
+      tags: post.tags,
+      tagSlugs: post.tagSlugs,
+      category: post.category,
+      categorySlug: post.categorySlug,
+      categoryImage: post.categoryImage,
+      categoryDescription: post.categoryDescription,
+      author: post.author,
+      sourceLink: post.sourceLink,
+      licenseName: post.licenseName,
+      licenseUrl: post.licenseUrl,
+      attraction_image: post.attraction_image,
+      image: post.image,
+      meta_image: post.meta_image,
+      keywords: post.keywords,
+    },
+  }));
+}
+
+async function LoadPostEntries(): Promise<BlogPostEntry[]> {
+  if (IsSanityEnabled()) {
+    const sanityEntries = await GetSanityPostEntries();
+    if (sanityEntries.length > 0) return sanityEntries;
+  }
+
+  return GetLocalPosts();
+}
+
+async function GetAllPostEntries(): Promise<BlogPostEntry[]> {
+  if (!postEntriesCache) {
+    postEntriesCache = LoadPostEntries();
+  }
+  return postEntriesCache;
+}
+
+const SortPostsByPublishedDesc = (entries: BlogPostEntry[]): BlogPostEntry[] =>
+  [...entries].sort(
+    (a, b) => toDate(b.data.published).getTime() - toDate(a.data.published).getTime(),
+  );
+
+export async function GetSortedPosts(): Promise<BlogPostEntry[]> {
+  const allBlogPosts = await GetAllPostEntries();
+  return SortPostsByPublishedDesc(allBlogPosts);
+}
+
+export async function GetPostBySlug(slug: string): Promise<BlogPostEntry | undefined> {
+  const allBlogPosts = await GetAllPostEntries();
+  return allBlogPosts.find((post) => IdToSlug(post.id) === slug);
+}
+
+export async function GetCategories(): Promise<Map<string, Category>> {
+  const allBlogPosts = await GetAllPostEntries();
   const categorias = new Map<string, Category>();
 
   for (const post of allBlogPosts) {
     if (!post.data.category) continue;
 
-    const categorySlug = NormalizeSlug(post.data.category);
+    const categorySlug = post.data.categorySlug || NormalizeSlug(post.data.category);
 
     if (!categorias.has(categorySlug)) {
       categorias.set(categorySlug, {
         name: post.data.category,
         slug: categorySlug,
-        image: post.data.image || `/images/default-category.jpg`,
+        image:
+          post.data.categoryImage ||
+          post.data.image ||
+          "/images/default-category.jpg",
         posts: [],
-        description: post.data.category,
+        description:
+          post.data.categoryDescription || post.data.category,
       });
     }
 
     categorias.get(categorySlug)!.posts.push({
       title: post.data.title,
       id: `/posts/${IdToSlug(post.id)}`,
-      date: new Date(post.data.published),
+      date: toDate(post.data.published),
       tags: post.data.tags || [],
       data: {
         title: post.data.title,
         description: post.data.description || "",
-        image: post.data.image || `/images/default-attraction.jpg`,
+        image: post.data.image || "/images/default-attraction.jpg",
         attraction_image: post.data.attraction_image,
       },
     });
   }
 
+  for (const [, category] of categorias) {
+    category.posts.sort((a, b) => b.date.getTime() - a.date.getTime());
+  }
+
   return categorias;
 }
 
-/**
- * Retrieves and organizes blog post archives.
- */
-export async function GetArchives() {
-  const allBlogPosts = await getCollection("posts", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
-
+export async function GetArchives(): Promise<Map<number, Archive[]>> {
+  const allBlogPosts = await GetAllPostEntries();
   const archives = new Map<number, Archive[]>();
 
   for (const post of allBlogPosts) {
-    const date = new Date(post.data.published);
+    const date = toDate(post.data.published);
     const year = date.getFullYear();
 
     if (!archives.has(year)) {
@@ -127,11 +234,11 @@ export async function GetArchives() {
     archives.get(year)!.push({
       title: post.data.title,
       id: `/posts/${IdToSlug(post.id)}`,
-      date: date,
+      date,
       tags: post.data.tags || [],
       data: {
         title: post.data.title,
-        image: post.data.attraction_image || `/images/default-attraction.jpg`,
+        image: post.data.attraction_image || "/images/default-attraction.jpg",
         attraction_image: post.data.attraction_image,
         description: post.data.description || "",
       },
@@ -142,26 +249,23 @@ export async function GetArchives() {
     [...archives.entries()].sort((a, b) => b[0] - a[0]),
   );
 
-  sortedArchives.forEach((value) => {
-    value.sort((a, b) => (a.date > b.date ? -1 : 1));
+  sortedArchives.forEach((items) => {
+    items.sort((a, b) => b.date.getTime() - a.date.getTime());
   });
 
   return sortedArchives;
 }
 
-/**
- * Retrieves all tags from blog posts.
- */
-export async function GetTags() {
-  const allBlogPosts = await getCollection("posts", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
-
+export async function GetTags(): Promise<Map<string, Tag>> {
+  const allBlogPosts = await GetAllPostEntries();
   const tags = new Map<string, Tag>();
 
   for (const post of allBlogPosts) {
-    post.data.tags?.forEach((tag: string) => {
-      const tagSlug = NormalizeSlug(tag);
+    const postTags = post.data.tags || [];
+    const postTagSlugs = post.data.tagSlugs || [];
+
+    postTags.forEach((tag, index) => {
+      const tagSlug = postTagSlugs[index] || NormalizeSlug(tag);
 
       if (!tags.has(tagSlug)) {
         tags.set(tagSlug, {
@@ -174,16 +278,20 @@ export async function GetTags() {
       tags.get(tagSlug)!.posts.push({
         title: post.data.title,
         id: `/posts/${IdToSlug(post.id)}`,
-        date: new Date(post.data.published),
-        tags: post.data.tags || [],
+        date: toDate(post.data.published),
+        tags: postTags,
         data: {
           title: post.data.title,
-          image: post.data.attraction_image || `/images/default-attraction.jpg`,
+          image: post.data.attraction_image || "/images/default-attraction.jpg",
           attraction_image: post.data.attraction_image,
           description: post.data.description || "",
         },
       });
     });
+  }
+
+  for (const [, tag] of tags) {
+    tag.posts.sort((a, b) => b.date.getTime() - a.date.getTime());
   }
 
   return tags;

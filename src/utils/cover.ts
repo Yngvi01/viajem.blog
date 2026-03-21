@@ -9,5 +9,5 @@ import YukinaConfig from "../../yukina.config";
  */
 export function GetCoverURLForUnspecifiedEntry(id: string): string {
   const index = GetIndexFromSlugID(id, YukinaConfig.banners.length);
-  return YukinaConfig.banners[index];
+  return YukinaConfig.banners[index]?.url || "/images/default-banner.jpg";
 }

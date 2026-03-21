@@ -1,18 +1,11 @@
 import rss from "@astrojs/rss";
-import { getCollection } from "astro:content";
-import { IdToSlug } from '../utils/hash';
 import YukinaConfig from "../../yukina.config";
 import { getImageSource } from "../utils/imageImports";
-
+import { GetSortedPosts } from "../utils/content";
+import { IdToSlug } from "../utils/hash";
 
 export async function GET(context: { site: string }) {
-  const posts = await getCollection("posts", ({ data }) => {
-    return import.meta.env.PROD ? data.draft !== true : true;
-  });
-  const sortedPosts = posts.sort(
-    (a, b) =>
-      new Date(b.data.published).getTime() - new Date(a.data.published).getTime(),
-  );
+  const posts = await GetSortedPosts();
   const siteURL = new URL(context.site);
 
   const resolveImageUrl = (rawImage?: string) => {
@@ -37,7 +30,7 @@ export async function GET(context: { site: string }) {
     <managingEditor>contato@${new URL(YukinaConfig.site).hostname}</managingEditor>
     <webMaster>webmaster@${new URL(YukinaConfig.site).hostname}</webMaster>
     <ttl>60</ttl>`,
-    items: sortedPosts.map((post) => {
+    items: posts.map((post) => {
       const imageURL = resolveImageUrl(
         post.data.meta_image || post.data.attraction_image || post.data.image,
       );

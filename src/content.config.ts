@@ -11,6 +11,7 @@ const posts = defineCollection({
     title: z.string(), // Título do post
     published: z.date(), // Data de publicação
     draft: z.boolean().optional(), // Indica se o post é um rascunho
+    legacySlugs: z.array(z.string()).optional(), // Slugs antigos para redirects
     description: z.string().optional(), // Descrição opcional
     cover: z.string().optional(), // Capa opcional
     tags: z.array(z.string()).optional(), // Tags para o post

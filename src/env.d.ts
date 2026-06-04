@@ -19,6 +19,10 @@ interface ImportMetaEnv {
   readonly PUBLIC_GOOGLE_SITE_VERIFICATION?: string;
   readonly PUBLIC_BING_SITE_VERIFICATION?: string;
   readonly PUBLIC_YANDEX_SITE_VERIFICATION?: string;
+  // ─── Admin Auth ────────────────────────────────────────────────────────────
+  readonly ADMIN_USERNAME?: string;
+  readonly ADMIN_PASSWORD_HASH?: string;
+  readonly SESSION_SECRET?: string;
 }
 
 interface ImportMeta {

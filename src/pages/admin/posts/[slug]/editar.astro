@@ -1,0 +1,363 @@
+---
+export const prerender = false;
+
+import AdminLayout from "../../../../layouts/AdminLayout.astro";
+import { sanityWriteClient, isSanityWriteEnabled } from "../../../../utils/sanityAdminClient";
+import { GetSanityPosts } from "../../../../utils/sanity";
+
+const { slug } = Astro.params;
+const sanityOk = isSanityWriteEnabled();
+
+// Buscar o post existente
+let post: Awaited<ReturnType<typeof GetSanityPosts>>[number] | undefined;
+let sanityId = "";
+let error = "";
+
+if (!slug) return Astro.redirect("/admin", 302);
+
+if (sanityOk) {
+  try {
+    const posts = await GetSanityPosts({ includeDrafts: true });
+    post = posts.find((p) => p.slug === slug);
+
+    if (!post) {
+      return new Response("Post não encontrado", { status: 404 });
+    }
+
+    // Buscar o _id do documento no Sanity
+    const raw = await sanityWriteClient.fetch<{ _id: string }[]>(
+      `*[_type == "post" && slug.current == $slug][0]{ _id }`,
+      { slug }
+    );
+    sanityId = (raw as any)?._id ?? "";
+  } catch (e: any) {
+    error = "Erro ao carregar o post: " + (e?.message ?? "");
+  }
+}
+
+if (Astro.request.method === "POST" && sanityOk && sanityId) {
+  try {
+    const form = await Astro.request.formData();
+
+    const title = String(form.get("title") ?? "").trim();
+    const description = String(form.get("description") ?? "").trim();
+    const excerpt = String(form.get("excerpt") ?? "").trim();
+    const published = String(form.get("published") ?? "").trim();
+    const draft = form.get("draft") === "true";
+    const keywords = String(form.get("keywords") ?? "")
+      .split(",")
+      .map((k) => k.trim())
+      .filter(Boolean);
+
+    if (!title) throw new Error("O título é obrigatório.");
+    if (description && (description.length < 80 || description.length > 180)) {
+      throw new Error("A descrição SEO deve ter entre 80 e 180 caracteres.");
+    }
+
+    const patch: Record<string, unknown> = {
+      title,
+      draft,
+      keywords,
+      "lastModified": new Date().toISOString(),
+    };
+
+    if (description) patch.description = description;
+    if (excerpt) patch.excerpt = excerpt;
+    if (published) patch.published = new Date(published).toISOString();
+
+    await sanityWriteClient.patch(sanityId).set(patch).commit();
+
+    return Astro.redirect("/admin?editado=1", 303);
+  } catch (e: any) {
+    error = e?.message ?? "Erro ao salvar o post.";
+  }
+}
+
+function toDatetimeLocal(iso: string): string {
+  if (!iso) return "";
+  try {
+    const d = new Date(iso);
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 16);
+  } catch {
+    return "";
+  }
+}
+---
+
+<AdminLayout title={`Editar: ${post?.title ?? slug}`} activeNav="posts">
+  <style>
+    .form-card {
+      background: #161922;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 800px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 7px;
+    }
+
+    .required { color: #f87171; }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px 13px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: 13px;
+      font-family: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+
+    textarea { resize: vertical; line-height: 1.6; }
+
+    input:focus, textarea:focus {
+      border-color: rgba(99,102,241,0.5);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+    }
+
+    input[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .char-count {
+      font-size: 11px;
+      color: #475569;
+      text-align: right;
+      margin-top: 4px;
+    }
+    .char-count.warn { color: #fbbf24; }
+    .char-count.ok   { color: #4ade80; }
+
+    .slug-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(99,102,241,0.08);
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 7px;
+      font-size: 12px;
+      color: #818cf8;
+      font-family: monospace;
+    }
+
+    .hint { font-size: 11px; color: #475569; margin-top: 5px; }
+
+    .switch-row { display: flex; align-items: center; gap: 12px; }
+
+    .switch { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch-slider {
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,0.1);
+      border-radius: 22px; cursor: pointer; transition: background 0.2s;
+    }
+    .switch-slider::before {
+      content: ''; position: absolute;
+      width: 16px; height: 16px; left: 3px; top: 3px;
+      background: #94a3b8; border-radius: 50%;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .switch input:checked + .switch-slider { background: rgba(99,102,241,0.5); }
+    .switch input:checked + .switch-slider::before {
+      transform: translateX(18px); background: #818cf8;
+    }
+
+    .actions-row { display: flex; gap: 12px; align-items: center; margin-top: 8px; }
+
+    .btn-save {
+      padding: 10px 24px;
+      background: linear-gradient(135deg, #6366f1, #818cf8);
+      border: none; border-radius: 9px;
+      color: white; font-size: 13px; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: opacity 0.15s, transform 0.1s;
+      box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+    }
+    .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .btn-cancel {
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 9px; color: #94a3b8;
+      font-size: 13px; font-weight: 500; font-family: inherit;
+      cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center;
+    }
+    .btn-cancel:hover { background: rgba(255,255,255,0.08); color: #e2e8f0; }
+
+    .btn-delete-link {
+      padding: 10px 20px;
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.2);
+      border-radius: 9px; color: #f87171;
+      font-size: 13px; font-weight: 500;
+      text-decoration: none; display: inline-flex; align-items: center;
+      margin-left: auto;
+      transition: background 0.15s;
+    }
+    .btn-delete-link:hover { background: rgba(239,68,68,0.16); }
+
+    .alert { padding: 13px 16px; border-radius: 9px; font-size: 13px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 9px; }
+    .alert-error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); color: #f87171; }
+    .alert-warning { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: #fbbf24; }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: 1; }
+    }
+  </style>
+
+  {!sanityOk && (
+    <div class="alert alert-warning">
+      Sanity não configurado. Preencha as variáveis de ambiente.
+    </div>
+  )}
+
+  {error && (
+    <div class="alert alert-error">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      {error}
+    </div>
+  )}
+
+  <form method="POST" class="form-card">
+    <div class="form-grid">
+
+      <div class="form-group full">
+        <label for="edit-title">Título <span class="required">*</span></label>
+        <input id="edit-title" type="text" name="title" value={post?.title ?? ""} required />
+      </div>
+
+      <div class="form-group">
+        <label>Slug (URL)</label>
+        <span class="slug-badge">
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+          </svg>
+          {post?.slug ?? slug}
+        </span>
+        <div class="hint">O slug não pode ser alterado após a criação.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="edit-published">Data de Publicação</label>
+        <input
+          id="edit-published"
+          type="datetime-local"
+          name="published"
+          value={toDatetimeLocal(post?.published ?? "")}
+        />
+      </div>
+
+      <div class="form-group full">
+        <label for="edit-description">Descrição SEO</label>
+        <textarea
+          id="edit-description"
+          name="description"
+          rows="3"
+          maxlength="180"
+          placeholder="80–180 caracteres"
+        >{post?.description ?? ""}</textarea>
+        <div class="char-count" id="edit-desc-count">
+          {(post?.description ?? "").length} / 180
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label for="edit-excerpt">Resumo</label>
+        <textarea id="edit-excerpt" name="excerpt" rows="3">{post?.excerpt ?? ""}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="edit-keywords">Palavras-chave SEO</label>
+        <input
+          id="edit-keywords"
+          type="text"
+          name="keywords"
+          value={(post?.keywords ?? []).join(", ")}
+          placeholder="viagem, brasil, turismo"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <div class="switch-row">
+          <label class="switch">
+            <input
+              type="checkbox"
+              id="edit-draft"
+              name="draft"
+              value="true"
+              checked={post?.draft !== false}
+            />
+            <span class="switch-slider"></span>
+          </label>
+          <span style="font-size:13px;color:#94a3b8" id="edit-draft-label">
+            {post?.draft !== false ? "Rascunho" : "Publicado"}
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="actions-row">
+      <button type="submit" class="btn-save" id="edit-post-submit">
+        Salvar Alterações
+      </button>
+      <a href="/admin" class="btn-cancel">Cancelar</a>
+      <a href={`/admin/posts/${slug}/excluir`} class="btn-delete-link">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="margin-right:5px">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+        Excluir Post
+      </a>
+    </div>
+  </form>
+
+  <script>
+    const descTextarea = document.getElementById('edit-description') as HTMLTextAreaElement;
+    const descCount = document.getElementById('edit-desc-count');
+
+    descTextarea?.addEventListener('input', () => {
+      const len = descTextarea.value.length;
+      if (descCount) {
+        descCount.textContent = `${len} / 180`;
+        descCount.className = 'char-count' + (len >= 80 && len <= 180 ? ' ok' : len > 0 ? ' warn' : '');
+      }
+    });
+
+    const draftCheckbox = document.getElementById('edit-draft') as HTMLInputElement;
+    const draftLabel = document.getElementById('edit-draft-label');
+
+    draftCheckbox?.addEventListener('change', () => {
+      if (draftLabel) draftLabel.textContent = draftCheckbox.checked ? 'Rascunho' : 'Publicado';
+    });
+  </script>
+</AdminLayout>

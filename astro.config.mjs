@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import vercel from "@astrojs/vercel";
 
 import icon from "astro-icon";
 import sitemap from "@astrojs/sitemap";
@@ -22,6 +23,8 @@ import pagefind from "astro-pagefind";
 // https://astro.build/config
 export default defineConfig({
   site: YukinaConfig.site,
+  output: "hybrid",
+  adapter: vercel(),
   compressHTML: true,
   build: {
     inlineStylesheets: "auto",

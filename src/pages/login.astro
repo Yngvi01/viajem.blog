@@ -1,0 +1,315 @@
+---
+export const prerender = false;
+
+import {
+  verifyCredentials,
+  createSessionToken,
+  buildSessionCookie,
+  isAuthenticated,
+} from "../utils/auth";
+
+// Se já autenticado, redireciona para o admin
+if (isAuthenticated(Astro.request)) {
+  return Astro.redirect("/admin", 302);
+}
+
+let error = "";
+const redirect = Astro.url.searchParams.get("redirect") ?? "/admin";
+
+if (Astro.request.method === "POST") {
+  const formData = await Astro.request.formData();
+  const username = String(formData.get("username") ?? "");
+  const password = String(formData.get("password") ?? "");
+
+  const valid = await verifyCredentials(username, password);
+
+  if (valid) {
+    const token = createSessionToken();
+    const cookieHeader = buildSessionCookie(token);
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: redirect.startsWith("/") ? redirect : "/admin",
+        "Set-Cookie": cookieHeader,
+      },
+    });
+  } else {
+    error = "Usuário ou senha inválidos.";
+  }
+}
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Acesso Admin — Guia de Viagem</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg: #080a10;
+        --accent: #6366f1;
+        --accent-glow: rgba(99,102,241,0.35);
+        --border: rgba(255,255,255,0.08);
+        --text: #e2e8f0;
+        --text-muted: #64748b;
+        --error: #ef4444;
+        --radius: 14px;
+      }
+
+      html, body {
+        height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Background decorativo */
+      body::before {
+        content: '';
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+
+      body::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+        background-size: 32px 32px;
+        pointer-events: none;
+      }
+
+      .card {
+        position: relative;
+        z-index: 10;
+        background: rgba(22,25,34,0.9);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+        backdrop-filter: blur(20px);
+        box-shadow:
+          0 0 0 1px rgba(99,102,241,0.08),
+          0 24px 64px rgba(0,0,0,0.5),
+          0 0 80px var(--accent-glow);
+        animation: fadeUp 0.4s ease;
+      }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 32px;
+      }
+
+      .logo-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--accent), #818cf8);
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 14px;
+        box-shadow: 0 0 24px var(--accent-glow);
+      }
+
+      .logo-icon svg {
+        width: 24px;
+        height: 24px;
+        color: white;
+      }
+
+      .logo h1 {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+
+      .logo p {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 7px;
+      }
+
+      input {
+        width: 100%;
+        padding: 11px 14px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        color: var(--text);
+        font-size: 14px;
+        font-family: inherit;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: rgba(99,102,241,0.6);
+        box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+      }
+
+      input::placeholder { color: var(--text-muted); }
+
+      .error-msg {
+        background: rgba(239,68,68,0.1);
+        border: 1px solid rgba(239,68,68,0.25);
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: #fca5a5;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, var(--accent), #818cf8);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 14px;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        margin-top: 4px;
+        transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
+        box-shadow: 0 4px 16px rgba(99,102,241,0.4);
+      }
+
+      .btn:hover {
+        opacity: 0.92;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(99,102,241,0.5);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .back-link {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .back-link a {
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+
+      .back-link a:hover {
+        color: var(--text);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <h1>Área Administrativa</h1>
+        <p>Guia de Viagem · Acesso restrito</p>
+      </div>
+
+      {error && (
+        <div class="error-msg" role="alert">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          {error}
+        </div>
+      )}
+
+      <form method="POST" action="/login" autocomplete="on">
+        <input type="hidden" name="redirect" value={redirect} />
+
+        <div class="form-group">
+          <label for="username">Usuário</label>
+          <input
+            id="username"
+            type="text"
+            name="username"
+            placeholder="Digite seu usuário"
+            autocomplete="username"
+            required
+            autofocus
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Senha</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            placeholder="Digite sua senha"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn" id="login-submit-btn">
+          Entrar
+        </button>
+      </form>
+
+      <div class="back-link">
+        <a href="/">← Voltar ao blog</a>
+      </div>
+    </div>
+  </body>
+</html>

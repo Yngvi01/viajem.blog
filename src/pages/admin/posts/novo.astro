@@ -349,7 +349,7 @@ if (Astro.request.method === "POST" && sanityOk) {
     </div>
 
     <div class="actions-row">
-      <button type="submit" class="btn-save" id="novo-post-submit" {!sanityOk ? "disabled" : ""}>
+      <button type="submit" class="btn-save" id="novo-post-submit" disabled={!sanityOk}>
         Criar Post
       </button>
       <a href="/admin" class="btn-cancel">Cancelar</a>

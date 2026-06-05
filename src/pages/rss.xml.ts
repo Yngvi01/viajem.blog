@@ -4,6 +4,8 @@ import { getImageSource } from "../utils/imageImports";
 import { GetSortedPosts } from "../utils/content";
 import { IdToSlug } from "../utils/hash";
 
+export const prerender = true;
+
 export async function GET(context: { site: string }) {
   const posts = await GetSortedPosts();
   const siteURL = new URL(context.site);

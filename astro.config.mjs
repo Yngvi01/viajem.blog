@@ -23,7 +23,7 @@ import pagefind from "astro-pagefind";
 // https://astro.build/config
 export default defineConfig({
   site: YukinaConfig.site,
-  output: "hybrid",
+  output: "server",
   adapter: vercel(),
   compressHTML: true,
   build: {

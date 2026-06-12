@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import AdminLayout from "../../../../layouts/AdminLayout.astro";
+import MdxEditor from "../../../../components/MdxEditor.svelte";
 import { sanityWriteClient, isSanityWriteEnabled } from "../../../../utils/sanityAdminClient";
 import { GetSanityPosts } from "../../../../utils/sanity";
 
@@ -10,6 +11,7 @@ const sanityOk = isSanityWriteEnabled();
 
 // Buscar o post existente
 let post: Awaited<ReturnType<typeof GetSanityPosts>>[number] | undefined;
+let legacyMdx: string = "";
 let sanityId = "";
 let error = "";
 
@@ -24,12 +26,13 @@ if (sanityOk) {
       return new Response("Post não encontrado", { status: 404 });
     }
 
-    // Buscar o _id do documento no Sanity
-    const raw = await sanityWriteClient.fetch<{ _id: string }[]>(
-      `*[_type == "post" && slug.current == $slug][0]{ _id }`,
+    // Buscar o _id e legacyMdx do documento no Sanity
+    const raw = await sanityWriteClient.fetch<{ _id: string; legacyMdx?: string }>(
+      `*[_type == "post" && slug.current == $slug][0]{ _id, legacyMdx }`,
       { slug }
     );
     sanityId = (raw as any)?._id ?? "";
+    legacyMdx = (raw as any)?.legacyMdx ?? "";
   } catch (e: any) {
     error = "Erro ao carregar o post: " + (e?.message ?? "");
   }
@@ -43,7 +46,8 @@ if (Astro.request.method === "POST" && sanityOk && sanityId) {
     const description = String(form.get("description") ?? "").trim();
     const excerpt = String(form.get("excerpt") ?? "").trim();
     const published = String(form.get("published") ?? "").trim();
-    const draft = form.get("draft") === "true";
+    const body = String(form.get("body") ?? "").trim();
+    const draft = form.get("draft") === "on" ? true : false;
     const keywords = String(form.get("keywords") ?? "")
       .split(",")
       .map((k) => k.trim())
@@ -53,6 +57,17 @@ if (Astro.request.method === "POST" && sanityOk && sanityId) {
     if (description && (description.length < 80 || description.length > 180)) {
       throw new Error("A descrição SEO deve ter entre 80 e 180 caracteres.");
     }
+
+    // Converter MDX para Portable Text blocks
+    const bodyBlocks = body
+      ? body.split("\n\n").filter(Boolean).map((paragraph, i) => ({
+          _type: "block",
+          _key: `block${i}`,
+          style: "normal",
+          children: [{ _type: "span", _key: `span${i}`, text: paragraph.trim(), marks: [] }],
+          markDefs: [],
+        }))
+      : undefined;
 
     const patch: Record<string, unknown> = {
       title,
@@ -64,6 +79,10 @@ if (Astro.request.method === "POST" && sanityOk && sanityId) {
     if (description) patch.description = description;
     if (excerpt) patch.excerpt = excerpt;
     if (published) patch.published = new Date(published).toISOString();
+    if (body) {
+      patch.legacyMdx = body;
+      patch.body = bodyBlocks;
+    }
 
     await sanityWriteClient.patch(sanityId).set(patch).commit();
 
@@ -306,6 +325,12 @@ function toDatetimeLocal(iso: string): string {
         />
       </div>
 
+      <div class="form-group full">
+        <label for="edit-body">Conteúdo do Post (MDX)</label>
+        <MdxEditor client:load value={legacyMdx} placeholder="Escreva seu conteúdo em Markdown..." rows={16} />
+        <input type="hidden" id="edit-body" name="body" value={legacyMdx} />
+      </div>
+
       <div class="form-group">
         <label>Status</label>
         <div class="switch-row">
@@ -314,15 +339,15 @@ function toDatetimeLocal(iso: string): string {
               type="checkbox"
               id="edit-draft"
               name="draft"
-              value="true"
-              checked={post?.draft !== false}
+              checked={post?.draft === true}
             />
             <span class="switch-slider"></span>
           </label>
           <span style="font-size:13px;color:#94a3b8" id="edit-draft-label">
-            {post?.draft !== false ? "Rascunho" : "Publicado"}
+            {post?.draft === true ? "Rascunho" : "Publicado"}
           </span>
         </div>
+        <div class="hint">Marque para manter como rascunho (não publicado)</div>
       </div>
 
     </div>
@@ -359,5 +384,18 @@ function toDatetimeLocal(iso: string): string {
     draftCheckbox?.addEventListener('change', () => {
       if (draftLabel) draftLabel.textContent = draftCheckbox.checked ? 'Rascunho' : 'Publicado';
     });
+
+    // Sincronizar conteúdo do MdxEditor com o input hidden
+    const bodyInput = document.getElementById('edit-body') as HTMLInputElement;
+    const form = document.querySelector('form') as HTMLFormElement;
+    
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        const mdxTextarea = form.querySelector('textarea') as HTMLTextAreaElement;
+        if (mdxTextarea && bodyInput) {
+          bodyInput.value = mdxTextarea.value;
+        }
+      });
+    }
   </script>
 </AdminLayout>

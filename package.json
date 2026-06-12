@@ -10,6 +10,7 @@
     "studio:build": "sanity build",
     "studio:deploy": "sanity deploy",
     "cms:export": "node scripts/export-mdx-to-sanity-ndjson.mjs",
+    "cms:import": "node scripts/import-local-posts-to-sanity.mjs",
     "redirects:sync": "node scripts/sync-post-redirects.mjs",
     "astro": "astro",
     "format": "prettier --write .",

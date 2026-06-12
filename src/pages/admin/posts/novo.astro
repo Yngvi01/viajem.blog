@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import AdminLayout from "../../../layouts/AdminLayout.astro";
+import MdxEditor from "../../../components/MdxEditor.svelte";
 import { sanityWriteClient, isSanityWriteEnabled } from "../../../utils/sanityAdminClient";
 
 let success = false;
@@ -18,7 +19,7 @@ if (Astro.request.method === "POST" && sanityOk) {
     const excerpt = String(form.get("excerpt") ?? "").trim();
     const body = String(form.get("body") ?? "").trim();
     const published = String(form.get("published") ?? new Date().toISOString());
-    const draft = form.get("draft") === "true";
+    const draft = form.get("draft") === "on" ? true : false;
     const tagsRaw = String(form.get("tags") ?? "").trim();
     const keywords = String(form.get("keywords") ?? "")
       .split(",")
@@ -51,6 +52,7 @@ if (Astro.request.method === "POST" && sanityOk) {
       draft,
       keywords,
       legacySlugs: [],
+      legacyMdx: body,
       body: bodyBlocks,
     });
 
@@ -327,23 +329,18 @@ if (Astro.request.method === "POST" && sanityOk) {
         <label for="novo-draft">Status</label>
         <div class="switch-row">
           <label class="switch">
-            <input type="checkbox" id="novo-draft" name="draft" value="true" checked />
+            <input type="checkbox" id="novo-draft" name="draft" />
             <span class="switch-slider"></span>
           </label>
-          <span style="font-size:13px;color:#94a3b8" id="draft-label">Rascunho</span>
+          <span style="font-size:13px;color:#94a3b8" id="draft-label">Publicado</span>
         </div>
-        <input type="hidden" name="draft" value="false" id="draft-hidden" />
+        <div class="hint">Marque para manter como rascunho (não publicado)</div>
       </div>
 
       <div class="form-group full">
-        <label for="novo-body">Conteúdo do Post</label>
-        <textarea
-          id="novo-body"
-          name="body"
-          rows="16"
-          placeholder="Escreva o conteúdo aqui. Separe parágrafos com uma linha em branco.&#10;&#10;O conteúdo será salvo como texto simples no Sanity e poderá ser formatado depois no Sanity Studio."
-        ></textarea>
-        <div class="hint">Separe parágrafos com uma linha em branco. Use o Sanity Studio para formatação avançada.</div>
+        <label for="novo-body">Conteúdo do Post <span class="required">*</span></label>
+        <MdxEditor client:load value="" placeholder="Escreva seu conteúdo em Markdown..." rows={16} />
+        <input type="hidden" id="novo-body" name="body" value="" />
       </div>
 
     </div>
@@ -405,11 +402,23 @@ if (Astro.request.method === "POST" && sanityOk) {
     // Toggle draft label
     const draftCheckbox = document.getElementById('novo-draft') as HTMLInputElement;
     const draftLabel = document.getElementById('draft-label');
-    const draftHidden = document.getElementById('draft-hidden') as HTMLInputElement;
 
     draftCheckbox?.addEventListener('change', () => {
       if (draftLabel) draftLabel.textContent = draftCheckbox.checked ? 'Rascunho' : 'Publicado';
-      if (draftHidden) draftHidden.value = draftCheckbox.checked ? 'false' : 'false';
     });
+
+    // Sincronizar conteúdo do MdxEditor com o input hidden
+    const bodyInput = document.getElementById('novo-body') as HTMLInputElement;
+    const form = document.getElementById('novo-post-form') as HTMLFormElement;
+    
+    // Observer para mudanças no editor (quando o Svelte atualizar a textarea)
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        const mdxTextarea = form.querySelector('textarea') as HTMLTextAreaElement;
+        if (mdxTextarea && bodyInput) {
+          bodyInput.value = mdxTextarea.value;
+        }
+      });
+    }
   </script>
-</AdminLayout>
+

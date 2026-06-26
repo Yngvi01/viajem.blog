@@ -33,8 +33,8 @@ const toAbsoluteUrl = (value: string) => {
 
 const rawSocialImage = attractionImage || image;
 const resolvedImage = rawSocialImage
-  ? getImageSource(rawSocialImage, "images/default-image.jpg")
-  : getImageSource(undefined, "images/default-image.jpg");
+  ? getImageSource(rawSocialImage, "images/avatar.png")
+  : getImageSource(undefined, "images/avatar.png");
 
 const socialImagePath =
   typeof resolvedImage === "string"

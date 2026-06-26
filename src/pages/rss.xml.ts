@@ -13,7 +13,7 @@ export async function GET(context: { site: string }) {
   const resolveImageUrl = (rawImage?: string) => {
     if (!rawImage) return undefined;
 
-    const resolved = getImageSource(rawImage, "images/default-image.jpg");
+    const resolved = getImageSource(rawImage, "images/avatar.png");
     const path = typeof resolved === "string" ? resolved : resolved?.src;
     if (!path) return undefined;
 

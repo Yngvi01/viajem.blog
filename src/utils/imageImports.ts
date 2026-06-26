@@ -24,7 +24,7 @@ Object.entries(imageModules).forEach(([path, module]) => {
 
 // Garante que imagens essenciais estejam sempre disponíveis
 imageMap['images/default-attraction.jpg'] = defaultAttraction;
-imageMap['images/default-image.jpg'] = defaultImage;
+imageMap['images/default-image.jpg'] = imageMap['images/avatar.png'] || logoImage;
 imageMap['logo.png'] = logoImage;
 imageMap['images/logo.png'] = logoImage;
 

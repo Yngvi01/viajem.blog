@@ -5,9 +5,21 @@ import AdminLayout from "../../../layouts/AdminLayout.astro";
 import MdxEditor from "../../../components/MdxEditor.svelte";
 import { sanityWriteClient, isSanityWriteEnabled } from "../../../utils/sanityAdminClient";
 
-let success = false;
 let error = "";
 const sanityOk = isSanityWriteEnabled();
+
+const createBodyBlocks = (body: string, fallback: string) => {
+  const paragraphs = body.split("\n\n").map((paragraph) => paragraph.trim()).filter(Boolean);
+  const blocks = paragraphs.length ? paragraphs : [fallback];
+
+  return blocks.map((paragraph, i) => ({
+    _type: "block",
+    _key: `block${i}`,
+    style: "normal",
+    children: [{ _type: "span", _key: `span${i}`, text: paragraph, marks: [] }],
+    markDefs: [],
+  }));
+};
 
 if (Astro.request.method === "POST" && sanityOk) {
   try {
@@ -18,29 +30,24 @@ if (Astro.request.method === "POST" && sanityOk) {
     const description = String(form.get("description") ?? "").trim();
     const excerpt = String(form.get("excerpt") ?? "").trim();
     const body = String(form.get("body") ?? "").trim();
-    const published = String(form.get("published") ?? new Date().toISOString());
-    const draft = form.get("draft") === "on" ? true : false;
-    const tagsRaw = String(form.get("tags") ?? "").trim();
+    const publishedRaw = String(form.get("published") ?? "").trim();
+    const status = String(form.get("status") ?? "published");
+    const draft = status === "draft";
     const keywords = String(form.get("keywords") ?? "")
       .split(",")
       .map((k) => k.trim())
       .filter(Boolean);
 
     if (!title || !slug) throw new Error("Título e slug são obrigatórios.");
+    if (!body && !draft) throw new Error("O conteúdo do post é obrigatório para publicar.");
     if (description && (description.length < 80 || description.length > 180)) {
       throw new Error("A descrição SEO deve ter entre 80 e 180 caracteres.");
     }
 
-    // Conteúdo do post como bloco de texto simples (Portable Text)
-    const bodyBlocks = body
-      ? body.split("\n\n").filter(Boolean).map((paragraph, i) => ({
-          _type: "block",
-          _key: `block${i}`,
-          style: "normal",
-          children: [{ _type: "span", _key: `span${i}`, text: paragraph.trim(), marks: [] }],
-          markDefs: [],
-        }))
-      : [{ _type: "block", _key: "block0", style: "normal", children: [{ _type: "span", _key: "span0", text: "Conteúdo do post.", marks: [] }], markDefs: [] }];
+    const publishedDate = publishedRaw ? new Date(publishedRaw) : new Date();
+    if (Number.isNaN(publishedDate.getTime())) throw new Error("Data de publicação inválida.");
+
+    const bodyBlocks = createBodyBlocks(body, description || title);
 
     await sanityWriteClient.create({
       _type: "post",
@@ -48,7 +55,8 @@ if (Astro.request.method === "POST" && sanityOk) {
       slug: { _type: "slug", current: slug },
       description: description || undefined,
       excerpt: excerpt || undefined,
-      published: new Date(published).toISOString(),
+      published: publishedDate.toISOString(),
+      lastModified: new Date().toISOString(),
       draft,
       keywords,
       legacySlugs: [],
@@ -172,6 +180,7 @@ if (Astro.request.method === "POST" && sanityOk) {
 
     .actions-row {
       display: flex;
+      flex-wrap: wrap;
       gap: 12px;
       align-items: center;
       margin-top: 8px;
@@ -325,29 +334,19 @@ if (Astro.request.method === "POST" && sanityOk) {
         />
       </div>
 
-      <div class="form-group">
-        <label for="novo-draft">Status</label>
-        <div class="switch-row">
-          <label class="switch">
-            <input type="checkbox" id="novo-draft" name="draft" />
-            <span class="switch-slider"></span>
-          </label>
-          <span style="font-size:13px;color:#94a3b8" id="draft-label">Publicado</span>
-        </div>
-        <div class="hint">Marque para manter como rascunho (não publicado)</div>
-      </div>
-
       <div class="form-group full">
         <label for="novo-body">Conteúdo do Post <span class="required">*</span></label>
-        <MdxEditor client:load value="" placeholder="Escreva seu conteúdo em Markdown..." rows={16} />
-        <input type="hidden" id="novo-body" name="body" value="" />
+        <MdxEditor client:load name="body" value="" placeholder="Escreva seu conteúdo em Markdown..." rows={16} />
       </div>
 
     </div>
 
     <div class="actions-row">
-      <button type="submit" class="btn-save" id="novo-post-submit" disabled={!sanityOk}>
-        Criar Post
+      <button type="submit" name="status" value="published" class="btn-save" id="novo-post-submit" disabled={!sanityOk}>
+        Publicar no Blog
+      </button>
+      <button type="submit" name="status" value="draft" class="btn-cancel" disabled={!sanityOk}>
+        Salvar Rascunho
       </button>
       <a href="/admin" class="btn-cancel">Cancelar</a>
     </div>
@@ -399,26 +398,4 @@ if (Astro.request.method === "POST" && sanityOk) {
       publishedInput.value = now.toISOString().slice(0, 16);
     }
 
-    // Toggle draft label
-    const draftCheckbox = document.getElementById('novo-draft') as HTMLInputElement;
-    const draftLabel = document.getElementById('draft-label');
-
-    draftCheckbox?.addEventListener('change', () => {
-      if (draftLabel) draftLabel.textContent = draftCheckbox.checked ? 'Rascunho' : 'Publicado';
-    });
-
-    // Sincronizar conteúdo do MdxEditor com o input hidden
-    const bodyInput = document.getElementById('novo-body') as HTMLInputElement;
-    const form = document.getElementById('novo-post-form') as HTMLFormElement;
-    
-    // Observer para mudanças no editor (quando o Svelte atualizar a textarea)
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        const mdxTextarea = form.querySelector('textarea') as HTMLTextAreaElement;
-        if (mdxTextarea && bodyInput) {
-          bodyInput.value = mdxTextarea.value;
-        }
-      });
-    }
   </script>
-

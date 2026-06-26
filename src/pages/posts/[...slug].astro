@@ -1,56 +1,47 @@
 ---
-export const prerender = true;
+export const prerender = false;
 
 import { render } from "astro:content";
 import PostLayout from "../../layouts/PostLayout.astro";
 import { IdToSlug } from "../../utils/hash";
 import { GetSortedPosts, type BlogPostEntry } from "../../utils/content";
 
-export async function getStaticPaths() {
-  const postEntries = await GetSortedPosts();
-  const paths: Array<{
-    params: { slug: string };
-    props: {
-      entry: BlogPostEntry;
-      canonicalSlug: string;
-      isLegacySlug: boolean;
-    };
-  }> = [];
-  const seen = new Set<string>();
+const requestedSlug = (Astro.params.slug ?? "").replace(/^\/+|\/+$/g, "");
+const postEntries = await GetSortedPosts();
+let matchedEntry: BlogPostEntry | undefined;
+let canonicalSlug = "";
+let isLegacySlug = false;
 
-  for (const entry of postEntries) {
-    const canonicalSlug = IdToSlug(entry.id);
-    if (!seen.has(canonicalSlug)) {
-      paths.push({
-        params: { slug: canonicalSlug },
-        props: { entry, canonicalSlug, isLegacySlug: false },
-      });
-      seen.add(canonicalSlug);
-    }
+for (const candidate of postEntries) {
+  const candidateSlug = IdToSlug(candidate.id);
 
-    const legacySlugs = entry.data.legacySlugs || [];
-    for (const rawSlug of legacySlugs) {
-      const legacySlug = rawSlug.trim().replace(/^\/+|\/+$/g, "");
-      if (!legacySlug || legacySlug === canonicalSlug || seen.has(legacySlug)) continue;
-
-      paths.push({
-        params: { slug: legacySlug },
-        props: { entry, canonicalSlug, isLegacySlug: true },
-      });
-      seen.add(legacySlug);
-    }
+  if (candidateSlug === requestedSlug) {
+    matchedEntry = candidate;
+    canonicalSlug = candidateSlug;
+    break;
   }
 
-  return paths;
+  const legacySlug = (candidate.data.legacySlugs || [])
+    .map((rawSlug) => rawSlug.trim().replace(/^\/+|\/+$/g, ""))
+    .find((rawSlug) => rawSlug === requestedSlug);
+
+  if (legacySlug) {
+    matchedEntry = candidate;
+    canonicalSlug = candidateSlug;
+    isLegacySlug = true;
+    break;
+  }
 }
 
-interface Props {
-  entry: BlogPostEntry;
-  canonicalSlug: string;
-  isLegacySlug: boolean;
+if (!matchedEntry) {
+  return new Response("Post não encontrado", { status: 404 });
 }
 
-const { entry, canonicalSlug, isLegacySlug } = Astro.props as Props;
+const entry = matchedEntry;
+
+if (isLegacySlug) {
+  return Astro.redirect(`/posts/${canonicalSlug}`, 301);
+}
 
 let LocalContent: any = null;
 if (!isLegacySlug && entry.source === "local" && entry.rawEntry) {

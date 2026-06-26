@@ -88,3 +88,50 @@ export function getImageSource(imagePath: string | undefined, fallbackImage: str
   // Retorna a imagem padrão
   return imageMap[fallbackImage] || defaultAttraction;
 }
+
+/**
+ * Tenta resolver uma imagem importada pelo Astro sem aplicar fallback.
+ * Útil para conteúdo renderizado a partir de HTML/MDX vindo do CMS.
+ */
+export function getKnownImageSource(imagePath: string | undefined) {
+  if (!imagePath) return undefined;
+
+  if (imagePath.startsWith('http') || imagePath.startsWith('data:')) {
+    return imagePath;
+  }
+
+  if (imageMap[imagePath]) {
+    return imageMap[imagePath];
+  }
+
+  const normalizeImagePath = (path: string) => {
+    if (path.includes('src/assets/images/')) {
+      return 'images/' + path.split('/').pop();
+    }
+
+    if (path.startsWith('images/')) {
+      return path;
+    }
+
+    if (path.startsWith('/images/')) {
+      return path.substring(1);
+    }
+
+    return 'images/' + path.split('/').pop();
+  };
+
+  const attemptPaths = [
+    imagePath,
+    normalizeImagePath(imagePath),
+    imagePath.replace('src/', ''),
+    imagePath.startsWith('/') ? imagePath.substring(1) : imagePath
+  ];
+
+  for (const path of attemptPaths) {
+    if (imageMap[path]) {
+      return imageMap[path];
+    }
+  }
+
+  return undefined;
+}

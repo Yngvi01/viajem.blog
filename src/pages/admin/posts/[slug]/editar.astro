@@ -17,6 +17,19 @@ let error = "";
 
 if (!slug) return Astro.redirect("/admin", 302);
 
+const createBodyBlocks = (body: string, fallback: string) => {
+  const paragraphs = body.split("\n\n").map((paragraph) => paragraph.trim()).filter(Boolean);
+  const blocks = paragraphs.length ? paragraphs : [fallback];
+
+  return blocks.map((paragraph, i) => ({
+    _type: "block",
+    _key: `block${i}`,
+    style: "normal",
+    children: [{ _type: "span", _key: `span${i}`, text: paragraph, marks: [] }],
+    markDefs: [],
+  }));
+};
+
 if (sanityOk) {
   try {
     const posts = await GetSanityPosts({ includeDrafts: true });
@@ -47,33 +60,29 @@ if (Astro.request.method === "POST" && sanityOk && sanityId) {
     const excerpt = String(form.get("excerpt") ?? "").trim();
     const published = String(form.get("published") ?? "").trim();
     const body = String(form.get("body") ?? "").trim();
-    const draft = form.get("draft") === "on" ? true : false;
+    const status = String(form.get("status") ?? "");
+    const draft =
+      status === "published" ? false : status === "draft" ? true : form.get("draft") === "on";
     const keywords = String(form.get("keywords") ?? "")
       .split(",")
       .map((k) => k.trim())
       .filter(Boolean);
 
     if (!title) throw new Error("O título é obrigatório.");
+    if (!body && !draft && !post?.contentHtml) {
+      throw new Error("O conteúdo do post é obrigatório para publicar.");
+    }
     if (description && (description.length < 80 || description.length > 180)) {
       throw new Error("A descrição SEO deve ter entre 80 e 180 caracteres.");
     }
 
-    // Converter MDX para Portable Text blocks
-    const bodyBlocks = body
-      ? body.split("\n\n").filter(Boolean).map((paragraph, i) => ({
-          _type: "block",
-          _key: `block${i}`,
-          style: "normal",
-          children: [{ _type: "span", _key: `span${i}`, text: paragraph.trim(), marks: [] }],
-          markDefs: [],
-        }))
-      : undefined;
+    const bodyBlocks = body ? createBodyBlocks(body, description || title) : undefined;
 
     const patch: Record<string, unknown> = {
       title,
       draft,
       keywords,
-      "lastModified": new Date().toISOString(),
+      lastModified: new Date().toISOString(),
     };
 
     if (description) patch.description = description;
@@ -206,7 +215,7 @@ function toDatetimeLocal(iso: string): string {
       transform: translateX(18px); background: #818cf8;
     }
 
-    .actions-row { display: flex; gap: 12px; align-items: center; margin-top: 8px; }
+    .actions-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 8px; }
 
     .btn-save {
       padding: 10px 24px;
@@ -327,8 +336,7 @@ function toDatetimeLocal(iso: string): string {
 
       <div class="form-group full">
         <label for="edit-body">Conteúdo do Post (MDX)</label>
-        <MdxEditor client:load value={legacyMdx} placeholder="Escreva seu conteúdo em Markdown..." rows={16} />
-        <input type="hidden" id="edit-body" name="body" value={legacyMdx} />
+        <MdxEditor client:load name="body" value={legacyMdx} placeholder="Escreva seu conteúdo em Markdown..." rows={16} />
       </div>
 
       <div class="form-group">
@@ -353,10 +361,19 @@ function toDatetimeLocal(iso: string): string {
     </div>
 
     <div class="actions-row">
-      <button type="submit" class="btn-save" id="edit-post-submit">
+      <button type="submit" name="status" value="keep" class="btn-save" id="edit-post-submit">
         Salvar Alterações
       </button>
+      <button type="submit" name="status" value="published" class="btn-cancel">
+        Publicar no Blog
+      </button>
+      <button type="submit" name="status" value="draft" class="btn-cancel">
+        Salvar Rascunho
+      </button>
       <a href="/admin" class="btn-cancel">Cancelar</a>
+      <a href={`/admin/posts/${slug}/preview`} target="_blank" class="btn-cancel">
+        Pré-visualizar
+      </a>
       <a href={`/admin/posts/${slug}/excluir`} class="btn-delete-link">
         <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="margin-right:5px">
           <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -385,17 +402,5 @@ function toDatetimeLocal(iso: string): string {
       if (draftLabel) draftLabel.textContent = draftCheckbox.checked ? 'Rascunho' : 'Publicado';
     });
 
-    // Sincronizar conteúdo do MdxEditor com o input hidden
-    const bodyInput = document.getElementById('edit-body') as HTMLInputElement;
-    const form = document.querySelector('form') as HTMLFormElement;
-    
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        const mdxTextarea = form.querySelector('textarea') as HTMLTextAreaElement;
-        if (mdxTextarea && bodyInput) {
-          bodyInput.value = mdxTextarea.value;
-        }
-      });
-    }
   </script>
 </AdminLayout>

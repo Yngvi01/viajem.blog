@@ -101,6 +101,40 @@
   border-color: var(--primary-color-lighten) !important;
 }
 
+.article .mdx-media {
+  margin: 1.5rem 0;
+}
+
+.article .mdx-image img,
+.article .mdx-video video,
+.article .mdx-video iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 0.75rem;
+}
+
+.article .mdx-image img {
+  height: auto;
+}
+
+.article .mdx-video iframe {
+  aspect-ratio: 16 / 9;
+  min-height: 260px;
+}
+
+.article .mdx-video video {
+  max-height: 72vh;
+  background: #000;
+}
+
+.article figcaption {
+  margin-top: 0.5rem;
+  color: var(--text-color-lighten);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
 .article pre {
   @apply my-3;
   overflow: hidden !important;

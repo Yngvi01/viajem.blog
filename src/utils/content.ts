@@ -154,6 +154,10 @@ async function LoadPostEntries(): Promise<BlogPostEntry[]> {
 }
 
 async function GetAllPostEntries(): Promise<BlogPostEntry[]> {
+  if (IsSanityEnabled()) {
+    return LoadPostEntries();
+  }
+
   if (!postEntriesCache) {
     postEntriesCache = LoadPostEntries();
   }

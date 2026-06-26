@@ -1,23 +1,38 @@
 ---
-export const prerender = true;
+export const prerender = false;
 
 // Component imports
 import Main from "../layouts/MainLayout.astro";
 import PostCard from "../components/PostCard.astro";
 import Pagination from "../components/controllers/Pagination.astro";
-// Utils
-import type { PaginateFunction } from "astro";
 import { GetSortedPosts } from "../utils/content";
 
-export async function getStaticPaths({
-  paginate,
-}: {
-  paginate: PaginateFunction;
-}) {
-  const postCollections = await GetSortedPosts();
-  return paginate(postCollections, { pageSize: 6 });
+const pageSize = 6;
+const pageParam = (Astro.params.page ?? "").replace(/^\/+|\/+$/g, "");
+const currentPage = pageParam ? Number(pageParam) : 1;
+
+if (!Number.isInteger(currentPage) || currentPage < 1 || pageParam.includes("/")) {
+  return new Response("Página não encontrada", { status: 404 });
 }
-const { page } = Astro.props;
+
+const postCollections = await GetSortedPosts();
+const lastPage = Math.max(1, Math.ceil(postCollections.length / pageSize));
+
+if (currentPage > lastPage) {
+  return new Response("Página não encontrada", { status: 404 });
+}
+
+const start = (currentPage - 1) * pageSize;
+const page = {
+  currentPage,
+  lastPage,
+  data: postCollections.slice(start, start + pageSize),
+  url: {
+    prev: currentPage > 1 ? (currentPage === 2 ? "/" : `/${currentPage - 1}`) : undefined,
+    next: currentPage < lastPage ? `/${currentPage + 1}` : undefined,
+  },
+};
+
 const isFirstPage = page.currentPage === 1;
 const pageTitle = isFirstPage
   ? "Guia de Viagem"

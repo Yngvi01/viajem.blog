@@ -1,6 +1,8 @@
 import { createClient } from "@sanity/client";
 import { toHTML } from "@portabletext/to-html";
 import { NormalizeSlug } from "./hash";
+import { getKnownImageSource } from "./imageImports";
+import { renderMdxContentToHtml } from "./mdxRenderer";
 
 const SANITY_PROJECT_ID = import.meta.env.SANITY_PROJECT_ID;
 const SANITY_DATASET = import.meta.env.SANITY_DATASET;
@@ -33,6 +35,7 @@ const SANITY_POSTS_QUERY = `
     sourceLink,
     licenseName,
     licenseUrl,
+    legacyMdx,
     "body": body[]{
       ...,
       _type == "image" => {
@@ -136,6 +139,7 @@ interface RawSanityPost {
   sourceLink?: string;
   licenseName?: string;
   licenseUrl?: string;
+  legacyMdx?: string;
   body?: unknown[];
 }
 
@@ -211,6 +215,16 @@ export interface SanityPost {
   licenseUrl?: string;
   contentHtml: string;
 }
+
+const resolveImportedImageSrc = (src: string): string | undefined => {
+  const resolved = getKnownImageSource(src);
+  if (!resolved) return src;
+  if (typeof resolved === "string") return resolved;
+  if (typeof resolved === "object" && "src" in resolved && typeof resolved.src === "string") {
+    return resolved.src;
+  }
+  return src;
+};
 
 export interface SanityOffer {
   id: string;
@@ -417,7 +431,9 @@ export async function GetSanityPosts(
           sourceLink: post.sourceLink,
           licenseName: post.licenseName,
           licenseUrl: post.licenseUrl,
-          contentHtml: renderPortableText(post.body),
+          contentHtml: post.legacyMdx?.trim()
+            ? renderMdxContentToHtml(post.legacyMdx, { resolveImageSrc: resolveImportedImageSrc })
+            : renderPortableText(post.body),
         };
       });
   } catch (error) {

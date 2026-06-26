@@ -24,7 +24,17 @@ import pagefind from "astro-pagefind";
 export default defineConfig({
   site: YukinaConfig.site,
   output: "server",
-  adapter: vercel(),
+  adapter: vercel({
+    isr: {
+      expiration: 60 * 15, // Cacheia as páginas por 15 minutos na Edge CDN
+      exclude: [
+        "/admin",
+        "/login",
+        "/logout",
+        /^\/admin\/.*/
+      ]
+    }
+  }),
   compressHTML: true,
   build: {
     inlineStylesheets: "auto",

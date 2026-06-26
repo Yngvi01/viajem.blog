@@ -50,7 +50,7 @@ const { time = 1, wordCount = 0 } = props.readingMetadata || {};
     <div class="absolute bottom-2 w-full">
       <div class="mx-2 flex flex-row justify-between">
         <div
-          class="flex flex-row items-center space-x-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[var(--primary-color-lighten)] dark:text-[var(--text-color)]"
+          class="flex flex-row items-center space-x-2 rounded-md bg-black/50 px-1.5 py-0.5 text-white dark:text-[var(--text-color)]"
         >
           <Icon name="cuida:calendar-outline" />
           <span class="select-none">
@@ -59,7 +59,7 @@ const { time = 1, wordCount = 0 } = props.readingMetadata || {};
         </div>
         {
           props.category && (
-            <div class="flex flex-row items-center space-x-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[var(--primary-color-lighten)] dark:text-[var(--text-color)]">
+            <div class="flex flex-row items-center space-x-2 rounded-md bg-black/50 px-1.5 py-0.5 text-white dark:text-[var(--text-color)]">
               <Icon name="dashicons:category" />
               <span class="max-w-28 select-none truncate">
                 {props.category}
@@ -100,7 +100,7 @@ const { time = 1, wordCount = 0 } = props.readingMetadata || {};
               <li class="data space-x-1.5">
                   <PostCardInfoIcon name="dashicons:category" />
                   <a
-                    class="select-none rounded-md px-1.5 py-0.5 text-[var(--text-color-lighten)] transition-all hover:bg-[var(--primary-color-lighten)] hover:text-[var(--primary-color)]"
+                    class="select-none rounded-md px-1.5 py-0.5 text-[var(--text-color-lighten)] transition-all hover:bg-[var(--primary-color-lighten)] hover:text-white dark:hover:text-[var(--primary-color)]"
                     href={`/categorias/${NormalizeSlug(props.category)}`}
                   >
                     {props.category}
@@ -120,7 +120,7 @@ const { time = 1, wordCount = 0 } = props.readingMetadata || {};
                       <li class="flex select-none flex-row items-center text-[var(--text-color-lighten)]">
                         {index > 0 && <span class="pr-1">/</span>}
                         <a
-                          class="rounded-md px-1.5 py-0.5 transition-all hover:bg-[var(--primary-color-lighten)] hover:text-[var(--primary-color)]"
+                          class="rounded-md px-1.5 py-0.5 transition-all hover:bg-[var(--primary-color-lighten)] hover:text-white dark:hover:text-[var(--primary-color)]"
                           href={`/tags/${NormalizeSlug(tag)}`}
                         >
                           {tag}

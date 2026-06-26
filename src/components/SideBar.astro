@@ -71,7 +71,7 @@ const categorias = await GetCategories();
               <p class="text-[var(--text-color)] transition-all">
                 {categorias.get(category)!.name}
               </p>
-              <span class="rounded-md bg-[var(--primary-color-lighten)] px-2.5 py-0.5 text-[var(--text-color)]">
+              <span class="rounded-md bg-[var(--primary-color-lighten)] px-2.5 py-0.5 text-white dark:text-[var(--text-color)]">
                 {categorias.get(category)!.posts.length}
               </span>
             </a>
@@ -98,7 +98,7 @@ const categorias = await GetCategories();
               class="tag m-1 rounded-md bg-[var(--primary-color-lighten)] px-2 py-1 transition-all hover:brightness-95"
               aria-label={`Veja posts relacionados à tag ${tags.get(tag)!.name}`}
             >
-              <p class="text-sm text-[var(--text-color)]">
+              <p class="text-sm text-white dark:text-[var(--text-color)]">
                 {tags.get(tag)!.name}
               </p>
             </a>
@@ -165,7 +165,7 @@ const categorias = await GetCategories();
   }
 
   .category:hover > p {
-    @apply pl-2 text-[var(--primary-color)];
+    @apply pl-2 text-white dark:text-[var(--primary-color)];
   }
 
   .tag {

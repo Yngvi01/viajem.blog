@@ -101,7 +101,7 @@ const tags = await GetTags();
             <p class="line-clamp-1 text-[var(--text-color)] transition-all">
               {categorias.get(category)!.name}
             </p>
-            <span class="rounded-md bg-[var(--primary-color-lighten)] px-2.5 py-0.5 text-[var(--primary-color)]">
+            <span class="rounded-md bg-[var(--primary-color-lighten)] px-2.5 py-0.5 text-white dark:text-[var(--primary-color)]">
               {categorias.get(category)!.posts.length}
             </span>
           </a>
@@ -125,7 +125,7 @@ const tags = await GetTags();
             href={`/tags/${tag}`}
             class="tag m-1 rounded-md bg-[var(--primary-color-lighten)] px-2 py-1 transition-all hover:brightness-95"
           >
-            <p class="text-sm text-[var(--text-color)]">
+            <p class="text-sm text-white dark:text-[var(--text-color)]">
               {tags.get(tag)!.name}
             </p>
           </a>
@@ -172,6 +172,6 @@ const tags = await GetTags();
   }
 
   .category:hover > p {
-    @apply pl-2 text-[var(--primary-color)];
+    @apply pl-2 text-white dark:text-[var(--primary-color)];
   }
 </style>

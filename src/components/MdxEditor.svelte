@@ -1,11 +1,23 @@
 <script lang="ts">
-  import { tick } from 'svelte';
+  import { tick, onMount } from 'svelte';
   import { renderMdxContentToHtml } from '../utils/mdxRenderer';
 
   export let value: string = '';
   export let name: string = 'body';
   export let placeholder: string = 'Escreva seu conteúdo em Markdown...';
   export let rows: number = 16;
+
+  onMount(() => {
+    const handleUpdate = (e: CustomEvent<string>) => {
+      if (typeof e.detail === 'string') {
+        value = e.detail;
+      }
+    };
+    window.addEventListener('mdx-editor-update-value', handleUpdate as EventListener);
+    return () => {
+      window.removeEventListener('mdx-editor-update-value', handleUpdate as EventListener);
+    };
+  });
 
   let mode: 'editor' | 'preview' = 'editor';
   let previewHtml: string = '';

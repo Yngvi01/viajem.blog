@@ -54,6 +54,58 @@ if (Astro.request.method === "POST" && sanityOk) {
     const categoryId = String(form.get("category") ?? "").trim();
     const selectedTagIds = form.getAll("tags").map((t) => String(t).trim()).filter(Boolean);
 
+    // Helpers para slug e criação on-the-fly
+    const toSlug = (text: string): string => {
+      return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .slice(0, 96);
+    };
+
+    // Processar categoria on-the-fly
+    let finalCategoryId = categoryId;
+    const newCategory = String(form.get("new_category") ?? "").trim();
+    if (newCategory) {
+      const match = categories.find((c) => c.title.toLowerCase() === newCategory.toLowerCase());
+      if (match) {
+        finalCategoryId = match._id;
+      } else {
+        const newCat = await sanityWriteClient.create({
+          _type: "category",
+          title: newCategory,
+          slug: { _type: "slug", current: toSlug(newCategory) },
+        });
+        finalCategoryId = newCat._id;
+      }
+    }
+
+    // Processar tags on-the-fly
+    const finalTagIds = [...selectedTagIds];
+    const newTagsRaw = String(form.get("new_tags") ?? "").trim();
+    if (newTagsRaw) {
+      const newTagTitles = newTagsRaw.split(",").map((t) => t.trim()).filter(Boolean);
+      for (const newTagTitle of newTagTitles) {
+        const match = tags.find((t) => t.title.toLowerCase() === newTagTitle.toLowerCase());
+        if (match) {
+          if (!finalTagIds.includes(match._id)) {
+            finalTagIds.push(match._id);
+          }
+        } else {
+          const newTagDoc = await sanityWriteClient.create({
+            _type: "tag",
+            title: newTagTitle,
+            slug: { _type: "slug", current: toSlug(newTagTitle) },
+          });
+          finalTagIds.push(newTagDoc._id);
+        }
+      }
+    }
+
     if (!title || !slug) throw new Error("Título e slug são obrigatórios.");
     if (!body && !draft) throw new Error("O conteúdo do post é obrigatório para publicar.");
     if (description && (description.length < 80 || description.length > 180)) {
@@ -78,9 +130,9 @@ if (Astro.request.method === "POST" && sanityOk) {
       legacySlugs: [],
       legacyMdx: body,
       body: bodyBlocks,
-      category: categoryId ? { _type: "reference", _ref: categoryId } : undefined,
-      tags: selectedTagIds.length > 0
-        ? selectedTagIds.map((tagId) => ({
+      category: finalCategoryId ? { _type: "reference", _ref: finalCategoryId } : undefined,
+      tags: finalTagIds.length > 0
+        ? finalTagIds.map((tagId) => ({
             _type: "reference",
             _ref: tagId,
             _key: tagId,
@@ -451,6 +503,10 @@ if (Astro.request.method === "POST" && sanityOk) {
             <option value={c._id}>{c.title}</option>
           ))}
         </select>
+        <div style="margin-top: 10px;">
+          <span style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 5px;">Ou crie uma nova categoria:</span>
+          <input type="text" name="new_category" placeholder="Ex: Ecoturismo" />
+        </div>
       </div>
 
       <div class="form-group full">
@@ -467,6 +523,10 @@ if (Astro.request.method === "POST" && sanityOk) {
               </label>
             ))
           )}
+        </div>
+        <div style="margin-top: 12px;">
+          <span style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 5px;">Ou adicione novas tags (separadas por vírgula):</span>
+          <input type="text" name="new_tags" placeholder="Ex: aventura, trilhas, natureza" />
         </div>
       </div>
 

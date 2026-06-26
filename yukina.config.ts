@@ -31,7 +31,7 @@ const YukinaConfig: Configuration = {
 
   username: "Guia de Viagem",
   sign: "A bussola para seguir os seus sonhos!",
-  avatarUrl: "/imagem de perfil.png",
+  avatarUrl: "images/avatar.png",
   socialLinks: [
     {
       icon: "line-md:instagram",
@@ -47,36 +47,35 @@ const YukinaConfig: Configuration = {
 
   banners: [
     {
-      url: "/images/banner/banner1.jpg",
-      alt: "Vista panorâmica do Rio de Janeiro com o Cristo Redentor e a Baía de Guanabara",
-      width: 1280,
-      height: 853
+      url: "/images/banner/banner1.png",
+      alt: "Ilustração em estilo low poly do Rio de Janeiro, com o Pão de Açúcar e a Baía de Guanabara sob um pôr do sol caloroso em tons dourados e alaranjados",
+      width: 1920,
+      height: 1080
     },
     {
-      url: "/images/banner/banner2.jpg",
-      alt: "Praia tropical brasileira com coqueiros e águas cristalinas",
-      width: 1280,
-      height: 853
+      url: "/images/banner/banner2.png",
+      alt: "Ilustração em estilo low poly das Cataratas do Iguaçu, destacando as quedas d'água majestosas e um suave arco-íris sob a luz do entardecer",
+      width: 1920,
+      height: 1080
     },
     {
-      url: "/images/banner/banner3.jpg",
-      alt: "Centro histórico de Ouro Preto com suas igrejas e arquitetura colonial",
-      width: 960,
-      height: 720
+      url: "/images/banner/banner3.png",
+      alt: "Ilustração em estilo low poly dos Lençóis Maranhenses, retratando as dunas de areia branca e lagoas azul-turquesa sob o brilho de um pôr do sol aconchegante",
+      width: 1920,
+      height: 1080
     },
     {
-      url: "/images/banner/banner4.jpg",
-      alt: "Vista do Pão de Açúcar no Rio de Janeiro ao entardecer",
-      width: 960,
-      height: 720
+      url: "/images/banner/banner4.png",
+      alt: "Ilustração em estilo low poly da Chapada Diamantina, destacando o Morro do Pai Inácio banhado pela luz dourada e rústica do entardecer",
+      width: 1920,
+      height: 1080
     },
     {
-      url: "/images/banner/banner5.jpg",
-      alt: "Cataratas do Iguaçu com sua impressionante queda d'água",
-      width: 960,
-      height: 720
+      url: "/images/banner/banner5.png",
+      alt: "Ilustração em estilo low poly do centro histórico de Ouro Preto, mostrando ladeiras e igrejas coloniais barrocas iluminadas pelo brilho acolhedor de fim de tarde",
+      width: 1920,
+      height: 1080
     },
-
   ],
 
   slugMode: "RAW", // 'RAW' | 'HASH'

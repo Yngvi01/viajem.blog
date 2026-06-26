@@ -26,7 +26,7 @@ export default defineConfig({
   output: "server",
   adapter: vercel({
     isr: {
-      expiration: 60 * 15, // Cacheia as páginas por 15 minutos na Edge CDN
+      expiration: 30, // Cacheia as páginas por 30 segundos na Edge CDN para atualização quase instantânea
       exclude: [
         "/admin",
         "/login",

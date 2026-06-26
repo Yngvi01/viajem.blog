@@ -4,7 +4,7 @@ export function DestinoCard({ destino, imagem, descricao, atracoes, melhorEpoca 
   const [mostrarMais, setMostrarMais] = useState(false);
 
   return (
-    <div className="border rounded-lg overflow-hidden shadow-md mb-6 bg-white dark:bg-gray-800">
+    <div className="border border-[var(--primary-color-lighten)]/30 rounded-lg overflow-hidden shadow-md mb-6 bg-[var(--card-color)]">
       {imagem && (
         <div className="h-48 overflow-hidden">
           <img 

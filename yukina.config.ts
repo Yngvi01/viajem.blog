@@ -31,7 +31,7 @@ const YukinaConfig: Configuration = {
 
   username: "Guia de Viagem",
   sign: "A bussola para seguir os seus sonhos!",
-  avatarUrl: "/logo.png",
+  avatarUrl: "/imagem de perfil.png",
   socialLinks: [
     {
       icon: "line-md:instagram",

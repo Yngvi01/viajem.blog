@@ -62,17 +62,16 @@ import "../styles/accessibility.css";
 
 <style is:global>
   :root {
-    --hue: 300;
-    --banner-height: 100vh;
-    --primary-color: #349168;
-    --primary-color-lighten: oklch(95% 0.02 var(--hue));
-    --primary-color-hover: oklch(90% 0.025 var(--hue));
-    --primary-color-transparent: oklch(70% 0.15 var(--hue) / 15%);
-    --text-color: oklch(30% 0 0);
-    --text-color-lighten: oklch(50% 0 0);
-    --card-color: oklch(100% 0 0);
-    --card-color-transparent: oklch(100% 0 0 / 85%);
-    --background-color: oklch(97% 0.01 var(--hue));
+    /* Rustic Adventure - Light Mode (Padrão) */
+    --primary-color: #D95D39; /* Laranja Pôr do Sol */
+    --primary-color-hover: #BF4A26; /* Laranja Escuro */
+    --primary-color-lighten: #A67C52; /* Marrom Madeira Claro (badges, tags) */
+    --primary-color-transparent: rgba(217, 93, 57, 0.15);
+    --text-color: #2C1E16; /* Marrom Escuro/Café */
+    --text-color-lighten: #5C4A3D; /* Marrom Acinzentado */
+    --card-color: #FDFBF7; /* Bege Claro */
+    --card-color-transparent: rgba(253, 251, 247, 0.85);
+    --background-color: #F4E8D1; /* Bege Pergaminho */
 
     --brand-font: "Raleway", "Noto Sans SC", sans-serif;
     --primary-font: "Noto Sans SC", sans-serif;
@@ -83,24 +82,29 @@ import "../styles/accessibility.css";
 
     --banner-height: 55vh;
     --title-font: var(--brand-font);
-    --title-color: oklch(100% 0 0 / 95%);
+    --title-color: rgba(253, 251, 247, 0.95); /* Bege Claro com opacidade */
     --subtitle-font: var(--brand-font);
-    --subtitle-color: oklch(100% 0 0 / 85%);
+    --subtitle-color: rgba(253, 251, 247, 0.85); /* Bege Claro com opacidade */
 
     --onload-animation-delay: 100ms;
     --onload-animation-interval: 100ms;
   }
 
-  :root.dark {
-    --primary-color: white;
-    --primary-color-lighten: oklch(40% 0.04 var(--hue));
-    --primary-color-hover: oklch(20% 0.015 var(--hue));
-    --text-color: oklch(95% 0.002 var(--hue));
-    --text-color-lighten: oklch(90% 0.002 var(--hue));
-    --card-color: oklch(25% 0.02 var(--hue));
-    --card-color-lighten: oklch(40% 0.04 var(--hue));
-    --card-color-transparent: oklch(30% 0.025 var(--hue) / 85%);
-    --background-color: oklch(17.5% 0.015 var(--hue));
+  :root.dark,
+  :root[data-theme="dark"] {
+    /* Rustic Adventure - Dark Mode */
+    --primary-color: #E9C46A; /* Ouro/Amarelo Bússola */
+    --primary-color-hover: #F4D35E; /* Ouro Claro */
+    --primary-color-lighten: #E07A5F; /* Laranja Queimado (badges, tags) */
+    --primary-color-transparent: rgba(233, 196, 106, 0.15);
+    --text-color: #EAE0D5; /* Bege Claro/Off-white */
+    --text-color-lighten: #C6B7A9; /* Bege Escuro/Areia */
+    --card-color: #2C1E16; /* Marrom Madeira Escuro */
+    --card-color-lighten: #3D2E24; /* Marrom Madeira Médio para detalhes */
+    --card-color-transparent: rgba(44, 30, 22, 0.85);
+    --background-color: #1A120B; /* Marrom Profundo/Ébano */
+    --title-color: rgba(234, 224, 213, 0.95); /* Bege Claro com opacidade */
+    --subtitle-color: rgba(234, 224, 213, 0.85); /* Bege Claro com opacidade */
   }
 
   .swup-progress-bar {

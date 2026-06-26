@@ -8,6 +8,19 @@ import { sanityWriteClient, isSanityWriteEnabled } from "../../../utils/sanityAd
 let error = "";
 const sanityOk = isSanityWriteEnabled();
 
+// Buscar categorias e tags existentes para exibição no formulário
+const categories = sanityOk
+  ? await sanityWriteClient.fetch<{ _id: string; title: string }[]>(
+      `*[_type == "category"] | order(title asc) { _id, title }`
+    )
+  : [];
+
+const tags = sanityOk
+  ? await sanityWriteClient.fetch<{ _id: string; title: string }[]>(
+      `*[_type == "tag"] | order(title asc) { _id, title }`
+    )
+  : [];
+
 const createBodyBlocks = (body: string, fallback: string) => {
   const paragraphs = body.split("\n\n").map((paragraph) => paragraph.trim()).filter(Boolean);
   const blocks = paragraphs.length ? paragraphs : [fallback];
@@ -38,6 +51,9 @@ if (Astro.request.method === "POST" && sanityOk) {
       .map((k) => k.trim())
       .filter(Boolean);
 
+    const categoryId = String(form.get("category") ?? "").trim();
+    const selectedTagIds = form.getAll("tags").map((t) => String(t).trim()).filter(Boolean);
+
     if (!title || !slug) throw new Error("Título e slug são obrigatórios.");
     if (!body && !draft) throw new Error("O conteúdo do post é obrigatório para publicar.");
     if (description && (description.length < 80 || description.length > 180)) {
@@ -62,6 +78,14 @@ if (Astro.request.method === "POST" && sanityOk) {
       legacySlugs: [],
       legacyMdx: body,
       body: bodyBlocks,
+      category: categoryId ? { _type: "reference", _ref: categoryId } : undefined,
+      tags: selectedTagIds.length > 0
+        ? selectedTagIds.map((tagId) => ({
+            _type: "reference",
+            _ref: tagId,
+            _key: tagId,
+          }))
+        : undefined,
     });
 
     return Astro.redirect("/admin?criado=1", 303);
@@ -243,6 +267,91 @@ if (Astro.request.method === "POST" && sanityOk) {
 
     .hint { font-size: 11px; color: #475569; margin-top: 5px; }
 
+    select option {
+      background: #161922;
+      color: #e2e8f0;
+    }
+
+    .tags-checkbox-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .tag-checkbox-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #cbd5e1;
+      user-select: none;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .tag-checkbox-item:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.15);
+      color: #f1f5f9;
+    }
+
+    .tag-checkbox-item input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    .tag-checkbox-box {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid #64748b;
+      border-radius: 3px;
+      position: relative;
+      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+
+    .tag-checkbox-item input:checked + .tag-checkbox-box {
+      background: #6366f1;
+      border-color: #6366f1;
+    }
+
+    .tag-checkbox-item input:checked + .tag-checkbox-box::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 3.5px;
+      height: 7px;
+      border: solid white;
+      border-width: 0 1.5px 1.5px 0;
+      transform: rotate(45deg);
+    }
+
+    .tag-checkbox-item:has(input:checked) {
+      background: rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+    }
+
+    .no-tags-text {
+      font-size: 13px;
+      color: #64748b;
+      font-style: italic;
+    }
+
     @media (max-width: 640px) {
       .form-grid { grid-template-columns: 1fr; }
       .form-group.full { grid-column: 1; }
@@ -332,6 +441,33 @@ if (Astro.request.method === "POST" && sanityOk) {
           name="keywords"
           placeholder="viagem, brasil, turismo (separadas por vírgula)"
         />
+      </div>
+
+      <div class="form-group">
+        <label for="novo-category">Categoria</label>
+        <select id="novo-category" name="category">
+          <option value="">Selecione uma categoria...</option>
+          {categories.map((c) => (
+            <option value={c._id}>{c.title}</option>
+          ))}
+        </select>
+      </div>
+
+      <div class="form-group full">
+        <label>Tags</label>
+        <div class="tags-checkbox-container">
+          {tags.length === 0 ? (
+            <span class="no-tags-text">Nenhuma tag cadastrada.</span>
+          ) : (
+            tags.map((t) => (
+              <label class="tag-checkbox-item">
+                <input type="checkbox" name="tags" value={t._id} />
+                <span class="tag-checkbox-box"></span>
+                <span class="tag-label-text">{t.title}</span>
+              </label>
+            ))
+          )}
+        </div>
       </div>
 
       <div class="form-group full">

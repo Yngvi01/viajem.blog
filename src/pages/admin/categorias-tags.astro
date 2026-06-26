@@ -37,12 +37,63 @@ if (Astro.request.method === "POST" && sanityOk) {
       );
       if (existing > 0) throw new Error("Uma categoria com este nome ou slug já existe.");
 
+      // Processar upload de imagem
+      const imageFile = form.get("image") as File;
+      let imageAssetRef: string | undefined = undefined;
+
+      if (imageFile && imageFile.size > 0) {
+        const arrayBuffer = await imageFile.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const asset = await sanityWriteClient.assets.upload("image", buffer, {
+          filename: imageFile.name,
+          contentType: imageFile.type,
+        });
+        imageAssetRef = asset._id;
+      }
+
       await sanityWriteClient.create({
         _type: "category",
         title,
         slug: { _type: "slug", current: slug },
+        image: imageAssetRef
+          ? {
+              _type: "image",
+              asset: {
+                _type: "reference",
+                _ref: imageAssetRef,
+              },
+            }
+          : undefined,
       });
       success = `Categoria "${title}" criada com sucesso.`;
+    } else if (action === "update-category-image") {
+      const id = String(form.get("id") ?? "");
+      if (!id) throw new Error("ID de categoria inválido.");
+
+      const imageFile = form.get("image") as File;
+      if (!imageFile || imageFile.size === 0) throw new Error("Nenhum arquivo de imagem enviado.");
+
+      const arrayBuffer = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      const asset = await sanityWriteClient.assets.upload("image", buffer, {
+        filename: imageFile.name,
+        contentType: imageFile.type,
+      });
+
+      await sanityWriteClient
+        .patch(id)
+        .set({
+          image: {
+            _type: "image",
+            asset: {
+              _type: "reference",
+              _ref: asset._id,
+            },
+          },
+        })
+        .commit();
+
+      success = "Capa da categoria atualizada com sucesso.";
     } else if (action === "create-tag") {
       const title = String(form.get("title") ?? "").trim();
       if (!title) throw new Error("O nome da tag é obrigatório.");
@@ -74,10 +125,17 @@ if (Astro.request.method === "POST" && sanityOk) {
   }
 }
 
-// Buscar categorias e tags atualizadas
+// Buscar categorias e tags atualizadas com imagens
 const categories = sanityOk
-  ? await sanityWriteClient.fetch<{ _id: string; title: string; slug: { current: string } }[]>(
-      `*[_type == "category"] | order(title asc) { _id, title, slug }`
+  ? await sanityWriteClient.fetch<
+      { _id: string; title: string; slug: { current: string }; imageUrl?: string }[]
+    >(
+      `*[_type == "category"] | order(title asc) { 
+        _id, 
+        title, 
+        slug,
+        "imageUrl": image.asset->url 
+      }`
     )
   : [];
 
@@ -131,7 +189,7 @@ const tags = sanityOk
       margin-bottom: 20px;
     }
 
-    .tax-form input {
+    .tax-form input[type="text"] {
       flex: 1;
       padding: 9px 12px;
       background: rgba(255,255,255,0.04);
@@ -143,7 +201,7 @@ const tags = sanityOk
       transition: border-color 0.15s;
     }
 
-    .tax-form input:focus {
+    .tax-form input[type="text"]:focus {
       border-color: rgba(99,102,241,0.5);
     }
 
@@ -166,7 +224,7 @@ const tags = sanityOk
 
     .tax-list {
       flex: 1;
-      max-height: 480px;
+      max-height: 520px;
       overflow-y: auto;
       border: 1px solid rgba(255,255,255,0.04);
       border-radius: 8px;
@@ -177,7 +235,7 @@ const tags = sanityOk
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 14px;
+      padding: 12px 14px;
       border-bottom: 1px solid rgba(255,255,255,0.04);
       font-size: 13px;
       transition: background 0.1s;
@@ -285,10 +343,29 @@ const tags = sanityOk
         Categorias
       </h2>
 
-      <form method="POST" class="tax-form">
+      <form method="POST" enctype="multipart/form-data" class="tax-form" style="flex-direction: column; gap: 12px; margin-bottom: 24px;">
         <input type="hidden" name="action" value="create-category" />
-        <input type="text" name="title" placeholder="Nova categoria..." required disabled={!sanityOk} />
-        <button type="submit" class="btn-add" disabled={!sanityOk}>Adicionar</button>
+        <div style="display: flex; gap: 10px; width: 100%;">
+          <input type="text" name="title" placeholder="Nova categoria..." required disabled={!sanityOk} />
+          <button type="submit" class="btn-add" disabled={!sanityOk}>Adicionar</button>
+        </div>
+        <div class="file-input-wrapper">
+          <label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #94a3b8; cursor: pointer; padding: 4px 0;">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <span>Selecionar imagem de capa (opcional)</span>
+            <input 
+              type="file" 
+              name="image" 
+              accept="image/*" 
+              disabled={!sanityOk} 
+              style="display: none;" 
+              onchange="const span = this.nextElementSibling; if (span) span.textContent = this.files[0] ? `(${this.files[0].name})` : '';" 
+            />
+            <span style="color: #818cf8; font-weight: 500; margin-left: 4px;"></span>
+          </label>
+        </div>
       </form>
 
       <div class="tax-list">
@@ -296,11 +373,35 @@ const tags = sanityOk
           <div class="empty-tax">Nenhuma categoria cadastrada.</div>
         ) : (
           categories.map((cat) => (
-            <div class="tax-item">
-              <div class="tax-info">
+            <div class="tax-item" style="gap: 12px; align-items: center;">
+              {cat.imageUrl ? (
+                <img src={cat.imageUrl} alt={cat.title} style="width: 44px; height: 44px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;" />
+              ) : (
+                <div style="width: 44px; height: 44px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #475569; flex-shrink: 0;">
+                  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+              )}
+
+              <div class="tax-info" style="flex: 1;">
                 <span class="tax-name">{cat.title}</span>
                 <span class="tax-slug">/categorias/{cat.slug?.current}</span>
+                
+                <!-- Form para upload inline de capa -->
+                <form method="POST" enctype="multipart/form-data" style="margin: 4px 0 0 0; display: inline-block;">
+                  <input type="hidden" name="action" value="update-category-image" />
+                  <input type="hidden" name="id" value={cat._id} />
+                  <label style="font-size: 11px; color: #818cf8; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; padding: 2px 0;">
+                    <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+                    </svg>
+                    <span>{cat.imageUrl ? "Alterar Capa" : "Subir Capa"}</span>
+                    <input type="file" name="image" accept="image/*" onchange="this.form.submit()" style="display: none;" />
+                  </label>
+                </form>
               </div>
+              
               <form method="POST" style="margin: 0;" onsubmit="return confirm('Tem certeza que deseja excluir esta categoria? Os posts associados perderão o vínculo.');">
                 <input type="hidden" name="action" value="delete" />
                 <input type="hidden" name="type" value="category" />

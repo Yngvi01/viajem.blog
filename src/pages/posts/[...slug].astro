@@ -1,7 +1,6 @@
 ---
 export const prerender = false;
 
-import { render } from "astro:content";
 import PostLayout from "../../layouts/PostLayout.astro";
 import { IdToSlug } from "../../utils/hash";
 import { GetSortedPosts, type BlogPostEntry } from "../../utils/content";
@@ -41,12 +40,6 @@ const entry = matchedEntry;
 
 if (isLegacySlug) {
   return Astro.redirect(`/posts/${canonicalSlug}`, 301);
-}
-
-let LocalContent: any = null;
-if (!isLegacySlug && entry.source === "local" && entry.rawEntry) {
-  const { Content } = await render(entry.rawEntry);
-  LocalContent = Content;
 }
 
 const DEFAULT_BANNER = "/images/default-banner.jpg";
@@ -118,10 +111,8 @@ const hasSanityContent = entry.source === "sanity" && Boolean(entry.contentHtml)
         {
           hasSanityContent ? (
             <div set:html={entry.contentHtml} />
-          ) : entry.source === "sanity" ? (
-            <p>Conteúdo em atualização.</p>
           ) : (
-            LocalContent && <LocalContent />
+            <p>Conteúdo em atualização.</p>
           )
         }
       </div>

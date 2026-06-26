@@ -1,4 +1,3 @@
-import { getCollection, type CollectionEntry } from "astro:content";
 import { IdToSlug, NormalizeSlug } from "./hash";
 import { GetSanityPosts, IsSanityEnabled } from "./sanity";
 
@@ -59,7 +58,6 @@ export interface BlogPostEntry {
   id: string;
   source: "sanity" | "local";
   data: PostData;
-  rawEntry?: CollectionEntry<"posts">;
   contentHtml?: string;
 }
 
@@ -69,45 +67,6 @@ const toDate = (value: Date | string | undefined): Date => {
   if (!value) return new Date(0);
   return value instanceof Date ? value : new Date(value);
 };
-
-async function GetLocalPosts(): Promise<BlogPostEntry[]> {
-  const includeDrafts = !import.meta.env.PROD;
-  const localEntries = await getCollection("posts", ({ data }) => {
-    return includeDrafts || data.draft !== true;
-  });
-
-  return localEntries.map((entry) => ({
-    id: entry.id,
-    source: "local",
-    rawEntry: entry,
-    data: {
-      title: entry.data.title,
-      published: toDate(entry.data.published),
-      lastModified: toDate(entry.data.published),
-      draft: entry.data.draft,
-      legacySlugs: (entry.data as any).legacySlugs || [],
-      description: entry.data.description,
-      excerpt: entry.data.description,
-      cover: entry.data.cover,
-      tags: entry.data.tags || [],
-      tagSlugs: (entry.data.tags || []).map((tag) => NormalizeSlug(tag)),
-      category: entry.data.category,
-      categorySlug: entry.data.category
-        ? NormalizeSlug(entry.data.category)
-        : undefined,
-      categoryImage: entry.data.image,
-      categoryDescription: entry.data.category || "",
-      author: entry.data.author,
-      sourceLink: entry.data.sourceLink,
-      licenseName: entry.data.licenseName,
-      licenseUrl: entry.data.licenseUrl,
-      attraction_image: entry.data.attraction_image,
-      image: entry.data.image,
-      meta_image: entry.data.meta_image,
-      keywords: entry.data.keywords || [],
-    },
-  }));
-}
 
 async function GetSanityPostEntries(): Promise<BlogPostEntry[]> {
   const includeDrafts = !import.meta.env.PROD;
@@ -146,11 +105,9 @@ async function GetSanityPostEntries(): Promise<BlogPostEntry[]> {
 
 async function LoadPostEntries(): Promise<BlogPostEntry[]> {
   if (IsSanityEnabled()) {
-    const sanityEntries = await GetSanityPostEntries();
-    if (sanityEntries.length > 0) return sanityEntries;
+    return GetSanityPostEntries();
   }
-
-  return GetLocalPosts();
+  return [];
 }
 
 async function GetAllPostEntries(): Promise<BlogPostEntry[]> {

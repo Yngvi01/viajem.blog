@@ -24,6 +24,7 @@
   flex-direction: row;
   align-items: center;
   position: relative;
+  padding-left: 0.9rem;
 }
 
 .article h1::before,
@@ -33,6 +34,7 @@
 .article h5::before,
 .article h6::before {
   position: absolute;
+  left: 0;
   display: block;
   content: " ";
   background-color: var(--primary-color);

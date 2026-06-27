@@ -53,24 +53,31 @@ if (Astro.request.method === "POST") {
       rel="stylesheet"
     />
     <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
       :root {
         --bg: #080a10;
         --accent: #6366f1;
-        --accent-glow: rgba(99,102,241,0.35);
-        --border: rgba(255,255,255,0.08);
+        --accent-glow: rgba(99, 102, 241, 0.35);
+        --border: rgba(255, 255, 255, 0.08);
         --text: #e2e8f0;
         --text-muted: #64748b;
         --error: #ef4444;
         --radius: 14px;
       }
 
-      html, body {
+      html,
+      body {
         height: 100%;
         background: var(--bg);
         color: var(--text);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
       }
 
       body {
@@ -84,11 +91,15 @@ if (Astro.request.method === "POST") {
 
       /* Background decorativo */
       body::before {
-        content: '';
+        content: "";
         position: absolute;
         width: 600px;
         height: 600px;
-        background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+        background: radial-gradient(
+          circle,
+          rgba(99, 102, 241, 0.12) 0%,
+          transparent 70%
+        );
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -96,11 +107,13 @@ if (Astro.request.method === "POST") {
       }
 
       body::after {
-        content: '';
+        content: "";
         position: absolute;
         inset: 0;
-        background-image:
-          radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+        background-image: radial-gradient(
+          rgba(255, 255, 255, 0.03) 1px,
+          transparent 1px
+        );
         background-size: 32px 32px;
         pointer-events: none;
       }
@@ -108,7 +121,7 @@ if (Astro.request.method === "POST") {
       .card {
         position: relative;
         z-index: 10;
-        background: rgba(22,25,34,0.9);
+        background: rgba(22, 25, 34, 0.9);
         border: 1px solid var(--border);
         border-radius: var(--radius);
         padding: 40px;
@@ -116,15 +129,21 @@ if (Astro.request.method === "POST") {
         max-width: 400px;
         backdrop-filter: blur(20px);
         box-shadow:
-          0 0 0 1px rgba(99,102,241,0.08),
-          0 24px 64px rgba(0,0,0,0.5),
+          0 0 0 1px rgba(99, 102, 241, 0.08),
+          0 24px 64px rgba(0, 0, 0, 0.5),
           0 0 80px var(--accent-glow);
         animation: fadeUp 0.4s ease;
       }
 
       @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(16px); }
-        to   { opacity: 1; transform: translateY(0); }
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .logo {
@@ -179,26 +198,30 @@ if (Astro.request.method === "POST") {
       input {
         width: 100%;
         padding: 11px 14px;
-        background: rgba(255,255,255,0.04);
+        background: rgba(255, 255, 255, 0.04);
         border: 1px solid var(--border);
         border-radius: 9px;
         color: var(--text);
         font-size: 14px;
         font-family: inherit;
-        transition: border-color 0.15s, box-shadow 0.15s;
+        transition:
+          border-color 0.15s,
+          box-shadow 0.15s;
         outline: none;
       }
 
       input:focus {
-        border-color: rgba(99,102,241,0.6);
-        box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+        border-color: rgba(99, 102, 241, 0.6);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
       }
 
-      input::placeholder { color: var(--text-muted); }
+      input::placeholder {
+        color: var(--text-muted);
+      }
 
       .error-msg {
-        background: rgba(239,68,68,0.1);
-        border: 1px solid rgba(239,68,68,0.25);
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.25);
         border-radius: 8px;
         padding: 10px 14px;
         font-size: 13px;
@@ -221,14 +244,17 @@ if (Astro.request.method === "POST") {
         font-family: inherit;
         cursor: pointer;
         margin-top: 4px;
-        transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
-        box-shadow: 0 4px 16px rgba(99,102,241,0.4);
+        transition:
+          opacity 0.15s,
+          transform 0.1s,
+          box-shadow 0.15s;
+        box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
       }
 
       .btn:hover {
         opacity: 0.92;
         transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(99,102,241,0.5);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
       }
 
       .btn:active {
@@ -257,22 +283,44 @@ if (Astro.request.method === "POST") {
     <div class="card">
       <div class="logo">
         <div class="logo-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          <svg
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            ></path>
           </svg>
         </div>
         <h1>Área Administrativa</h1>
         <p>Guia de Viagem · Acesso restrito</p>
       </div>
 
-      {error && (
-        <div class="error-msg" role="alert">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          {error}
-        </div>
-      )}
+      {
+        error && (
+          <div class="error-msg" role="alert">
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            {error}
+          </div>
+        )
+      }
 
       <form method="POST" action="/login" autocomplete="on">
         <input type="hidden" name="redirect" value={redirect} />

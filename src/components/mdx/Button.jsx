@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
 export function Button({ text, onClick, className }) {
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-2 bg-[var(--primary-color)] text-white rounded-md hover:bg-[var(--primary-color-darken)] transition-colors ${className || ''}`}
+      className={`rounded-md bg-[var(--primary-color)] px-4 py-2 text-white transition-colors hover:bg-[var(--primary-color-darken)] ${className || ""}`}
     >
       {text}
     </button>

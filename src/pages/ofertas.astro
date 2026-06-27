@@ -18,37 +18,43 @@ const pageDescription =
   noindex={offers.length === 0}
 >
   <section class="offers-wrapper" data-pagefind-body>
-    {offers.length === 0 ? (
-      <p class="empty-state">Nenhuma oferta ativa no momento.</p>
-    ) : (
-      <div class="offers-grid">
-        {offers.map((offer) => (
-          <article class="offer-card">
-            {offer.image && (
-              <img
-                src={offer.image}
-                alt={offer.title}
-                loading="lazy"
-                decoding="async"
-                class="offer-image"
-              />
-            )}
-            <div class="offer-content">
-              <h2>{offer.title}</h2>
-              {offer.destinationName && <p class="destination">{offer.destinationName}</p>}
-              {offer.description && <p class="description">{offer.description}</p>}
-              <a
-                href={`/go/${offer.slug}`}
-                rel="nofollow sponsored"
-                class="offer-link"
-              >
-                {offer.ctaText || "Ver oferta"}
-              </a>
-            </div>
-          </article>
-        ))}
-      </div>
-    )}
+    {
+      offers.length === 0 ? (
+        <p class="empty-state">Nenhuma oferta ativa no momento.</p>
+      ) : (
+        <div class="offers-grid">
+          {offers.map((offer) => (
+            <article class="offer-card">
+              {offer.image && (
+                <img
+                  src={offer.image}
+                  alt={offer.title}
+                  loading="lazy"
+                  decoding="async"
+                  class="offer-image"
+                />
+              )}
+              <div class="offer-content">
+                <h2>{offer.title}</h2>
+                {offer.destinationName && (
+                  <p class="destination">{offer.destinationName}</p>
+                )}
+                {offer.description && (
+                  <p class="description">{offer.description}</p>
+                )}
+                <a
+                  href={`/go/${offer.slug}`}
+                  rel="nofollow sponsored"
+                  class="offer-link"
+                >
+                  {offer.ctaText || "Ver oferta"}
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      )
+    }
   </section>
 </MainLayout>
 

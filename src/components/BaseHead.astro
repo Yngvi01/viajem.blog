@@ -117,7 +117,10 @@ const articleSchema =
       window.setTimeout(() => {
         const i = "GTM-W8FQBNKB";
         window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        window.dataLayer.push({
+          "gtm.start": new Date().getTime(),
+          event: "gtm.js",
+        });
 
         const f = document.getElementsByTagName("script")[0];
         const j = document.createElement("script");
@@ -126,7 +129,7 @@ const articleSchema =
         if (f && f.parentNode) f.parentNode.insertBefore(j, f);
       }, 1500);
     },
-    { once: true }
+    { once: true },
   );
 </script>
 
@@ -138,13 +141,33 @@ const articleSchema =
 <link rel="icon" href="/favicon.png" type="image/png" />
 <meta name="generator" content={Astro.generator} />
 <meta name="robots" content={robotsContent} />
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-<meta name="theme-color" content="#111827" media="(prefers-color-scheme: dark)" />
+<meta
+  name="theme-color"
+  content="#ffffff"
+  media="(prefers-color-scheme: light)"
+/>
+<meta
+  name="theme-color"
+  content="#111827"
+  media="(prefers-color-scheme: dark)"
+/>
 <meta name="author" content={YukinaConfig.username} />
 <meta name="format-detection" content="telephone=no" />
-{googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
-{bingSiteVerification && <meta name="msvalidate.01" content={bingSiteVerification} />}
-{yandexSiteVerification && <meta name="yandex-verification" content={yandexSiteVerification} />}
+{
+  googleSiteVerification && (
+    <meta name="google-site-verification" content={googleSiteVerification} />
+  )
+}
+{
+  bingSiteVerification && (
+    <meta name="msvalidate.01" content={bingSiteVerification} />
+  )
+}
+{
+  yandexSiteVerification && (
+    <meta name="yandex-verification" content={yandexSiteVerification} />
+  )
+}
 
 <link rel="canonical" href={canonicalURL} />
 
@@ -159,12 +182,16 @@ const articleSchema =
 <meta property="og:title" content={seoTitle} />
 <meta property="og:description" content={seoDescription} />
 <meta property="og:image" content={socialImageURL} />
-{typeof resolvedImage !== "string" && resolvedImage?.width && (
-  <meta property="og:image:width" content={String(resolvedImage.width)} />
-)}
-{typeof resolvedImage !== "string" && resolvedImage?.height && (
-  <meta property="og:image:height" content={String(resolvedImage.height)} />
-)}
+{
+  typeof resolvedImage !== "string" && resolvedImage?.width && (
+    <meta property="og:image:width" content={String(resolvedImage.width)} />
+  )
+}
+{
+  typeof resolvedImage !== "string" && resolvedImage?.height && (
+    <meta property="og:image:height" content={String(resolvedImage.height)} />
+  )
+}
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content={canonicalURL} />
@@ -172,15 +199,33 @@ const articleSchema =
 <meta name="twitter:description" content={seoDescription} />
 <meta name="twitter:image" content={socialImageURL} />
 
-{isArticle && publishedISO && <meta property="article:published_time" content={publishedISO} />}
-{isArticle && modifiedISO && <meta property="article:modified_time" content={modifiedISO} />}
+{
+  isArticle && publishedISO && (
+    <meta property="article:published_time" content={publishedISO} />
+  )
+}
+{
+  isArticle && modifiedISO && (
+    <meta property="article:modified_time" content={modifiedISO} />
+  )
+}
 
-<link rel="alternate" type="application/rss+xml" title={YukinaConfig.title} href="/rss.xml" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={YukinaConfig.title}
+  href="/rss.xml"
+/>
 
-<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)}></script>
-{articleSchema && (
-  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)}></script>
-)}
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+{
+  articleSchema && (
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(articleSchema)}
+    />
+  )
+}
 
 <link
   rel="preload"
@@ -188,7 +233,8 @@ const articleSchema =
   as="style"
   onload="this.onload=null;this.rel='stylesheet'"
 />
-<noscript><link rel="stylesheet" href="/assets/katex/katex.min.css" /></noscript>
+<noscript><link rel="stylesheet" href="/assets/katex/katex.min.css" /></noscript
+>
 
 <GlobalStyles />
 <ScriptSetup />

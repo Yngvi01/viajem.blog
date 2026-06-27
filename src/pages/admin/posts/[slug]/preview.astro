@@ -43,7 +43,9 @@ const licenseData = post.licenseName && {
   attractionImage={post.attraction_image}
   keywords={post.keywords}
   published={new Date(post.published)}
-  lastModified={post.lastModified ? new Date(post.lastModified) : new Date(post.published)}
+  lastModified={post.lastModified
+    ? new Date(post.lastModified)
+    : new Date(post.published)}
   slug={post.slug}
   {...licenseData}
 >
@@ -53,7 +55,13 @@ const licenseData = post.licenseName && {
     <a href={`/admin/posts/${post.slug}/editar`}>Editar</a>
   </aside>
 
-  {post.contentHtml ? <div set:html={post.contentHtml} /> : <p>Conteúdo em atualização.</p>}
+  {
+    post.contentHtml ? (
+      <div set:html={post.contentHtml} />
+    ) : (
+      <p>Conteúdo em atualização.</p>
+    )
+  }
 </PostLayout>
 
 <style>

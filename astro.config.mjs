@@ -27,13 +27,8 @@ export default defineConfig({
   adapter: vercel({
     isr: {
       expiration: 30, // Cacheia as páginas por 30 segundos na Edge CDN para atualização quase instantânea
-      exclude: [
-        "/admin",
-        "/login",
-        "/logout",
-        /^\/admin\/.*/
-      ]
-    }
+      exclude: ["/admin", "/login", "/logout", /^\/admin\/.*/],
+    },
   }),
   compressHTML: true,
   build: {
@@ -91,7 +86,10 @@ export default defineConfig({
       globalInstance: true,
       animationSelector: '[class*="transition-"]',
       plugins: [],
-      linkSelector: 'a[href^="/"]:not([data-no-swup]), a[href^="' + YukinaConfig.site + '"]:not([data-no-swup])',
+      linkSelector:
+        'a[href^="/"]:not([data-no-swup]), a[href^="' +
+        YukinaConfig.site +
+        '"]:not([data-no-swup])',
     }),
     sitemap(),
     pagefind(),
@@ -101,6 +99,6 @@ export default defineConfig({
       img: true,
       js: true,
       svg: true,
-    })
+    }),
   ],
 });

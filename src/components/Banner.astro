@@ -33,47 +33,63 @@ const carouselAnimationTime = `${bannerImages.length * 6}s`;
 
 // Log para debug (será removido em produção)
 if (import.meta.env.DEV) {
-  console.log('Banner Images URLs:', bannerImages.map(img => img.image));
+  console.log(
+    "Banner Images URLs:",
+    bannerImages.map((img) => img.image),
+  );
 }
 ---
 
-<div id="banner" class="banner select-none" role="banner" aria-label="Site banner">
+<div
+  id="banner"
+  class="banner select-none"
+  role="banner"
+  aria-label="Site banner"
+>
   <div class="transition-main banner-inner h-full w-full select-none">
     <div class="carousel" role="region" aria-label="Image carousel">
       <ul id="carousel_imgs" aria-live="polite">
-        {bannerImages.map((img, index) => (
-          <li
-            class={`item ${index === 0 ? 'first-banner' : ''}`}
-            style={{
-              animationDelay: `${index * 6}s`,
-            }}
-            data-index={index}
-            role="img"
-            aria-label={img.alt}
-          >
-            <Image
-              src={img.image}
-              alt={img.alt}
-              class="banner-image"
-              loading={index === 0 ? "eager" : "lazy"}
-              quality={90}
-            />
-          </li>
-        ))}
+        {
+          bannerImages.map((img, index) => (
+            <li
+              class={`item ${index === 0 ? "first-banner" : ""}`}
+              style={{
+                animationDelay: `${index * 6}s`,
+              }}
+              data-index={index}
+              role="img"
+              aria-label={img.alt}
+            >
+              <Image
+                src={img.image}
+                alt={img.alt}
+                class="banner-image"
+                loading={index === 0 ? "eager" : "lazy"}
+                quality={90}
+              />
+            </li>
+          ))
+        }
       </ul>
     </div>
-    <div class="relative h-full w-full flex items-center justify-center select-none">
+    <div
+      class="relative flex h-full w-full select-none items-center justify-center"
+    >
       <div
-        class="w-4/5 lg:w-3/4 flex items-center justify-center my-auto select-none"
+        class="my-auto flex w-4/5 select-none items-center justify-center lg:w-3/4"
       >
-        <div class="flex flex-col items-center justify-center text-center select-none">
+        <div
+          class="flex select-none flex-col items-center justify-center text-center"
+        >
           <h1
             class:list={[hasTitle ? "title-normal" : "title-index"]}
-            class="title hidden lg:block lg:mb-2"
+            class="title hidden lg:mb-2 lg:block"
           >
             {title ?? YukinaConfig.title}
           </h1>
-          <h2 class="subtitle lg:translate-y-0">{subTitle ?? YukinaConfig.subTitle}</h2>
+          <h2 class="subtitle lg:translate-y-0">
+            {subTitle ?? YukinaConfig.subTitle}
+          </h2>
         </div>
       </div>
     </div>
@@ -144,16 +160,16 @@ if (import.meta.env.DEV) {
     }
 
     private initEventListeners(): void {
-      document.addEventListener('DOMContentLoaded', () => this.initBanner());
-      document.addEventListener('swup:contentReplaced', () => {
+      document.addEventListener("DOMContentLoaded", () => this.initBanner());
+      document.addEventListener("swup:contentReplaced", () => {
         this.cleanupBanner();
         requestAnimationFrame(() => this.initBanner());
       });
-      document.addEventListener('astro:after-swap', () => {
+      document.addEventListener("astro:after-swap", () => {
         this.cleanupBanner();
         requestAnimationFrame(() => this.initBanner());
       });
-      document.addEventListener('astro:page-load', () => {
+      document.addEventListener("astro:page-load", () => {
         this.cleanupBanner();
         requestAnimationFrame(() => this.initBanner());
       });
@@ -172,18 +188,18 @@ if (import.meta.env.DEV) {
     private initBanner(): void {
       if (this.isInitialized) return;
 
-      this.bannerElement = document.getElementById('banner');
+      this.bannerElement = document.getElementById("banner");
       if (!this.bannerElement) return;
 
-      this.carouselImgs = document.getElementById('carousel_imgs');
+      this.carouselImgs = document.getElementById("carousel_imgs");
       if (!this.carouselImgs) return;
 
       this.setupCarouselAnimation();
       this.loadCarouselImages();
-      
+
       requestAnimationFrame(() => {
         if (this.bannerElement) {
-          this.bannerElement.classList.add('banner-initialized');
+          this.bannerElement.classList.add("banner-initialized");
           void this.bannerElement.offsetHeight;
         }
       });
@@ -195,7 +211,7 @@ if (import.meta.env.DEV) {
       const carouselImgsCount = this.carouselImgs?.children.length ?? 0;
       if (carouselImgsCount === 0) return;
 
-      this.animationStyles = document.createElement('style');
+      this.animationStyles = document.createElement("style");
       this.animationStyles.textContent = `
         @keyframes carousel-animation {
           0% {
@@ -232,9 +248,9 @@ if (import.meta.env.DEV) {
 
       Array.from(this.carouselImgs.children).forEach((item, index) => {
         const imgElement = item as HTMLElement;
-        imgElement.classList.add('loaded');
+        imgElement.classList.add("loaded");
         if (index === 0) {
-          imgElement.classList.add('active');
+          imgElement.classList.add("active");
         }
       });
     }
@@ -246,7 +262,7 @@ if (import.meta.env.DEV) {
 
 <style define:vars={{ carouselAnimationTime }}>
   .banner {
-    @apply relative h-[calc(var(--banner-height)*3/4)] opacity-0 lg:h-[var(--banner-height)] select-none;
+    @apply relative h-[calc(var(--banner-height)*3/4)] select-none opacity-0 lg:h-[var(--banner-height)];
     transition: opacity 0.5s ease-in-out;
   }
 
@@ -271,12 +287,13 @@ if (import.meta.env.DEV) {
 
   .carousel .item {
     @apply absolute left-0 top-0 z-0 h-full w-full origin-center opacity-0;
-    animation: carousel-animation var(--carouselAnimationTime) linear infinite 0s;
+    animation: carousel-animation var(--carouselAnimationTime) linear infinite
+      0s;
     transform: translateZ(0);
     will-change: transform, opacity;
     visibility: hidden;
   }
-  
+
   .carousel .item.loaded {
     visibility: visible;
   }
@@ -290,7 +307,7 @@ if (import.meta.env.DEV) {
   }
 
   .title {
-    @apply mt-8 text-center font-bold text-[var(--title-color)] drop-shadow-lg lg:mt-4 select-none;
+    @apply mt-8 select-none text-center font-bold text-[var(--title-color)] drop-shadow-lg lg:mt-4;
     font-family: var(--title-font);
     margin-bottom: 0.25rem;
     user-select: none;
@@ -307,7 +324,7 @@ if (import.meta.env.DEV) {
   }
 
   .subtitle {
-    @apply text-center text-3xl lg:text-4xl text-[var(--subtitle-color)] drop-shadow-md select-none;
+    @apply select-none text-center text-3xl text-[var(--subtitle-color)] drop-shadow-md lg:text-4xl;
     font-family: var(--subtitle-font);
     line-height: 1.4;
     margin: 0 auto;
@@ -317,7 +334,7 @@ if (import.meta.env.DEV) {
   }
 
   .waves {
-    @apply absolute bottom-0 left-0 right-0 w-full overflow-visible select-none;
+    @apply absolute bottom-0 left-0 right-0 w-full select-none overflow-visible;
     height: 22vh;
     max-height: 12rem;
     min-height: 5rem;
@@ -438,4 +455,3 @@ if (import.meta.env.DEV) {
     }
   }
 </style>
-

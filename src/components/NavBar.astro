@@ -42,7 +42,13 @@ const navCount = YukinaConfig.navigators.length;
     </div>
     <a class="brand-lg" href="/">
       <div class="title space-x-2">
-        <img src="/favicon.png" alt="Logo" width="32" height="32" class="h-8 w-8 select-none" />
+        <img
+          src="/favicon.png"
+          alt="Logo"
+          width="32"
+          height="32"
+          class="h-8 w-8 select-none"
+        />
         <p>{YukinaConfig.brandTitle}</p>
       </div>
     </a>
@@ -113,7 +119,7 @@ const navCount = YukinaConfig.navigators.length;
 
 <style define:vars={{ navCount }}>
   .nav {
-    @apply fixed left-1/2 z-10 flex w-full select-none flex-col justify-end rounded-b-xl bg-[var(--card-color-transparent)] px-2.5 opacity-0 backdrop-blur-md transition-all;
+    @apply fixed top-0 left-1/2 z-10 flex w-full select-none flex-col justify-end rounded-b-xl bg-[var(--card-color-transparent)] px-2.5 opacity-0 backdrop-blur-md transition-all;
     @apply lg:w-[var(--page-width-lg)] lg:rounded-b-2xl;
     @apply xl:w-[var(--page-width-xl)];
     transform: translateX(-50%) translateY(-5rem);
@@ -251,19 +257,20 @@ const navCount = YukinaConfig.navigators.length;
     const mobileMenuNav = document.getElementById("mobile-menu-nav");
     const themeIconLight = document.getElementById("theme-icon-light");
     const themeIconDark = document.getElementById("theme-icon-dark");
-    
+
     // Update menu state
     if (menuIconClosed && menuIconOpened) {
       menuIconClosed.style.display = isMenuOpen ? "none" : "block";
       menuIconOpened.style.display = isMenuOpen ? "block" : "none";
     }
-    
+
     // Update theme state
     if (themeIconLight && themeIconDark) {
-      themeIconLight.style.display = currentTheme === "light" ? "block" : "none";
+      themeIconLight.style.display =
+        currentTheme === "light" ? "block" : "none";
       themeIconDark.style.display = currentTheme === "dark" ? "block" : "none";
     }
-    
+
     // Update mobile menu state
     if (mobileMenuNav) {
       if (isMenuOpen) {
@@ -274,71 +281,75 @@ const navCount = YukinaConfig.navigators.length;
         mobileMenuNav.classList.add("mobile-menu-nav-closed");
       }
     }
-    
+
     // Update document theme
     document.documentElement.setAttribute("data-theme", currentTheme);
     document.documentElement.classList.toggle("dark", currentTheme === "dark");
   }
-  
+
   // Toggle menu state
   function toggleMenu() {
     isMenuOpen = !isMenuOpen;
     updateUI();
   }
-  
+
   // Toggle theme
   function toggleTheme() {
     currentTheme = currentTheme === "light" ? "dark" : "light";
     localStorage.setItem("theme", currentTheme);
     updateUI();
   }
-  
+
   // Setup click handlers
   function setupClickHandlers() {
     const menuSwitcher = document.getElementById("menu-switcher");
     const themeSwitcher = document.getElementById("theme-switcher");
     const mobileNavItems = document.getElementsByClassName("mobile-nav-item");
-    
+
     // Set direct onclick handlers
     if (menuSwitcher) menuSwitcher.onclick = toggleMenu;
     if (themeSwitcher) themeSwitcher.onclick = toggleTheme;
-    
+
     // Set mobile menu item click handlers
     for (let i = 0; i < mobileNavItems.length; i++) {
       if (mobileNavItems[i]) mobileNavItems[i].onclick = toggleMenu;
     }
-    
+
     // Handle clicks outside menu to close
-    document.onclick = function(event) {
+    document.onclick = function (event) {
       const menuSwitcher = document.getElementById("menu-switcher");
       const mobileMenuNav = document.getElementById("mobile-menu-nav");
-      
-      if (isMenuOpen && 
-          menuSwitcher && !menuSwitcher.contains(event.target) && 
-          mobileMenuNav && !mobileMenuNav.contains(event.target)) {
+
+      if (
+        isMenuOpen &&
+        menuSwitcher &&
+        !menuSwitcher.contains(event.target) &&
+        mobileMenuNav &&
+        !mobileMenuNav.contains(event.target)
+      ) {
         toggleMenu();
       }
     };
   }
-  
+
   // Initialize everything
   function initAll() {
     updateUI();
     setupClickHandlers();
   }
-  
+
   // Run on load and at intervals to handle navigation
   initAll();
   document.addEventListener("DOMContentLoaded", initAll);
   setInterval(initAll, 100);
-  
+
   // fold nav bar when scroll down
   let lastYPos = 0;
   window.addEventListener("scroll", () => {
     const navBarElement = document.getElementById("nav");
     const bannerElement = document.getElementById("banner");
     const bannerHeight = bannerElement ? bannerElement.offsetHeight - 50 : 0;
-    
+
     if (navBarElement) {
       if (bannerHeight < window.scrollY && window.scrollY > lastYPos) {
         navBarElement.style.top = "-72px";
@@ -352,10 +363,10 @@ const navCount = YukinaConfig.navigators.length;
 
 <script is:inline>
   let pagefindLoaded = false;
-  
+
   async function loadPagefind() {
     if (pagefindLoaded) return window.pagefind;
-    
+
     try {
       const pagefind = await import("/pagefind/pagefind.js");
       await pagefind.options({
@@ -370,23 +381,23 @@ const navCount = YukinaConfig.navigators.length;
       return null;
     }
   }
-  
+
   // Exporta a função para o objeto window
   window.loadPagefind = loadPagefind;
-  
+
   // Inicializar pagefind quando o usuário interage com os inputs de busca
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener("DOMContentLoaded", () => {
     // Carregar pagefind quando o usuário interage com qualquer campo de busca
-    document.addEventListener('click', (e) => {
+    document.addEventListener("click", (e) => {
       const target = e.target;
-      if (target && (
-          target.id === 'search-bar-input' || 
-          target.id === 'search-bar-input-mobile' ||
-          target.closest && (
-            target.closest('[for="search-bar-input"]') ||
-            target.closest('[for="search-bar-input-mobile"]')
-          )
-      )) {
+      if (
+        target &&
+        (target.id === "search-bar-input" ||
+          target.id === "search-bar-input-mobile" ||
+          (target.closest &&
+            (target.closest('[for="search-bar-input"]') ||
+              target.closest('[for="search-bar-input-mobile"]'))))
+      ) {
         loadPagefind();
       }
     });

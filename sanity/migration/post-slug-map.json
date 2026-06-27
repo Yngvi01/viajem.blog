@@ -2,78 +2,56 @@
   {
     "file": "7DestinosEcologicos",
     "slug": "destinos-ecologicos-brasil",
-    "legacySlugs": [
-      "7destinosecologicos"
-    ]
+    "legacySlugs": ["7destinosecologicos"]
   },
   {
     "file": "CatedralSãoPedro",
     "slug": "paroquia-sao-pedro-gramado",
-    "legacySlugs": [
-      "catedralsaopedro"
-    ]
+    "legacySlugs": ["catedralsaopedro"]
   },
   {
     "file": "Destinosbr2025",
     "slug": "destinos-incriveis-brasil-2025",
-    "legacySlugs": [
-      "destinosbr2025"
-    ]
+    "legacySlugs": ["destinosbr2025"]
   },
   {
     "file": "Jalapão",
     "slug": "jalapao-fervedouros-ecoturismo",
-    "legacySlugs": [
-      "jalapao"
-    ]
+    "legacySlugs": ["jalapao"]
   },
   {
     "file": "Lençois",
     "slug": "lencois-maranhenses-guia-completo",
-    "legacySlugs": [
-      "lencois"
-    ]
+    "legacySlugs": ["lencois"]
   },
   {
     "file": "PascoaGramado",
     "slug": "pascoa-em-gramado-2025",
-    "legacySlugs": [
-      "pascoagramado"
-    ]
+    "legacySlugs": ["pascoagramado"]
   },
   {
     "file": "praias2025",
     "slug": "praias-imperdiveis-brasil-2025",
-    "legacySlugs": [
-      "praias2025"
-    ]
+    "legacySlugs": ["praias2025"]
   },
   {
     "file": "rio2025",
     "slug": "roteiro-rio-de-janeiro-2025",
-    "legacySlugs": [
-      "rio2025"
-    ]
+    "legacySlugs": ["rio2025"]
   },
   {
     "file": "SaboresDaSerra",
     "slug": "roteiro-gastronomico-serra-gaucha",
-    "legacySlugs": [
-      "saboresdaserra"
-    ]
+    "legacySlugs": ["saboresdaserra"]
   },
   {
     "file": "turismocultural",
     "slug": "turismo-cultural-historico-brasil",
-    "legacySlugs": [
-      "turismocultural"
-    ]
+    "legacySlugs": ["turismocultural"]
   },
   {
     "file": "urubici",
     "slug": "urubici-ecoturismo-aventura",
-    "legacySlugs": [
-      "urubici"
-    ]
+    "legacySlugs": ["urubici"]
   }
 ]

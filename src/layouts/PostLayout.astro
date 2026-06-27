@@ -4,7 +4,6 @@ import Markdown from "../components/Markdown.astro";
 import CopyRight from "../components/misc/CopyRight.astro";
 import AdSlot from "../components/AdSlot.astro";
 
-
 interface Props {
   title?: string;
   subTitle?: string;
@@ -28,14 +27,19 @@ const { title, subTitle, bannerImage, published, license, author, sourceLink } =
   Astro.props;
 ---
 
-<Main {...Astro.props} title={title} subTitle={subTitle} bannerImage={bannerImage}>
+<Main
+  {...Astro.props}
+  title={title}
+  subTitle={subTitle}
+  bannerImage={bannerImage}
+>
   <!-- <Fragment set:html={tocHTMLString} /> -->
   <div class="article-wrapper" itemscope itemtype="https://schema.org/Article">
     <div class="article">
       <AdSlot placement="post_inline" />
-      <div itemprop="articleBody" class="article-content">
+      <div itemprop="articleBody" class="article-content pt-4">
         <Markdown>
-          <slot / class="pt-4">
+          <slot />
         </Markdown>
       </div>
       <AdSlot placement="post_bottom" />
@@ -57,10 +61,10 @@ const { title, subTitle, bannerImage, published, license, author, sourceLink } =
 
 <style>
   .article-wrapper {
-    @apply mx-3 rounded-2xl bg-[var(--card-color)] px-5 py-6  lg:mx-0 lg:px-10 lg:py-9;
+    @apply mx-3 rounded-2xl bg-[var(--card-color)] px-5 py-6 lg:mx-0 lg:px-10 lg:py-9;
   }
   .article {
-    @apply flex flex-col mt-[-2rem];
+    @apply flex flex-col;
     font-size: var(--primary-font);
   }
 </style>

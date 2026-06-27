@@ -53,7 +53,7 @@ const categoryDescription = categoryData
               data-pagefind-meta="title"
             >
               <div class="city-image-container">
-                <OptimizedImage 
+                <OptimizedImage
                   src={entry.data.attraction_image || entry.data.image}
                   alt={entry.data.title}
                   width={400}
@@ -64,14 +64,12 @@ const categoryDescription = categoryData
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   fallbackImage="images/default-attraction.jpg"
                 />
-                <div class="city-overlay"></div>
+                <div class="city-overlay" />
               </div>
               <div class="post-meta">
                 <div class="post-date">
                   <Icon name="line-md:calendar" class="meta-icon" />
-                  <span>
-                    {formatDate(entry.date, YukinaConfig.locale)}
-                  </span>
+                  <span>{formatDate(entry.date, YukinaConfig.locale)}</span>
                 </div>
               </div>
               <a href={entry.id} class="city-link">
@@ -80,7 +78,10 @@ const categoryDescription = categoryData
                   <p class="city-description">{entry.data.description}</p>
                   <div class="read-more">
                     <span>Leia mais</span>
-                    <Icon name="line-md:arrow-right-circle" class="arrow-icon" />
+                    <Icon
+                      name="line-md:arrow-right-circle"
+                      class="arrow-icon"
+                    />
                   </div>
                 </div>
               </a>
@@ -119,7 +120,7 @@ const categoryDescription = categoryData
     overflow: hidden;
     z-index: 0;
   }
-  
+
   .city-image-container {
     position: absolute;
     top: 0;
@@ -128,7 +129,7 @@ const categoryDescription = categoryData
     height: 100%;
     z-index: 0;
   }
-  
+
   .city-background-image {
     width: 100%;
     height: 100%;
@@ -152,7 +153,7 @@ const categoryDescription = categoryData
     z-index: 1;
     transition: opacity 0.4s ease;
   }
-  
+
   .post-meta {
     position: absolute;
     top: 15px;
@@ -162,8 +163,9 @@ const categoryDescription = categoryData
     gap: 10px;
     font-size: 0.8rem;
   }
-  
-  .post-date, .post-tag {
+
+  .post-date,
+  .post-tag {
     background-color: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
     padding: 4px 10px;
@@ -172,7 +174,7 @@ const categoryDescription = categoryData
     align-items: center;
     gap: 5px;
   }
-  
+
   .meta-icon {
     width: 16px;
     height: 16px;
@@ -182,7 +184,7 @@ const categoryDescription = categoryData
     transform: translateY(-5px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
   }
-  
+
   .city-card:hover .city-background-image {
     transform: scale(1.08);
   }
@@ -229,7 +231,7 @@ const categoryDescription = categoryData
     overflow: hidden;
     transition: opacity 0.3s ease;
   }
-  
+
   .read-more {
     display: flex;
     align-items: center;
@@ -239,11 +241,11 @@ const categoryDescription = categoryData
     margin-top: 5px;
     opacity: 0;
     transform: translateY(10px);
-    transition: 
+    transition:
       transform 0.4s ease,
       opacity 0.4s ease;
   }
-  
+
   .arrow-icon {
     width: 20px;
     height: 20px;
@@ -258,16 +260,16 @@ const categoryDescription = categoryData
   .city-card:hover .city-title {
     transform: translateY(-5px);
   }
-  
+
   .city-card:hover .city-description {
     opacity: 1;
   }
-  
+
   .city-card:hover .read-more {
     opacity: 1;
     transform: translateY(0);
   }
-  
+
   .city-card:hover .arrow-icon {
     transform: translateX(3px);
   }
@@ -278,7 +280,7 @@ const categoryDescription = categoryData
       gap: 20px;
       padding: 15px;
     }
-    
+
     .city-card {
       aspect-ratio: 1/1;
     }
@@ -289,19 +291,19 @@ const categoryDescription = categoryData
       grid-template-columns: 1fr;
       gap: 15px;
     }
-    
+
     .city-card {
       aspect-ratio: 1/1;
     }
-    
+
     .city-title {
       font-size: 1.3rem;
     }
-    
+
     .city-description {
       font-size: 0.9rem;
     }
-    
+
     .post-meta {
       top: 10px;
       left: 10px;

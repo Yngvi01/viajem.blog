@@ -53,6 +53,7 @@ Isso evita duplicidade de termos e melhora consistência quando o volume de post
 ## 5. Publicação e indexação
 
 Fluxo recomendado:
+
 1. Publicar post no Sanity.
 2. Acionar build na hospedagem (Vercel Deploy Hook).
 3. Novo HTML estático gerado com SEO já aplicado.
@@ -68,6 +69,7 @@ npm run redirects:sync
 ```
 
 Esse comando atualiza:
+
 - `data/post-slug-redirects.json`
 - `vercel.json` (redirects permanentes de `/posts/...` e `/go/...`)
 
@@ -80,6 +82,7 @@ npm run cms:export
 ```
 
 Isso cria:
+
 - `sanity/migration/import.ndjson`
 - `sanity/migration/post-slug-map.json`
 

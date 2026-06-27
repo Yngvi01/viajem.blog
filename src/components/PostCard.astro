@@ -9,7 +9,6 @@ import YukinaConfig from "../../yukina.config";
 import { formatDate } from "../utils/date";
 import OptimizedImage from "./OptimizedImage.astro";
 
-
 export interface Props {
   id: string;
   title: string;
@@ -36,7 +35,9 @@ const { time = 1, wordCount = 0 } = props.readingMetadata || {};
     class="relative h-[128px] transition-all hover:brightness-75 lg:hidden"
   >
     <OptimizedImage
-      src={props.attraction_image || props.image || GetCoverURLForUnspecifiedEntry(entryID)}
+      src={props.attraction_image ||
+        props.image ||
+        GetCoverURLForUnspecifiedEntry(entryID)}
       width={400}
       height={300}
       class="absolute left-0 top-0 h-full w-full rounded-t-3xl object-cover lg:hidden"
@@ -98,14 +99,14 @@ const { time = 1, wordCount = 0 } = props.readingMetadata || {};
           {
             props.category && (
               <li class="data space-x-1.5">
-                  <PostCardInfoIcon name="dashicons:category" />
-                  <a
-                    class="select-none rounded-md px-1.5 py-0.5 text-[var(--text-color-lighten)] transition-all hover:bg-[var(--primary-color-lighten)] hover:text-white dark:hover:text-[var(--primary-color)]"
-                    href={`/categorias/${NormalizeSlug(props.category)}`}
-                  >
-                    {props.category}
-                  </a>
-                </li>
+                <PostCardInfoIcon name="dashicons:category" />
+                <a
+                  class="select-none rounded-md px-1.5 py-0.5 text-[var(--text-color-lighten)] transition-all hover:bg-[var(--primary-color-lighten)] hover:text-white dark:hover:text-[var(--primary-color)]"
+                  href={`/categorias/${NormalizeSlug(props.category)}`}
+                >
+                  {props.category}
+                </a>
+              </li>
             )
           }
           <li
@@ -157,7 +158,9 @@ const { time = 1, wordCount = 0 } = props.readingMetadata || {};
       <a href={contentUrl} class="cover-wrapper">
         <Icon class="right-icon" name="cuida:caret-right-outline" size={96} />
         <OptimizedImage
-          src={props.attraction_image || props.image || GetCoverURLForUnspecifiedEntry(entryID)}
+          src={props.attraction_image ||
+            props.image ||
+            GetCoverURLForUnspecifiedEntry(entryID)}
           width={404}
           height={212}
           class="h-[212px] w-[404px] select-none rounded-r-3xl object-cover dark:brightness-90"

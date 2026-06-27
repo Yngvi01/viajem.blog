@@ -30,7 +30,10 @@ const isSafeMediaSrc = (src: string, allowDataImage = false): boolean => {
   const value = src.trim();
   if (!value) return false;
   if (/^(https?:|\/)/i.test(value)) return true;
-  if (allowDataImage && /^data:image\/(png|gif|jpe?g|webp|avif|svg\+xml);base64,/i.test(value)) {
+  if (
+    allowDataImage &&
+    /^data:image\/(png|gif|jpe?g|webp|avif|svg\+xml);base64,/i.test(value)
+  ) {
     return true;
   }
   return !/^[a-z][a-z0-9+.-]*:/i.test(value);
@@ -43,7 +46,8 @@ const getSafeUrl = (url: string): string | undefined => {
 
 const parseAttributes = (tag: string): Record<string, string> => {
   const attrs: Record<string, string> = {};
-  const pattern = /([A-Za-z_:][\w:.-]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|\{([^}]*)\}|([^\s"'=<>`]+))/g;
+  const pattern =
+    /([A-Za-z_:][\w:.-]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|\{([^}]*)\}|([^\s"'=<>`]+))/g;
   let match: RegExpExecArray | null;
 
   while ((match = pattern.exec(tag))) {
@@ -55,7 +59,9 @@ const parseAttributes = (tag: string): Record<string, string> => {
   return attrs;
 };
 
-const parseMarkdownDestination = (value: string): { url: string; title?: string } => {
+const parseMarkdownDestination = (
+  value: string,
+): { url: string; title?: string } => {
   const trimmed = value.trim();
   const titled = trimmed.match(/^(.+?)\s+["']([^"']+)["']$/);
 
@@ -121,13 +127,18 @@ const renderImage = (
 };
 
 const getYoutubeId = (url: URL): string | undefined => {
-  if (url.hostname === "youtu.be") return url.pathname.split("/").filter(Boolean)[0];
-  if (url.pathname.startsWith("/shorts/")) return url.pathname.split("/").filter(Boolean)[1];
-  if (url.pathname.startsWith("/embed/")) return url.pathname.split("/").filter(Boolean)[1];
+  if (url.hostname === "youtu.be")
+    return url.pathname.split("/").filter(Boolean)[0];
+  if (url.pathname.startsWith("/shorts/"))
+    return url.pathname.split("/").filter(Boolean)[1];
+  if (url.pathname.startsWith("/embed/"))
+    return url.pathname.split("/").filter(Boolean)[1];
   return url.searchParams.get("v") ?? undefined;
 };
 
-const getVideoEmbed = (rawUrl: string): { type: "iframe" | "video"; src: string } | undefined => {
+const getVideoEmbed = (
+  rawUrl: string,
+): { type: "iframe" | "video"; src: string } | undefined => {
   const source = rawUrl.trim();
   if (!isSafeMediaSrc(source)) return undefined;
 
@@ -135,7 +146,11 @@ const getVideoEmbed = (rawUrl: string): { type: "iframe" | "video"; src: string 
     const url = new URL(source, "https://example.com");
     const hostname = url.hostname.replace(/^www\./, "");
 
-    if (hostname === "youtu.be" || hostname === "youtube.com" || hostname === "youtube-nocookie.com") {
+    if (
+      hostname === "youtu.be" ||
+      hostname === "youtube.com" ||
+      hostname === "youtube-nocookie.com"
+    ) {
       const videoId = getYoutubeId(url);
       if (!videoId) return undefined;
       return {
@@ -202,25 +217,37 @@ const renderIframeTag = (tag: string): string => {
 
 const renderVideoTag = (tag: string): string => {
   const attrs = parseAttributes(tag);
-  return attrs.src ? renderVideo(attrs.src, attrs.title || "Vídeo do artigo") : "";
+  return attrs.src
+    ? renderVideo(attrs.src, attrs.title || "Vídeo do artigo")
+    : "";
 };
 
-const renderImageTag = (tag: string, caption: string | undefined, options: RenderMdxOptions): string => {
+const renderImageTag = (
+  tag: string,
+  caption: string | undefined,
+  options: RenderMdxOptions,
+): string => {
   const attrs = parseAttributes(tag);
   const src = attrs.src?.trim();
   if (!src) return "";
   return renderImage(src, attrs.alt || attrs.title || "", caption, options);
 };
 
-const renderFigureBlock = (block: string, options: RenderMdxOptions): string => {
-  const captionMatch = block.match(/<figcaption\b[^>]*>([\s\S]*?)<\/figcaption>/i);
+const renderFigureBlock = (
+  block: string,
+  options: RenderMdxOptions,
+): string => {
+  const captionMatch = block.match(
+    /<figcaption\b[^>]*>([\s\S]*?)<\/figcaption>/i,
+  );
   const caption = captionMatch ? captionMatch[1] : undefined;
   const optimizedImage = block.match(/<OptimizedImage\b[\s\S]*?\/>/i);
   const image = block.match(/<img\b[^>]*>/i);
   const iframe = block.match(/<iframe\b[\s\S]*?<\/iframe>/i);
   const video = block.match(/<video\b[\s\S]*?<\/video>/i);
 
-  if (optimizedImage) return renderImageTag(optimizedImage[0], caption, options);
+  if (optimizedImage)
+    return renderImageTag(optimizedImage[0], caption, options);
   if (image) return renderImageTag(image[0], caption, options);
   if (iframe) return renderIframeTag(iframe[0]);
   if (video) return renderVideoTag(video[0]);
@@ -228,7 +255,10 @@ const renderFigureBlock = (block: string, options: RenderMdxOptions): string => 
   return "";
 };
 
-const renderMediaLine = (line: string, options: RenderMdxOptions): string | undefined => {
+const renderMediaLine = (
+  line: string,
+  options: RenderMdxOptions,
+): string | undefined => {
   const markdownImage = line.match(/^!\[([^\]]*)\]\((.+)\)$/);
   if (markdownImage) {
     const { url, title } = parseMarkdownDestination(markdownImage[2]);
@@ -242,14 +272,18 @@ const renderMediaLine = (line: string, options: RenderMdxOptions): string | unde
     return renderVideo(url, title);
   }
 
-  if (/^<OptimizedImage\b/i.test(line) || /^<img\b/i.test(line)) return renderImageTag(line, undefined, options);
+  if (/^<OptimizedImage\b/i.test(line) || /^<img\b/i.test(line))
+    return renderImageTag(line, undefined, options);
   if (/^<iframe\b/i.test(line)) return renderIframeTag(line);
   if (/^<video\b/i.test(line)) return renderVideoTag(line);
 
   return undefined;
 };
 
-export function renderMdxContentToHtml(source: string, options: RenderMdxOptions = {}): string {
+export function renderMdxContentToHtml(
+  source: string,
+  options: RenderMdxOptions = {},
+): string {
   const lines = stripFrontmatter(source).replace(/\r\n?/g, "\n").split("\n");
   const html: string[] = [];
   let paragraph: string[] = [];
@@ -264,7 +298,9 @@ export function renderMdxContentToHtml(source: string, options: RenderMdxOptions
 
   const flushList = () => {
     if (!list) return;
-    const items = list.items.map((item) => `<li>${renderInlineMarkdown(item)}</li>`).join("");
+    const items = list.items
+      .map((item) => `<li>${renderInlineMarkdown(item)}</li>`)
+      .join("");
     html.push(`<${list.type}>${items}</${list.type}>`);
     list = undefined;
   };
@@ -280,7 +316,9 @@ export function renderMdxContentToHtml(source: string, options: RenderMdxOptions
 
     if (trimmed.startsWith("```")) {
       if (codeFence) {
-        html.push(`<pre><code>${escapeHtml(codeFence.join("\n"))}</code></pre>`);
+        html.push(
+          `<pre><code>${escapeHtml(codeFence.join("\n"))}</code></pre>`,
+        );
         codeFence = undefined;
       } else {
         flushTextBlocks();
@@ -294,7 +332,10 @@ export function renderMdxContentToHtml(source: string, options: RenderMdxOptions
       continue;
     }
 
-    if (/^\s*import\s.+from\s.+;?\s*$/.test(rawLine) || /^\s*export\s.+/.test(rawLine)) {
+    if (
+      /^\s*import\s.+from\s.+;?\s*$/.test(rawLine) ||
+      /^\s*export\s.+/.test(rawLine)
+    ) {
       continue;
     }
 
@@ -332,7 +373,9 @@ export function renderMdxContentToHtml(source: string, options: RenderMdxOptions
     if (heading) {
       flushTextBlocks();
       const level = Math.min(heading[1].length, 6);
-      html.push(`<h${level}>${renderInlineMarkdown(heading[2].trim())}</h${level}>`);
+      html.push(
+        `<h${level}>${renderInlineMarkdown(heading[2].trim())}</h${level}>`,
+      );
       continue;
     }
 
@@ -357,7 +400,9 @@ export function renderMdxContentToHtml(source: string, options: RenderMdxOptions
     const quote = trimmed.match(/^>\s?(.*)$/);
     if (quote) {
       flushTextBlocks();
-      html.push(`<blockquote><p>${renderInlineMarkdown(quote[1].trim())}</p></blockquote>`);
+      html.push(
+        `<blockquote><p>${renderInlineMarkdown(quote[1].trim())}</p></blockquote>`,
+      );
       continue;
     }
 
@@ -365,7 +410,8 @@ export function renderMdxContentToHtml(source: string, options: RenderMdxOptions
     paragraph.push(trimmed);
   }
 
-  if (codeFence) html.push(`<pre><code>${escapeHtml(codeFence.join("\n"))}</code></pre>`);
+  if (codeFence)
+    html.push(`<pre><code>${escapeHtml(codeFence.join("\n"))}</code></pre>`);
   flushTextBlocks();
 
   return html.join("\n");

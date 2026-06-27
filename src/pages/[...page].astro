@@ -11,7 +11,11 @@ const pageSize = 6;
 const pageParam = (Astro.params.page ?? "").replace(/^\/+|\/+$/g, "");
 const currentPage = pageParam ? Number(pageParam) : 1;
 
-if (!Number.isInteger(currentPage) || currentPage < 1 || pageParam.includes("/")) {
+if (
+  !Number.isInteger(currentPage) ||
+  currentPage < 1 ||
+  pageParam.includes("/")
+) {
   return new Response("Página não encontrada", { status: 404 });
 }
 
@@ -28,7 +32,12 @@ const page = {
   lastPage,
   data: postCollections.slice(start, start + pageSize),
   url: {
-    prev: currentPage > 1 ? (currentPage === 2 ? "/" : `/${currentPage - 1}`) : undefined,
+    prev:
+      currentPage > 1
+        ? currentPage === 2
+          ? "/"
+          : `/${currentPage - 1}`
+        : undefined,
     next: currentPage < lastPage ? `/${currentPage + 1}` : undefined,
   },
 };

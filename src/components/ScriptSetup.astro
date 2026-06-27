@@ -5,12 +5,12 @@
 <script>
   // Importar lozad apenas quando necessário para reduzir o bloqueio inicial
   const loadLozad = async () => {
-    if (typeof lozad === 'undefined') {
-      return await import('lozad').then(module => module.default);
+    if (typeof lozad === "undefined") {
+      return await import("lozad").then((module) => module.default);
     }
     return lozad;
   };
-  
+
   // Importar OverlayScrollbars sob demanda
   let OverlayScrollbars: any;
   const loadOverlayScrollbars = async () => {
@@ -44,14 +44,14 @@
         },
         rootMargin: "300px 0px", // Carrega imagens 300px antes de entrar na viewport
         // Configuração específica para elementos com data-background-image
-        backgroundImage: true
+        backgroundImage: true,
       });
 
       observer.observe();
     };
 
     // Usar requestIdleCallback se disponível, ou setTimeout como fallback
-    if ('requestIdleCallback' in window) {
+    if ("requestIdleCallback" in window) {
       (window as any).requestIdleCallback(initLozad, { timeout: 1000 });
     } else {
       setTimeout(initLozad, 100);
@@ -60,19 +60,19 @@
 
   // Processar elementos pre em lotes para evitar bloquear a thread principal
   const processPrebatchs = async (
-    elements: Element[], 
-    OS: any, 
-    options: Record<string, any>, 
-    batchSize = 3, 
-    delay = 10
+    elements: Element[],
+    OS: any,
+    options: Record<string, any>,
+    batchSize = 3,
+    delay = 10,
   ) => {
     const total = elements.length;
-    
+
     for (let i = 0; i < total; i += batchSize) {
       const batch = elements.slice(i, i + batchSize);
-      
+
       // Processar um lote
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         requestAnimationFrame(() => {
           batch.forEach((ele: Element) => {
             OS(ele, options);
@@ -88,48 +88,55 @@
     // Verificar se a página atual realmente precisa de scrollbars personalizados
     // Posts e páginas longas se beneficiam mais
     const isLongContent = document.body.scrollHeight > window.innerHeight * 1.5;
-    
+
     // Adiar esta verificação para não bloquear a thread principal durante o carregamento
     let hasCodeBlocks = false;
-    
+
     // Liberar o scrolling do body imediatamente, não bloqueie a interação do usuário
     document.body.classList.remove("overflow-y-hidden");
-    
+
     // Adiar a detecção de blocos de código com requestIdleCallback
     const checkForCodeBlocks = () => {
       hasCodeBlocks = document.querySelectorAll("pre").length > 0;
       if (!isLongContent && !hasCodeBlocks) return;
-      
+
       // Continuar com a inicialização dos scrollbars apenas se necessário
       initScrollbars();
     };
-    
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(checkForCodeBlocks, { timeout: 1000 });
+
+    if ("requestIdleCallback" in window) {
+      (window as any).requestIdleCallback(checkForCodeBlocks, {
+        timeout: 1000,
+      });
     } else {
       setTimeout(checkForCodeBlocks, 300);
     }
-    
+
     const initScrollbars = async () => {
       // Carregar OverlayScrollbars sob demanda
       const OS = await loadOverlayScrollbars();
-      
+
       // Aplicar scrollbar no body apenas se for conteúdo longo (em idle time)
       if (isLongContent) {
         const applyBodyScrollbar = () => {
           OS(
-            { target: document.body, cancel: { nativeScrollbarsOverlaid: true } },
+            {
+              target: document.body,
+              cancel: { nativeScrollbarsOverlaid: true },
+            },
             {
               scrollbars: {
                 theme: "scrollbar-base scrollbar-auto py-1",
                 autoHide: "move",
               },
-            }
+            },
           );
         };
-        
-        if ('requestIdleCallback' in window) {
-          (window as any).requestIdleCallback(applyBodyScrollbar, { timeout: 2000 });
+
+        if ("requestIdleCallback" in window) {
+          (window as any).requestIdleCallback(applyBodyScrollbar, {
+            timeout: 2000,
+          });
         } else {
           setTimeout(applyBodyScrollbar, 500);
         }
@@ -144,16 +151,16 @@
             autoHide: "leave",
             autoHideDelay: 500,
             autoHideSuspend: false,
-          }
+          },
         };
-        
+
         // Inicializar apenas elementos visíveis em um primeiro momento
         const elements = Array.from(document.querySelectorAll("pre"));
-        const visiblePreElements = elements.filter(el => {
+        const visiblePreElements = elements.filter((el) => {
           const rect = el.getBoundingClientRect();
           return rect.top < window.innerHeight + 300;
         });
-        
+
         // Processar elementos visíveis em pequenos lotes
         if (visiblePreElements.length > 0) {
           // Usar um timeout para dar ao navegador um tempo para renderizar
@@ -161,28 +168,35 @@
             processPrebatchs(visiblePreElements, OS, preOptions);
           }, 200);
         }
-        
+
         // Configurar Observer para elementos fora da viewport
-        if ('IntersectionObserver' in window) {
-          const offscreenElements = elements.filter(el => !visiblePreElements.includes(el));
-          
+        if ("IntersectionObserver" in window) {
+          const offscreenElements = elements.filter(
+            (el) => !visiblePreElements.includes(el),
+          );
+
           if (offscreenElements.length > 0) {
-            const observer = new IntersectionObserver((entries) => {
-              const intersectingElements = entries
-                .filter(entry => entry.isIntersecting)
-                .map(entry => entry.target);
-              
-              if (intersectingElements.length > 0) {
-                // Processar em lotes os elementos que entraram na viewport
-                processPrebatchs(intersectingElements, OS, preOptions);
-                
-                // Remover elementos observados
-                intersectingElements.forEach(element => observer.unobserve(element));
-              }
-            }, { rootMargin: "100px", threshold: 0.1 });
-            
+            const observer = new IntersectionObserver(
+              (entries) => {
+                const intersectingElements = entries
+                  .filter((entry) => entry.isIntersecting)
+                  .map((entry) => entry.target);
+
+                if (intersectingElements.length > 0) {
+                  // Processar em lotes os elementos que entraram na viewport
+                  processPrebatchs(intersectingElements, OS, preOptions);
+
+                  // Remover elementos observados
+                  intersectingElements.forEach((element) =>
+                    observer.unobserve(element),
+                  );
+                }
+              },
+              { rootMargin: "100px", threshold: 0.1 },
+            );
+
             // Adicionar elementos ao observer
-            offscreenElements.forEach(el => observer.observe(el));
+            offscreenElements.forEach((el) => observer.observe(el));
           }
         }
       }
@@ -193,24 +207,24 @@
   const setup = () => {
     // Operações rápidas executadas imediatamente
     setupUrlAnchor();
-    
+
     // Operações críticas para a experiência do usuário com prioridade
     setupLozad(); // Carregamento de imagens - prioridade alta
-    
+
     // Operações não-críticas após pequeno atraso
     setTimeout(() => {
       // Adiar a inicialização do scrollbar
-      if (document.readyState === 'complete') {
+      if (document.readyState === "complete") {
         setupScrollBar();
       } else {
-        window.addEventListener('load', setupScrollBar, { once: true });
+        window.addEventListener("load", setupScrollBar, { once: true });
       }
     }, 200);
   };
 
   // Usar event listener com { once: true } para auto-remover após execução
   document.addEventListener("DOMContentLoaded", setup, { once: true });
-  
+
   // Evitar inicialização duplicada com Swup
   if (window.swup?.hooks) {
     setup();

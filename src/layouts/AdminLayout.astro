@@ -21,13 +21,19 @@ const { title, activeNav } = Astro.props;
       rel="stylesheet"
     />
     <style>
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
       :root {
         --bg: #0d0f14;
         --bg-card: #161922;
         --bg-hover: #1e2230;
-        --border: rgba(255,255,255,0.07);
+        --border: rgba(255, 255, 255, 0.07);
         --accent: #6366f1;
         --accent-hover: #818cf8;
         --danger: #ef4444;
@@ -39,16 +45,20 @@ const { title, activeNav } = Astro.props;
         --radius: 12px;
       }
 
-      html, body {
+      html,
+      body {
         height: 100%;
         background: var(--bg);
         color: var(--text);
-        font-family: 'Inter', system-ui, sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         font-size: 14px;
         line-height: 1.6;
       }
 
-      a { color: inherit; text-decoration: none; }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
 
       .layout {
         display: flex;
@@ -63,7 +73,8 @@ const { title, activeNav } = Astro.props;
         display: flex;
         flex-direction: column;
         position: fixed;
-        top: 0; left: 0;
+        top: 0;
+        left: 0;
         height: 100vh;
         z-index: 50;
         transition: transform 0.3s ease;
@@ -94,7 +105,7 @@ const { title, activeNav } = Astro.props;
       }
 
       .sidebar-logo strong::before {
-        content: '';
+        content: "";
         display: inline-block;
         width: 8px;
         height: 8px;
@@ -128,7 +139,9 @@ const { title, activeNav } = Astro.props;
         border-radius: 8px;
         color: var(--text-muted);
         font-weight: 500;
-        transition: background 0.15s, color 0.15s;
+        transition:
+          background 0.15s,
+          color 0.15s;
         cursor: pointer;
       }
 
@@ -138,7 +151,7 @@ const { title, activeNav } = Astro.props;
       }
 
       .nav-link.active {
-        background: rgba(99,102,241,0.15);
+        background: rgba(99, 102, 241, 0.15);
         color: var(--accent-hover);
       }
 
@@ -171,7 +184,7 @@ const { title, activeNav } = Astro.props;
       }
 
       .logout-btn:hover {
-        background: rgba(239,68,68,0.1);
+        background: rgba(239, 68, 68, 0.1);
       }
 
       /* ── Main content ─────────────────────────────────────────── */
@@ -189,7 +202,7 @@ const { title, activeNav } = Astro.props;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: rgba(13,15,20,0.8);
+        background: rgba(13, 15, 20, 0.8);
         backdrop-filter: blur(12px);
         position: sticky;
         top: 0;
@@ -205,9 +218,9 @@ const { title, activeNav } = Astro.props;
       .topbar-badge {
         font-size: 11px;
         padding: 3px 8px;
-        background: rgba(99,102,241,0.15);
+        background: rgba(99, 102, 241, 0.15);
         color: var(--accent-hover);
-        border: 1px solid rgba(99,102,241,0.3);
+        border: 1px solid rgba(99, 102, 241, 0.3);
         border-radius: 20px;
         font-weight: 600;
       }
@@ -246,38 +259,94 @@ const { title, activeNav } = Astro.props;
         <nav class="sidebar-nav">
           <span class="nav-section-label">Menu</span>
 
-          <a href="/admin" class={`nav-link ${activeNav === "dashboard" ? "active" : ""}`}>
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          <a
+            href="/admin"
+            class={`nav-link ${activeNav === "dashboard" ? "active" : ""}`}
+          >
+            <svg
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              ></path>
             </svg>
             Dashboard
           </a>
 
-          <a href="/admin/posts" class={`nav-link ${activeNav === "posts" ? "active" : ""}`}>
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          <a
+            href="/admin/posts"
+            class={`nav-link ${activeNav === "posts" ? "active" : ""}`}
+          >
+            <svg
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              ></path>
             </svg>
             Posts
           </a>
 
-          <a href="/admin/posts/novo" class={`nav-link ${activeNav === "novo" ? "active" : ""}`}>
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+          <a
+            href="/admin/posts/novo"
+            class={`nav-link ${activeNav === "novo" ? "active" : ""}`}
+          >
+            <svg
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 4v16m8-8H4"></path>
             </svg>
             Novo Post
           </a>
 
-          <a href="/admin/categorias-tags" class={`nav-link ${activeNav === "categorias-tags" ? "active" : ""}`}>
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7c.78.78.78 2.047 0 2.828l-5 5c-.78.78-2.047.78-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+          <a
+            href="/admin/categorias-tags"
+            class={`nav-link ${activeNav === "categorias-tags" ? "active" : ""}`}
+          >
+            <svg
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7c.78.78.78 2.047 0 2.828l-5 5c-.78.78-2.047.78-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+              ></path>
             </svg>
             Categorias & Tags
           </a>
 
           <span class="nav-section-label" style="margin-top:8px;">Site</span>
           <a href="/" target="_blank" class="nav-link">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            <svg
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              ></path>
             </svg>
             Ver Blog
           </a>
@@ -286,8 +355,19 @@ const { title, activeNav } = Astro.props;
         <div class="sidebar-footer">
           <form action="/admin/logout" method="post">
             <button type="submit" class="logout-btn">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" width="16" height="16">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              <svg
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+                width="16"
+                height="16"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                ></path>
               </svg>
               Sair
             </button>

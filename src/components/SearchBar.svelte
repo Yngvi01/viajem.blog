@@ -7,78 +7,72 @@
   import { i18n } from "../locales/translation";
 
   let searchKeyword = "";
-  let searchResult: any[] = [];
+  let searchResult: { title: string; url: string; excerpt: string; cover: string | null }[] = [];
+  let isSearching = false;
+  let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   let resultPannel: HTMLDivElement;
   let searchBar: HTMLDivElement;
 
-  let search = (keyword: string) => {};
-
-  onMount(async () => {
-    // setup overlay scrollbars
+  onMount(() => {
     OverlayScrollbars(resultPannel, {
       scrollbars: {
         theme: "scrollbar-base scrollbar-auto py-1",
         autoHide: "move",
       },
     });
-
-    /**
-     * Asynchronously performs a search based on the provided keyword.
-     * If in development mode, extracts a subset of mock results for demonstration.
-     * Otherwise, fetches results from the Pagefind search engine and populates the array.
-     * Toggles the visibility and height of the results panel based on the outcome.
-     */
-    search = async (keyword: string) => {
-      if (!keyword.trim()) {
-        searchResult = [];
-        resultPannel.style.height = "0px";
-        resultPannel.style.opacity = "0";
-        return;
-      }
-
-      let searchResultArr = [];
-
-      try {
-        // Garantir que o pagefind esteja carregado
-        if (typeof window.loadPagefind === 'function') {
-          const pagefind = await window.loadPagefind();
-          if (!pagefind) {
-            throw new Error("Não foi possível carregar o pagefind");
-          }
-          
-          const ret = await pagefind.search(keyword);
-          for (const item of ret.results) {
-            searchResultArr.push(await item.data());
-          }
-        } else {
-          console.error("Função loadPagefind não encontrada");
-        }
-      } catch (error) {
-        console.error("Erro na busca:", error);
-      }
-      
-      searchResult = searchResultArr;
-
-      const searchResultVisable = keyword != "" && searchResult.length != 0;
-
-      if (searchResultVisable) {
-        resultPannel.style.height = `${searchResultArr.length * 84 + 16}px`;
-        resultPannel.style.opacity = "100%";
-      } else {
-        resultPannel.style.height = "0px";
-        resultPannel.style.opacity = "0";
-      }
-    };
   });
 
-  // handle click outside to closed result pannel
+  async function search(keyword: string) {
+    if (debounceTimer) clearTimeout(debounceTimer);
+
+    if (!keyword.trim() || keyword.trim().length < 2) {
+      searchResult = [];
+      hidePanel();
+      return;
+    }
+
+    debounceTimer = setTimeout(async () => {
+      isSearching = true;
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(keyword.trim())}`);
+        if (res.ok) {
+          searchResult = await res.json();
+        } else {
+          searchResult = [];
+        }
+      } catch {
+        searchResult = [];
+      } finally {
+        isSearching = false;
+        updatePanel();
+      }
+    }, 250);
+  }
+
+  function updatePanel() {
+    if (searchResult.length > 0) {
+      resultPannel.style.height = `${Math.min(searchResult.length * 84 + 16, 436)}px`;
+      resultPannel.style.opacity = "1";
+    } else {
+      hidePanel();
+    }
+  }
+
+  function hidePanel() {
+    resultPannel.style.height = "0px";
+    resultPannel.style.opacity = "0";
+  }
+
+  // fechar ao clicar fora
   document.addEventListener("click", (event) => {
     if (
-      !resultPannel.contains(event.target as any) &&
-      !searchBar.contains(event.target as any)
+      !resultPannel?.contains(event.target as any) &&
+      !searchBar?.contains(event.target as any)
     ) {
-      search("");
+      searchKeyword = "";
+      searchResult = [];
+      hidePanel();
     }
   });
 
@@ -87,12 +81,16 @@
 
 <!-- search bar -->
 <div bind:this={searchBar} class="search-bar hidden lg:block">
-  <div class="bg-black/5 dark:bg-white/5 h-10 rounded-lg flex flex-row">
+  <div class="bg-black/5 dark:bg-white/5 h-10 rounded-lg flex flex-row items-center">
     <label
       for="search-bar-input"
       class="w-10 h-10 flex flex-row justify-center items-center pl-2 pr-1 hover:cursor-text text-gray-400"
     >
-      <Icon icon="mingcute:search-line" width={24} height={24} />
+      {#if isSearching}
+        <Icon icon="mingcute:loading-line" width={24} height={24} class="animate-spin" />
+      {:else}
+        <Icon icon="mingcute:search-line" width={24} height={24} />
+      {/if}
     </label>
     <input
       id="search-bar-input"
@@ -100,18 +98,17 @@
       placeholder={i18n(I18nKeys.nav_bar_search_placeholder)}
       type="text"
       autocomplete="off"
-      on:focus={() => {
-        search(searchKeyword);
-      }}
+      on:focus={() => search(searchKeyword)}
       bind:value={searchKeyword}
     />
   </div>
 </div>
-<!-- result pannel -->
+
+<!-- result panel -->
 <div
   id="result-pannel"
   bind:this={resultPannel}
-  class="max-h-[436px] overflow-y-scroll opacity-0 !absolute h-0 -right-3 w-[28rem] bg-[var(--card-color)] rounded-2xl top-20 transition-all"
+  class="max-h-[436px] overflow-y-scroll opacity-0 !absolute h-0 -right-3 w-[28rem] bg-[var(--card-color)] rounded-2xl top-20 transition-all shadow-xl"
 >
   <div
     class="flex flex-col h-full onload-animation before:content-[''] before:pt-2 after:content-[''] after:pb-2"
@@ -119,13 +116,13 @@
     {#each searchResult as item}
       <a
         href={item.url}
-        class="mx-2 py-2 px-3 rounded-xl result-item transition-all"
+        class="mx-2 py-2 px-3 rounded-xl result-item transition-all hover:bg-[var(--primary-color-transparent)]"
       >
         <div class="flex flex-row space-x-1 items-center">
           <p
             class="line-clamp-1 text-lg font-semibold text-[var(--text-color)] result-title"
           >
-            {item.meta.title}
+            {item.title}
           </p>
           <span class="text-[var(--primary-color)] font-extrabold">
             <Icon icon="cuida:caret-right-outline" width={16} height={16} />
@@ -136,11 +133,15 @@
             <p
               class="item-excerpt text-sm line-clamp-2 text-[var(--text-color-lighten)]"
             >
-              {@html item.excerpt}
+              {item.excerpt}
             </p>
           </div>
         </div>
       </a>
+    {:else}
+      {#if searchKeyword.length >= 2 && !isSearching}
+        <p class="mx-4 my-3 text-sm text-[var(--text-color-lighten)]">Nenhum resultado encontrado.</p>
+      {/if}
     {/each}
   </div>
 </div>

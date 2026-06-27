@@ -7,7 +7,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // Protege todas as rotas /admin/*
   if (pathname.startsWith("/admin")) {
     if (!isAuthenticated(context.request)) {
-      return context.redirect("/login?redirect=" + encodeURIComponent(pathname), 302);
+      return context.redirect(
+        "/login?redirect=" + encodeURIComponent(pathname),
+        302,
+      );
     }
   }
 

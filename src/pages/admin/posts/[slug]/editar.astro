@@ -3,7 +3,10 @@ export const prerender = false;
 
 import AdminLayout from "../../../../layouts/AdminLayout.astro";
 import MdxEditor from "../../../../components/MdxEditor.svelte";
-import { sanityWriteClient, isSanityWriteEnabled } from "../../../../utils/sanityAdminClient";
+import {
+  sanityWriteClient,
+  isSanityWriteEnabled,
+} from "../../../../utils/sanityAdminClient";
 import { GetSanityPosts } from "../../../../utils/sanity";
 
 const { slug } = Astro.params;
@@ -21,18 +24,21 @@ if (!slug) return Astro.redirect("/admin", 302);
 
 const categories = sanityOk
   ? await sanityWriteClient.fetch<{ _id: string; title: string }[]>(
-      `*[_type == "category"] | order(title asc) { _id, title }`
+      `*[_type == "category"] | order(title asc) { _id, title }`,
     )
   : [];
 
 const tags = sanityOk
   ? await sanityWriteClient.fetch<{ _id: string; title: string }[]>(
-      `*[_type == "tag"] | order(title asc) { _id, title }`
+      `*[_type == "tag"] | order(title asc) { _id, title }`,
     )
   : [];
 
 const createBodyBlocks = (body: string, fallback: string) => {
-  const paragraphs = body.split("\n\n").map((paragraph) => paragraph.trim()).filter(Boolean);
+  const paragraphs = body
+    .split("\n\n")
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
   const blocks = paragraphs.length ? paragraphs : [fallback];
 
   return blocks.map((paragraph, i) => ({
@@ -61,7 +67,7 @@ if (sanityOk) {
       tags?: { _ref: string }[];
     }>(
       `*[_type == "post" && slug.current == $slug][0]{ _id, legacyMdx, category, tags }`,
-      { slug }
+      { slug },
     );
     sanityId = raw?._id ?? "";
     legacyMdx = raw?.legacyMdx ?? "";
@@ -83,14 +89,21 @@ if (Astro.request.method === "POST" && sanityOk && sanityId) {
     const body = String(form.get("body") ?? "").trim();
     const status = String(form.get("status") ?? "");
     const draft =
-      status === "published" ? false : status === "draft" ? true : form.get("draft") === "on";
+      status === "published"
+        ? false
+        : status === "draft"
+          ? true
+          : form.get("draft") === "on";
     const keywords = String(form.get("keywords") ?? "")
       .split(",")
       .map((k) => k.trim())
       .filter(Boolean);
 
     const categoryId = String(form.get("category") ?? "").trim();
-    const selectedTagIds = form.getAll("tags").map((t) => String(t).trim()).filter(Boolean);
+    const selectedTagIds = form
+      .getAll("tags")
+      .map((t) => String(t).trim())
+      .filter(Boolean);
 
     // Helpers para slug e criação on-the-fly
     const toSlug = (text: string): string => {
@@ -109,7 +122,9 @@ if (Astro.request.method === "POST" && sanityOk && sanityId) {
     let finalCategoryId = categoryId;
     const newCategory = String(form.get("new_category") ?? "").trim();
     if (newCategory) {
-      const match = categories.find((c) => c.title.toLowerCase() === newCategory.toLowerCase());
+      const match = categories.find(
+        (c) => c.title.toLowerCase() === newCategory.toLowerCase(),
+      );
       if (match) {
         finalCategoryId = match._id;
       } else {
@@ -126,9 +141,14 @@ if (Astro.request.method === "POST" && sanityOk && sanityId) {
     const finalTagIds = [...selectedTagIds];
     const newTagsRaw = String(form.get("new_tags") ?? "").trim();
     if (newTagsRaw) {
-      const newTagTitles = newTagsRaw.split(",").map((t) => t.trim()).filter(Boolean);
+      const newTagTitles = newTagsRaw
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
       for (const newTagTitle of newTagTitles) {
-        const match = tags.find((t) => t.title.toLowerCase() === newTagTitle.toLowerCase());
+        const match = tags.find(
+          (t) => t.title.toLowerCase() === newTagTitle.toLowerCase(),
+        );
         if (match) {
           if (!finalTagIds.includes(match._id)) {
             finalTagIds.push(match._id);
@@ -152,7 +172,9 @@ if (Astro.request.method === "POST" && sanityOk && sanityId) {
       throw new Error("A descrição SEO deve ter entre 80 e 180 caracteres.");
     }
 
-    const bodyBlocks = body ? createBodyBlocks(body, description || title) : undefined;
+    const bodyBlocks = body
+      ? createBodyBlocks(body, description || title)
+      : undefined;
 
     // Processar upload de imagem de capa
     const coverImageFile = form.get("cover_image") as File;
@@ -162,9 +184,9 @@ if (Astro.request.method === "POST" && sanityOk && sanityId) {
     if (coverImageFile && coverImageFile.size > 0) {
       const arrayBuffer = await coverImageFile.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
-      const asset = await sanityWriteClient.assets.upload('image', buffer, {
+      const asset = await sanityWriteClient.assets.upload("image", buffer, {
         filename: coverImageFile.name,
-        contentType: coverImageFile.type
+        contentType: coverImageFile.type,
       });
       coverAssetRef = asset._id;
     }
@@ -198,7 +220,10 @@ if (Astro.request.method === "POST" && sanityOk && sanityId) {
 
     // Inserir imagens se foram fornecidas
     if (coverAssetRef) {
-      const imageRef = { _type: "image", asset: { _type: "reference", _ref: coverAssetRef } };
+      const imageRef = {
+        _type: "image",
+        asset: { _type: "reference", _ref: coverAssetRef },
+      };
       patch.cover = imageRef;
       patch.image = imageRef;
       patch.attractionImage = imageRef;
@@ -213,10 +238,15 @@ if (Astro.request.method === "POST" && sanityOk && sanityId) {
     if (finalTagIds.length === 0) {
       patchBuilder = patchBuilder.unset(["tags"]);
     }
-    
+
     // Se o usuário removeu a imagem e não subiu outra
     if (removeCover && !coverAssetRef) {
-      patchBuilder = patchBuilder.unset(["cover", "image", "attractionImage", "metaImage"]);
+      patchBuilder = patchBuilder.unset([
+        "cover",
+        "image",
+        "attractionImage",
+        "metaImage",
+      ]);
     }
 
     await patchBuilder.commit();
@@ -243,7 +273,7 @@ function toDatetimeLocal(iso: string): string {
   <style>
     .form-card {
       background: #161922;
-      border: 1px solid rgba(255,255,255,0.07);
+      border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 12px;
       padding: 28px;
       max-width: 800px;
@@ -255,8 +285,12 @@ function toDatetimeLocal(iso: string): string {
       gap: 18px;
     }
 
-    .form-group { margin-bottom: 18px; }
-    .form-group.full { grid-column: 1 / -1; }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
 
     label {
       display: flex;
@@ -270,26 +304,35 @@ function toDatetimeLocal(iso: string): string {
       margin-bottom: 7px;
     }
 
-    .required { color: #f87171; }
+    .required {
+      color: #f87171;
+    }
 
-    input, textarea {
+    input,
+    textarea {
       width: 100%;
       padding: 10px 13px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 8px;
       color: #e2e8f0;
       font-size: 13px;
       font-family: inherit;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition:
+        border-color 0.15s,
+        box-shadow 0.15s;
       outline: none;
     }
 
-    textarea { resize: vertical; line-height: 1.6; }
+    textarea {
+      resize: vertical;
+      line-height: 1.6;
+    }
 
-    input:focus, textarea:focus {
-      border-color: rgba(99,102,241,0.5);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+    input:focus,
+    textarea:focus {
+      border-color: rgba(99, 102, 241, 0.5);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
     }
 
     input[disabled] {
@@ -303,82 +346,162 @@ function toDatetimeLocal(iso: string): string {
       text-align: right;
       margin-top: 4px;
     }
-    .char-count.warn { color: #fbbf24; }
-    .char-count.ok   { color: #4ade80; }
+    .char-count.warn {
+      color: #fbbf24;
+    }
+    .char-count.ok {
+      color: #4ade80;
+    }
 
     .slug-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       padding: 6px 12px;
-      background: rgba(99,102,241,0.08);
-      border: 1px solid rgba(99,102,241,0.2);
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid rgba(99, 102, 241, 0.2);
       border-radius: 7px;
       font-size: 12px;
       color: #818cf8;
       font-family: monospace;
     }
 
-    .hint { font-size: 11px; color: #475569; margin-top: 5px; }
+    .hint {
+      font-size: 11px;
+      color: #475569;
+      margin-top: 5px;
+    }
 
-    .switch-row { display: flex; align-items: center; gap: 12px; }
+    .switch-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-    .switch { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
-    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
     .switch-slider {
-      position: absolute; inset: 0;
-      background: rgba(255,255,255,0.1);
-      border-radius: 22px; cursor: pointer; transition: background 0.2s;
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 22px;
+      cursor: pointer;
+      transition: background 0.2s;
     }
     .switch-slider::before {
-      content: ''; position: absolute;
-      width: 16px; height: 16px; left: 3px; top: 3px;
-      background: #94a3b8; border-radius: 50%;
-      transition: transform 0.2s, background 0.2s;
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      top: 3px;
+      background: #94a3b8;
+      border-radius: 50%;
+      transition:
+        transform 0.2s,
+        background 0.2s;
     }
-    .switch input:checked + .switch-slider { background: rgba(99,102,241,0.5); }
+    .switch input:checked + .switch-slider {
+      background: rgba(99, 102, 241, 0.5);
+    }
     .switch input:checked + .switch-slider::before {
-      transform: translateX(18px); background: #818cf8;
+      transform: translateX(18px);
+      background: #818cf8;
     }
 
-    .actions-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 8px; }
+    .actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 8px;
+    }
 
     .btn-save {
       padding: 10px 24px;
       background: linear-gradient(135deg, #6366f1, #818cf8);
-      border: none; border-radius: 9px;
-      color: white; font-size: 13px; font-weight: 600; font-family: inherit;
-      cursor: pointer; transition: opacity 0.15s, transform 0.1s;
-      box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+      border: none;
+      border-radius: 9px;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition:
+        opacity 0.15s,
+        transform 0.1s;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
     }
-    .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-save:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
 
     .btn-cancel {
       padding: 10px 20px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 9px; color: #94a3b8;
-      font-size: 13px; font-weight: 500; font-family: inherit;
-      cursor: pointer; text-decoration: none;
-      display: inline-flex; align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 9px;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
     }
-    .btn-cancel:hover { background: rgba(255,255,255,0.08); color: #e2e8f0; }
+    .btn-cancel:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+    }
 
     .btn-delete-link {
       padding: 10px 20px;
-      background: rgba(239,68,68,0.08);
-      border: 1px solid rgba(239,68,68,0.2);
-      border-radius: 9px; color: #f87171;
-      font-size: 13px; font-weight: 500;
-      text-decoration: none; display: inline-flex; align-items: center;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 9px;
+      color: #f87171;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
       margin-left: auto;
       transition: background 0.15s;
     }
-    .btn-delete-link:hover { background: rgba(239,68,68,0.16); }
+    .btn-delete-link:hover {
+      background: rgba(239, 68, 68, 0.16);
+    }
 
-    .alert { padding: 13px 16px; border-radius: 9px; font-size: 13px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 9px; }
-    .alert-error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); color: #f87171; }
-    .alert-warning { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: #fbbf24; }
+    .alert {
+      padding: 13px 16px;
+      border-radius: 9px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      color: #f87171;
+    }
+    .alert-warning {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      color: #fbbf24;
+    }
 
     select option {
       background: #161922;
@@ -390,8 +513,8 @@ function toDatetimeLocal(iso: string): string {
       flex-wrap: wrap;
       gap: 10px;
       padding: 14px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 10px;
       max-height: 160px;
       overflow-y: auto;
@@ -402,19 +525,22 @@ function toDatetimeLocal(iso: string): string {
       align-items: center;
       gap: 8px;
       padding: 6px 12px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 20px;
       cursor: pointer;
       font-size: 13px;
       color: #cbd5e1;
       user-select: none;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      transition:
+        background 0.15s,
+        border-color 0.15s,
+        color 0.15s;
     }
 
     .tag-checkbox-item:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.15);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
       color: #f1f5f9;
     }
 
@@ -432,7 +558,9 @@ function toDatetimeLocal(iso: string): string {
       border: 1.5px solid #64748b;
       border-radius: 3px;
       position: relative;
-      transition: background 0.15s, border-color 0.15s;
+      transition:
+        background 0.15s,
+        border-color 0.15s;
       flex-shrink: 0;
     }
 
@@ -466,8 +594,12 @@ function toDatetimeLocal(iso: string): string {
     }
 
     @media (max-width: 640px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .form-group.full { grid-column: 1; }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-group.full {
+        grid-column: 1;
+      }
     }
 
     /* Estilos para Upload de Imagem de Capa */
@@ -482,7 +614,9 @@ function toDatetimeLocal(iso: string): string {
       border-radius: 10px;
       padding: 22px;
       text-align: center;
-      transition: border-color 0.15s, background-color 0.15s;
+      transition:
+        border-color 0.15s,
+        background-color 0.15s;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -490,7 +624,8 @@ function toDatetimeLocal(iso: string): string {
       gap: 10px;
     }
 
-    .image-dropzone:hover, .image-dropzone.dragover {
+    .image-dropzone:hover,
+    .image-dropzone.dragover {
       border-color: rgba(99, 102, 241, 0.4);
       background: rgba(99, 102, 241, 0.04);
     }
@@ -545,7 +680,9 @@ function toDatetimeLocal(iso: string): string {
       font-size: 12px;
       font-weight: 500;
       cursor: pointer;
-      transition: background 0.15s, color 0.15s;
+      transition:
+        background 0.15s,
+        color 0.15s;
     }
 
     .btn-remove-image:hover {
@@ -554,36 +691,73 @@ function toDatetimeLocal(iso: string): string {
     }
   </style>
 
-  {!sanityOk && (
-    <div class="alert alert-warning">
-      Sanity não configurado. Preencha as variáveis de ambiente.
-    </div>
-  )}
+  {
+    !sanityOk && (
+      <div class="alert alert-warning">
+        Sanity não configurado. Preencha as variáveis de ambiente.
+      </div>
+    )
+  }
 
-  {error && (
-    <div class="alert alert-error">
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-      </svg>
-      {error}
-    </div>
-  )}
+  {
+    error && (
+      <div class="alert alert-error">
+        <svg
+          width="16"
+          height="16"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          style="flex-shrink:0"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        {error}
+      </div>
+    )
+  }
 
   <form method="POST" class="form-card" enctype="multipart/form-data">
     <!-- Campo oculto para rastrear se a imagem existente foi removida -->
-    <input type="hidden" name="remove_cover" id="remove-cover-input" value="false" />
+    <input
+      type="hidden"
+      name="remove_cover"
+      id="remove-cover-input"
+      value="false"
+    />
     <div class="form-grid">
-
       <div class="form-group full">
         <label for="edit-title">Título <span class="required">*</span></label>
-        <input id="edit-title" type="text" name="title" value={post?.title ?? ""} required />
+        <input
+          id="edit-title"
+          type="text"
+          name="title"
+          value={post?.title ?? ""}
+          required
+        />
       </div>
 
       <div class="form-group">
         <label>Slug (URL)</label>
         <span class="slug-badge">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+          <svg
+            width="12"
+            height="12"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+            ></path>
           </svg>
           {post?.slug ?? slug}
         </span>
@@ -601,35 +775,85 @@ function toDatetimeLocal(iso: string): string {
       </div>
 
       <!-- Campo de Upload de Imagem de Capa -->
-      {(() => {
-        const currentCoverUrl = post?.cover || post?.image || post?.attraction_image || "";
-        return (
-          <div class="form-group full">
-            <label>Imagem de Capa / Card / Abertura</label>
-            <div class="image-upload-wrapper">
-              <div class="image-preview-box" id="image-preview-box" style={currentCoverUrl ? "display: flex;" : "display: none;"}>
-                <img id="image-preview" src={currentCoverUrl} alt="Prévia da imagem de capa" />
-                <button type="button" class="btn-remove-image" id="btn-remove-image">
-                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                  </svg>
-                  Remover Imagem
-                </button>
-              </div>
-              <div class="image-dropzone" id="image-dropzone" style={currentCoverUrl ? "display: none;" : "display: flex;"}>
-                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: #818cf8; opacity: 0.85;">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                <div class="dropzone-text">
-                  <strong>Selecionar Imagem de Capa</strong>
-                  <span>Arraste e solte ou clique para navegar (PNG, JPG, WEBP)</span>
+      {
+        (() => {
+          const currentCoverUrl =
+            post?.cover || post?.image || post?.attraction_image || "";
+          return (
+            <div class="form-group full">
+              <label>Imagem de Capa / Card / Abertura</label>
+              <div class="image-upload-wrapper">
+                <div
+                  class="image-preview-box"
+                  id="image-preview-box"
+                  style={currentCoverUrl ? "display: flex;" : "display: none;"}
+                >
+                  <img
+                    id="image-preview"
+                    src={currentCoverUrl}
+                    alt="Prévia da imagem de capa"
+                  />
+                  <button
+                    type="button"
+                    class="btn-remove-image"
+                    id="btn-remove-image"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                    Remover Imagem
+                  </button>
                 </div>
-                <input type="file" id="cover-image-input" name="cover_image" accept="image/*" style="display: none;" />
+                <div
+                  class="image-dropzone"
+                  id="image-dropzone"
+                  style={currentCoverUrl ? "display: none;" : "display: flex;"}
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    style="color: #818cf8; opacity: 0.85;"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <div class="dropzone-text">
+                    <strong>Selecionar Imagem de Capa</strong>
+                    <span>
+                      Arraste e solte ou clique para navegar (PNG, JPG, WEBP)
+                    </span>
+                  </div>
+                  <input
+                    type="file"
+                    id="cover-image-input"
+                    name="cover_image"
+                    accept="image/*"
+                    style="display: none;"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })()}
+          );
+        })()
+      }
 
       <div class="form-group full">
         <label for="edit-description">Descrição SEO</label>
@@ -638,8 +862,8 @@ function toDatetimeLocal(iso: string): string {
           name="description"
           rows="3"
           maxlength="180"
-          placeholder="80–180 caracteres"
-        >{post?.description ?? ""}</textarea>
+          placeholder="80–180 caracteres">{post?.description ?? ""}</textarea
+        >
         <div class="char-count" id="edit-desc-count">
           {(post?.description ?? "").length} / 180
         </div>
@@ -647,7 +871,9 @@ function toDatetimeLocal(iso: string): string {
 
       <div class="form-group full">
         <label for="edit-excerpt">Resumo</label>
-        <textarea id="edit-excerpt" name="excerpt" rows="3">{post?.excerpt ?? ""}</textarea>
+        <textarea id="edit-excerpt" name="excerpt" rows="3"
+          >{post?.excerpt ?? ""}</textarea
+        >
       </div>
 
       <div class="form-group">
@@ -665,12 +891,19 @@ function toDatetimeLocal(iso: string): string {
         <label for="edit-category">Categoria</label>
         <select id="edit-category" name="category">
           <option value="">Selecione uma categoria...</option>
-          {categories.map((c) => (
-            <option value={c._id} selected={c._id === currentCategoryId}>{c.title}</option>
-          ))}
+          {
+            categories.map((c) => (
+              <option value={c._id} selected={c._id === currentCategoryId}>
+                {c.title}
+              </option>
+            ))
+          }
         </select>
         <div style="margin-top: 10px;">
-          <span style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 5px;">Ou crie uma nova categoria:</span>
+          <span
+            style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 5px;"
+            >Ou crie uma nova categoria:</span
+          >
           <input type="text" name="new_category" placeholder="Ex: Ecoturismo" />
         </div>
       </div>
@@ -678,32 +911,47 @@ function toDatetimeLocal(iso: string): string {
       <div class="form-group full">
         <label>Tags</label>
         <div class="tags-checkbox-container">
-          {tags.length === 0 ? (
-            <span class="no-tags-text">Nenhuma tag cadastrada.</span>
-          ) : (
-            tags.map((t) => (
-              <label class="tag-checkbox-item">
-                <input
-                  type="checkbox"
-                  name="tags"
-                  value={t._id}
-                  checked={currentTagIds.includes(t._id)}
-                />
-                <span class="tag-checkbox-box"></span>
-                <span class="tag-label-text">{t.title}</span>
-              </label>
-            ))
-          )}
+          {
+            tags.length === 0 ? (
+              <span class="no-tags-text">Nenhuma tag cadastrada.</span>
+            ) : (
+              tags.map((t) => (
+                <label class="tag-checkbox-item">
+                  <input
+                    type="checkbox"
+                    name="tags"
+                    value={t._id}
+                    checked={currentTagIds.includes(t._id)}
+                  />
+                  <span class="tag-checkbox-box" />
+                  <span class="tag-label-text">{t.title}</span>
+                </label>
+              ))
+            )
+          }
         </div>
         <div style="margin-top: 12px;">
-          <span style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 5px;">Ou adicione novas tags (separadas por vírgula):</span>
-          <input type="text" name="new_tags" placeholder="Ex: aventura, trilhas, natureza" />
+          <span
+            style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 5px;"
+            >Ou adicione novas tags (separadas por vírgula):</span
+          >
+          <input
+            type="text"
+            name="new_tags"
+            placeholder="Ex: aventura, trilhas, natureza"
+          />
         </div>
       </div>
 
       <div class="form-group full">
         <label for="edit-body">Conteúdo do Post (MDX)</label>
-        <MdxEditor client:load name="body" value={legacyMdx} placeholder="Escreva seu conteúdo em Markdown..." rows={16} />
+        <MdxEditor
+          client:load
+          name="body"
+          value={legacyMdx}
+          placeholder="Escreva seu conteúdo em Markdown..."
+          rows={16}
+        />
       </div>
 
       <div class="form-group">
@@ -724,11 +972,16 @@ function toDatetimeLocal(iso: string): string {
         </div>
         <div class="hint">Marque para manter como rascunho (não publicado)</div>
       </div>
-
     </div>
 
     <div class="actions-row">
-      <button type="submit" name="status" value="keep" class="btn-save" id="edit-post-submit">
+      <button
+        type="submit"
+        name="status"
+        value="keep"
+        class="btn-save"
+        id="edit-post-submit"
+      >
         Salvar Alterações
       </button>
       <button type="submit" name="status" value="published" class="btn-cancel">
@@ -738,12 +991,28 @@ function toDatetimeLocal(iso: string): string {
         Salvar Rascunho
       </button>
       <a href="/admin" class="btn-cancel">Cancelar</a>
-      <a href={`/admin/posts/${slug}/preview`} target="_blank" class="btn-cancel">
+      <a
+        href={`/admin/posts/${slug}/preview`}
+        target="_blank"
+        class="btn-cancel"
+      >
         Pré-visualizar
       </a>
       <a href={`/admin/posts/${slug}/excluir`} class="btn-delete-link">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="margin-right:5px">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        <svg
+          width="13"
+          height="13"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          style="margin-right:5px"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+          ></path>
         </svg>
         Excluir Post
       </a>
@@ -751,78 +1020,93 @@ function toDatetimeLocal(iso: string): string {
   </form>
 
   <script>
-    const descTextarea = document.getElementById('edit-description') as HTMLTextAreaElement;
-    const descCount = document.getElementById('edit-desc-count');
+    const descTextarea = document.getElementById(
+      "edit-description",
+    ) as HTMLTextAreaElement;
+    const descCount = document.getElementById("edit-desc-count");
 
-    descTextarea?.addEventListener('input', () => {
+    descTextarea?.addEventListener("input", () => {
       const len = descTextarea.value.length;
       if (descCount) {
         descCount.textContent = `${len} / 180`;
-        descCount.className = 'char-count' + (len >= 80 && len <= 180 ? ' ok' : len > 0 ? ' warn' : '');
+        descCount.className =
+          "char-count" +
+          (len >= 80 && len <= 180 ? " ok" : len > 0 ? " warn" : "");
       }
     });
 
-    const draftCheckbox = document.getElementById('edit-draft') as HTMLInputElement;
-    const draftLabel = document.getElementById('edit-draft-label');
+    const draftCheckbox = document.getElementById(
+      "edit-draft",
+    ) as HTMLInputElement;
+    const draftLabel = document.getElementById("edit-draft-label");
 
-    draftCheckbox?.addEventListener('change', () => {
-      if (draftLabel) draftLabel.textContent = draftCheckbox.checked ? 'Rascunho' : 'Publicado';
+    draftCheckbox?.addEventListener("change", () => {
+      if (draftLabel)
+        draftLabel.textContent = draftCheckbox.checked
+          ? "Rascunho"
+          : "Publicado";
     });
 
     // ── Lógica de Upload e Prévia de Imagem de Capa ─────────────────
-    const imageDropzone = document.getElementById('image-dropzone');
-    const coverImageInput = document.getElementById('cover-image-input') as HTMLInputElement;
-    const imagePreviewBox = document.getElementById('image-preview-box');
-    const imagePreview = document.getElementById('image-preview') as HTMLImageElement;
-    const btnRemoveImage = document.getElementById('btn-remove-image');
-    const removeCoverInput = document.getElementById('remove-cover-input') as HTMLInputElement;
+    const imageDropzone = document.getElementById("image-dropzone");
+    const coverImageInput = document.getElementById(
+      "cover-image-input",
+    ) as HTMLInputElement;
+    const imagePreviewBox = document.getElementById("image-preview-box");
+    const imagePreview = document.getElementById(
+      "image-preview",
+    ) as HTMLImageElement;
+    const btnRemoveImage = document.getElementById("btn-remove-image");
+    const removeCoverInput = document.getElementById(
+      "remove-cover-input",
+    ) as HTMLInputElement;
 
-    imageDropzone?.addEventListener('click', () => {
+    imageDropzone?.addEventListener("click", () => {
       coverImageInput?.click();
     });
 
-    imageDropzone?.addEventListener('dragover', (e) => {
+    imageDropzone?.addEventListener("dragover", (e) => {
       e.preventDefault();
-      imageDropzone.classList.add('dragover');
+      imageDropzone.classList.add("dragover");
     });
 
-    imageDropzone?.addEventListener('dragleave', () => {
-      imageDropzone.classList.remove('dragover');
+    imageDropzone?.addEventListener("dragleave", () => {
+      imageDropzone.classList.remove("dragover");
     });
 
-    imageDropzone?.addEventListener('drop', (e) => {
+    imageDropzone?.addEventListener("drop", (e) => {
       e.preventDefault();
-      imageDropzone.classList.remove('dragover');
+      imageDropzone.classList.remove("dragover");
       const files = e.dataTransfer?.files;
       if (files && files.length > 0) {
         if (coverImageInput) {
           coverImageInput.files = files;
-          coverImageInput.dispatchEvent(new Event('change'));
+          coverImageInput.dispatchEvent(new Event("change"));
         }
       }
     });
 
-    coverImageInput?.addEventListener('change', () => {
+    coverImageInput?.addEventListener("change", () => {
       const file = coverImageInput.files?.[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
           if (imagePreview && e.target?.result) {
             imagePreview.src = e.target.result as string;
-            if (imagePreviewBox) imagePreviewBox.style.display = 'flex';
-            if (imageDropzone) imageDropzone.style.display = 'none';
-            if (removeCoverInput) removeCoverInput.value = 'false';
+            if (imagePreviewBox) imagePreviewBox.style.display = "flex";
+            if (imageDropzone) imageDropzone.style.display = "none";
+            if (removeCoverInput) removeCoverInput.value = "false";
           }
         };
         reader.readAsDataURL(file);
       }
     });
 
-    btnRemoveImage?.addEventListener('click', () => {
-      if (coverImageInput) coverImageInput.value = '';
-      if (imagePreviewBox) imagePreviewBox.style.display = 'none';
-      if (imageDropzone) imageDropzone.style.display = 'flex';
-      if (removeCoverInput) removeCoverInput.value = 'true'; // Sinaliza remoção no servidor
+    btnRemoveImage?.addEventListener("click", () => {
+      if (coverImageInput) coverImageInput.value = "";
+      if (imagePreviewBox) imagePreviewBox.style.display = "none";
+      if (imageDropzone) imageDropzone.style.display = "flex";
+      if (removeCoverInput) removeCoverInput.value = "true"; // Sinaliza remoção no servidor
     });
   </script>
 </AdminLayout>

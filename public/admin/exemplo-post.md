@@ -30,7 +30,9 @@ A melhor época para visitar é logo após a temporada de chuvas, entre **maio e
 ## O que fazer
 
 ### Lagoa Bonita e Lagoa Azul
+
 As lagoas mais famosas a partir de Barreirinhas oferecem um pôr do sol inesquecível do topo das dunas.
 
 ### Circuito Santo Amaro
+
 Santo Amaro abriga as lagoas mais amplas e profundas, como a Lagoa da Gaivota e a Lagoa das Emendadas, ideais para banho.

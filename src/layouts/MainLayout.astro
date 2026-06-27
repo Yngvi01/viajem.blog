@@ -29,12 +29,10 @@ const shouldShowBreadcrumbs = Astro.url.pathname !== "/";
 
 <Base {...Astro.props}>
   <NavBar />
-  <div class="main-container mt-2">
-    <AdSlot placement="header_top" />
-  </div>
 
+  {/* Banner imediatamente após a navbar, colado ao topo */}
   {
-    YukinaConfig.bannerStyle == "LOOP" && (
+    YukinaConfig.bannerStyle == "LOOP" ? (
       <div class="banner-container">
         <Banner
           title={props.title}
@@ -43,10 +41,13 @@ const shouldShowBreadcrumbs = Astro.url.pathname !== "/";
           slug={props.slug}
         />
       </div>
+    ) : (
+      <div class="navbar-spacer" />
     )
   }
 
-  <div class="main-container mt-6 mb-8 md:my-10">
+  <div class="main-container mb-8 mt-6 md:my-10">
+    <AdSlot placement="header_top" />
     {shouldShowBreadcrumbs && <Breadcrumbs title={props.title} />}
     <div class="flex flex-row items-start xl:space-x-4">
       <aside class="side-bar" aria-label="Barra lateral">
@@ -54,7 +55,10 @@ const shouldShowBreadcrumbs = Astro.url.pathname !== "/";
       </aside>
       <div class="transition-leaving w-full space-y-4 md:space-y-8">
         <AdSlot placement="content_top" />
-        <section class="content onload-animation" aria-label="Conteúdo principal">
+        <section
+          class="content onload-animation"
+          aria-label="Conteúdo principal"
+        >
           <article>
             <slot />
           </article>
@@ -78,6 +82,17 @@ const shouldShowBreadcrumbs = Astro.url.pathname !== "/";
 
   .content {
     @apply xl:w-[calc(var(--page-width-xl)-264px)];
+  }
+
+  /* Espaçador para páginas sem banner — ocupa a altura da navbar fixa */
+  .navbar-spacer {
+    height: 4rem;
+  }
+
+  @media (min-width: 1024px) {
+    .navbar-spacer {
+      height: 4.5rem;
+    }
   }
 
   /* Ajuste para o container do Banner */

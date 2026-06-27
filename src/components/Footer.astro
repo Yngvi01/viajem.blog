@@ -67,7 +67,7 @@ const tags = await GetTags();
                 <li>
                   <a
                     href={item.link}
-                    class="text-[var(--primary-color)] inline-flex p-2"
+                    class="inline-flex p-2 text-[var(--primary-color)]"
                     aria-label={item.label}
                     rel="noopener noreferrer"
                     target="_blank"
@@ -145,12 +145,17 @@ const tags = await GetTags();
     <div
       class="flex w-full flex-col items-center text-sm text-[var(--text-color-lighten)]"
     >
-      <nav aria-label="Links institucionais" class="mb-2 flex flex-wrap items-center justify-center gap-3 text-sm">
+      <nav
+        aria-label="Links institucionais"
+        class="mb-2 flex flex-wrap items-center justify-center gap-3 text-sm"
+      >
         <a href="/ofertas" class="link">Ofertas</a>
         <span aria-hidden="true">|</span>
         <a href="/contato" class="link">Contato</a>
         <span aria-hidden="true">|</span>
-        <a href="/politica-de-privacidade" class="link">Política de Privacidade</a>
+        <a href="/politica-de-privacidade" class="link"
+          >Política de Privacidade</a
+        >
         <span aria-hidden="true">|</span>
         <a href="/termos-de-uso" class="link">Termos de Uso</a>
       </nav>

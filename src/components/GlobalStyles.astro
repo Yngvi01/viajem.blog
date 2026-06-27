@@ -14,26 +14,28 @@ import "../styles/accessibility.css";
     // Detectar elementos que precisariam de scrollbar personalizado
     const detectScrollableContent = () => {
       // Verificar se temos elementos que realmente precisam de scrollbar personalizado
-      const hasCodeBlocks = document.querySelectorAll('pre').length > 0;
-      const isLongContent = document.body.scrollHeight > window.innerHeight * 1.5;
-      
+      const hasCodeBlocks = document.querySelectorAll("pre").length > 0;
+      const isLongContent =
+        document.body.scrollHeight > window.innerHeight * 1.5;
+
       return hasCodeBlocks || isLongContent;
     };
-    
+
     // Usar requestIdleCallback para não bloquear o carregamento inicial
     const checkAndLoadStyles = () => {
       if (detectScrollableContent()) {
         // Importar CSS diretamente do node_modules usando ESM dinâmico
-        import('overlayscrollbars/overlayscrollbars.css')
-          .catch(error => {
-            console.warn('Erro ao carregar CSS de OverlayScrollbars:', error);
-          });
+        import("overlayscrollbars/overlayscrollbars.css").catch((error) => {
+          console.warn("Erro ao carregar CSS de OverlayScrollbars:", error);
+        });
       }
     };
-    
+
     // Usar API de carregamento preguiçoso quando disponível
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(checkAndLoadStyles, { timeout: 2000 });
+    if ("requestIdleCallback" in window) {
+      (window as any).requestIdleCallback(checkAndLoadStyles, {
+        timeout: 2000,
+      });
     } else {
       // Fallback para browsers mais antigos
       setTimeout(checkAndLoadStyles, 1000);
@@ -42,20 +44,26 @@ import "../styles/accessibility.css";
 
   // Inicializar verificação uma vez que o DOM estiver pronto
   // Usar { once: true } para remover o listener automaticamente após execução
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadScrollbarStyles, { once: true });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadScrollbarStyles, {
+      once: true,
+    });
   } else {
     loadScrollbarStyles();
   }
-  
+
   // Adicionar suporte para navegação SPA com Swup
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     if (window.swup?.hooks) {
       window.swup.hooks.on("content:replace", loadScrollbarStyles);
     } else {
-      document.addEventListener("swup:enable", () => {
-        window.swup.hooks.on("content:replace", loadScrollbarStyles);
-      }, { once: true });
+      document.addEventListener(
+        "swup:enable",
+        () => {
+          window.swup.hooks.on("content:replace", loadScrollbarStyles);
+        },
+        { once: true },
+      );
     }
   }
 </script>
@@ -63,15 +71,15 @@ import "../styles/accessibility.css";
 <style is:global>
   :root {
     /* Rustic Adventure - Light Mode (Padrão Otimizado para Contraste) */
-    --primary-color: #B03610; /* Rico Terracota / Ferrugem Vibrante (Contraste Excepcional ~8:1) */
-    --primary-color-hover: #8A2708; /* Terracota Escuro / Tijolo para Hover */
-    --primary-color-lighten: #7A4F2A; /* Marrom Madeira Quente (Badges, Tags - Contraste > 6:1) */
+    --primary-color: #b03610; /* Rico Terracota / Ferrugem Vibrante (Contraste Excepcional ~8:1) */
+    --primary-color-hover: #8a2708; /* Terracota Escuro / Tijolo para Hover */
+    --primary-color-lighten: #7a4f2a; /* Marrom Madeira Quente (Badges, Tags - Contraste > 6:1) */
     --primary-color-transparent: rgba(176, 54, 16, 0.08);
     --text-color: #241810; /* Café Escuro Profundo (Contraste Excepcional) */
     --text-color-lighten: #584437; /* Areia Escura / Tronco (Contraste > 6:1) */
-    --card-color: #FFFFFF; /* Branco Puro para Máximo Contraste de Fundo */
+    --card-color: #ffffff; /* Branco Puro para Máximo Contraste de Fundo */
     --card-color-transparent: rgba(255, 255, 255, 0.85);
-    --background-color: #FAF6F0; /* Off-white Pergaminho Claro (Otimiza Contraste com Textos e Links) */
+    --background-color: #faf6f0; /* Off-white Pergaminho Claro (Otimiza Contraste com Textos e Links) */
 
     --brand-font: "Raleway", "Noto Sans SC", sans-serif;
     --primary-font: "Noto Sans SC", sans-serif;
@@ -93,16 +101,16 @@ import "../styles/accessibility.css";
   :root.dark,
   :root[data-theme="dark"] {
     /* Rustic Adventure - Dark Mode Otimizado */
-    --primary-color: #E9C46A; /* Ouro Compass (Contraste > 9:1) */
-    --primary-color-hover: #F4D35E; /* Ouro Claro */
-    --primary-color-lighten: #F29D82; /* Terracota Suave (Badges, Tags - Contraste > 7:1) */
+    --primary-color: #e9c46a; /* Ouro Compass (Contraste > 9:1) */
+    --primary-color-hover: #f4d35e; /* Ouro Claro */
+    --primary-color-lighten: #f29d82; /* Terracota Suave (Badges, Tags - Contraste > 7:1) */
     --primary-color-transparent: rgba(233, 196, 106, 0.12);
-    --text-color: #F5EFE6; /* Creme Claro / Areia do Deserto (Contraste > 14:1) */
-    --text-color-lighten: #CBBFB4; /* Areia de Duna Suave (Contraste > 9:1) */
-    --card-color: #19120D; /* Marrom Cacau Profundo */
-    --card-color-lighten: #261C15; /* Marrom Madeira Detalhado */
+    --text-color: #f5efe6; /* Creme Claro / Areia do Deserto (Contraste > 14:1) */
+    --text-color-lighten: #cbbfb4; /* Areia de Duna Suave (Contraste > 9:1) */
+    --card-color: #19120d; /* Marrom Cacau Profundo */
+    --card-color-lighten: #261c15; /* Marrom Madeira Detalhado */
     --card-color-transparent: rgba(25, 18, 13, 0.85);
-    --background-color: #0E0A07; /* Ébano Terroso Escuro */
+    --background-color: #0e0a07; /* Ébano Terroso Escuro */
     --title-color: rgba(245, 239, 230, 0.95);
     --subtitle-color: rgba(245, 239, 230, 0.85);
   }

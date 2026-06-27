@@ -3,6 +3,6 @@ interface Window {
   loadPagefind: () => Promise<any>;
 }
 
-declare module 'astro-pagefind' {
+declare module "astro-pagefind" {
   export {};
-} 
+}

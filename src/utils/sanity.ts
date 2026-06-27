@@ -220,7 +220,11 @@ const resolveImportedImageSrc = (src: string): string | undefined => {
   const resolved = getKnownImageSource(src);
   if (!resolved) return src;
   if (typeof resolved === "string") return resolved;
-  if (typeof resolved === "object" && "src" in resolved && typeof resolved.src === "string") {
+  if (
+    typeof resolved === "object" &&
+    "src" in resolved &&
+    typeof resolved.src === "string"
+  ) {
     return resolved.src;
   }
   return src;
@@ -268,7 +272,10 @@ export function IsSanityEnabled(): boolean {
 
 const toStringArray = (value: unknown): string[] => {
   if (!Array.isArray(value)) return [];
-  return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+  return value.filter(
+    (item): item is string =>
+      typeof item === "string" && item.trim().length > 0,
+  );
 };
 
 const escapeHtml = (value: string): string =>
@@ -279,7 +286,8 @@ const escapeHtml = (value: string): string =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-const isSafeHref = (href: string): boolean => /^(https?:|mailto:|tel:|\/)/i.test(href);
+const isSafeHref = (href: string): boolean =>
+  /^(https?:|mailto:|tel:|\/)/i.test(href);
 
 const renderPortableText = (blocks: unknown[] | undefined): string => {
   if (!Array.isArray(blocks) || blocks.length === 0) return "";
@@ -302,10 +310,14 @@ const renderPortableText = (blocks: unknown[] | undefined): string => {
           const imageUrl = value?.asset?.url;
           if (typeof imageUrl !== "string" || !imageUrl) return "";
 
-          const altCandidate = value?.alt || value?.asset?.altText || "Imagem do artigo";
-          const caption = typeof value?.caption === "string" ? value.caption : "";
+          const altCandidate =
+            value?.alt || value?.asset?.altText || "Imagem do artigo";
+          const caption =
+            typeof value?.caption === "string" ? value.caption : "";
 
-          const figcaption = caption ? `<figcaption>${escapeHtml(caption)}</figcaption>` : "";
+          const figcaption = caption
+            ? `<figcaption>${escapeHtml(caption)}</figcaption>`
+            : "";
           return `<figure><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(
             String(altCandidate),
           )}" loading="lazy" decoding="async" />${figcaption}</figure>`;
@@ -320,22 +332,33 @@ const renderPortableText = (blocks: unknown[] | undefined): string => {
           if (typeof offerTitle !== "string" || !offerTitle) return "";
 
           const offerSlug =
-            typeof embeddedOffer?.slug === "string" ? embeddedOffer.slug.trim() : "";
+            typeof embeddedOffer?.slug === "string"
+              ? embeddedOffer.slug.trim()
+              : "";
           const finalUrl =
-            typeof embeddedOffer?.finalUrl === "string" ? embeddedOffer.finalUrl.trim() : "";
-          const href = offerSlug ? `/go/${encodeURIComponent(offerSlug)}` : finalUrl;
+            typeof embeddedOffer?.finalUrl === "string"
+              ? embeddedOffer.finalUrl.trim()
+              : "";
+          const href = offerSlug
+            ? `/go/${encodeURIComponent(offerSlug)}`
+            : finalUrl;
           if (!href) return "";
 
           const relParts = ["nofollow", "sponsored", "noopener", "noreferrer"];
           const rel = relParts.join(" ");
           const programName =
-            typeof embeddedOffer?.programName === "string" ? embeddedOffer.programName.trim() : "";
+            typeof embeddedOffer?.programName === "string"
+              ? embeddedOffer.programName.trim()
+              : "";
           const ctaText =
-            typeof embeddedOffer?.ctaText === "string" && embeddedOffer.ctaText.trim()
+            typeof embeddedOffer?.ctaText === "string" &&
+            embeddedOffer.ctaText.trim()
               ? embeddedOffer.ctaText.trim()
               : "Ver oferta";
           const imageUrl =
-            typeof embeddedOffer?.image === "string" ? embeddedOffer.image : undefined;
+            typeof embeddedOffer?.image === "string"
+              ? embeddedOffer.image
+              : undefined;
 
           const imageHtml = imageUrl
             ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(
@@ -398,13 +421,17 @@ export async function GetSanityPosts(
     return rawPosts
       .filter((post) => post.slug && post.title && post.published)
       .map((post) => {
-        const fallbackCategorySlug = post.category ? NormalizeSlug(post.category) : undefined;
+        const fallbackCategorySlug = post.category
+          ? NormalizeSlug(post.category)
+          : undefined;
         const tags = toStringArray(post.tags);
         const tagSlugsRaw = toStringArray(post.tagSlugs);
         const tagSlugs =
           tagSlugsRaw.length === tags.length
             ? tagSlugsRaw
-            : tags.map((tag, index) => tagSlugsRaw[index] || NormalizeSlug(tag));
+            : tags.map(
+                (tag, index) => tagSlugsRaw[index] || NormalizeSlug(tag),
+              );
 
         return {
           id: post.slug as string,
@@ -432,12 +459,17 @@ export async function GetSanityPosts(
           licenseName: post.licenseName,
           licenseUrl: post.licenseUrl,
           contentHtml: post.legacyMdx?.trim()
-            ? renderMdxContentToHtml(post.legacyMdx, { resolveImageSrc: resolveImportedImageSrc })
+            ? renderMdxContentToHtml(post.legacyMdx, {
+                resolveImageSrc: resolveImportedImageSrc,
+              })
             : renderPortableText(post.body),
         };
       });
   } catch (error) {
-    console.error("Erro ao buscar posts no Sanity. Voltando para conteúdo local.", error);
+    console.error(
+      "Erro ao buscar posts no Sanity. Voltando para conteúdo local.",
+      error,
+    );
     return [];
   }
 }
@@ -451,9 +483,12 @@ export async function GetSanityOffers(
   const client = createSanityClient(false);
 
   try {
-    const rawOffers = await client.fetch<RawSanityOffer[]>(SANITY_OFFERS_QUERY, {
-      includeInactive,
-    });
+    const rawOffers = await client.fetch<RawSanityOffer[]>(
+      SANITY_OFFERS_QUERY,
+      {
+        includeInactive,
+      },
+    );
 
     return rawOffers
       .filter((offer) => offer.slug && offer.title && offer.finalUrl)
@@ -468,7 +503,8 @@ export async function GetSanityOffers(
         image: offer.image,
         destinationName: offer.destinationName,
         destinationSlug: offer.destinationSlug,
-        priceFrom: typeof offer.priceFrom === "number" ? offer.priceFrom : undefined,
+        priceFrom:
+          typeof offer.priceFrom === "number" ? offer.priceFrom : undefined,
         currency: offer.currency || "BRL",
         tags: toStringArray(offer.tags),
         isFeatured: offer.isFeatured === true,
@@ -493,9 +529,12 @@ export async function GetSanityAdSlots(
   const client = createSanityClient(false);
 
   try {
-    const rawSlots = await client.fetch<RawSanityAdSlot[]>(SANITY_AD_SLOTS_QUERY, {
-      placement,
-    });
+    const rawSlots = await client.fetch<RawSanityAdSlot[]>(
+      SANITY_AD_SLOTS_QUERY,
+      {
+        placement,
+      },
+    );
 
     return rawSlots
       .filter((slot) => slot.name && slot.slug && slot.placement === placement)

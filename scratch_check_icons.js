@@ -1,11 +1,16 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
 const checkIcon = (pkg, name) => {
   try {
-    const filePath = path.join(process.cwd(), 'node_modules', `@iconify-json/${pkg}`, 'icons.json');
+    const filePath = path.join(
+      process.cwd(),
+      "node_modules",
+      `@iconify-json/${pkg}`,
+      "icons.json",
+    );
     if (fs.existsSync(filePath)) {
-      const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
       const icon = data.icons[name];
       if (icon) {
         console.log(`Icon ${pkg}:${name}:`);
@@ -21,6 +26,6 @@ const checkIcon = (pkg, name) => {
   }
 };
 
-checkIcon('cuida', 'calendar-outline');
-checkIcon('dashicons', 'category');
-checkIcon('mdi', 'tag-outline');
+checkIcon("cuida", "calendar-outline");
+checkIcon("dashicons", "category");
+checkIcon("mdi", "tag-outline");

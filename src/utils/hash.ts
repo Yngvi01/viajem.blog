@@ -66,7 +66,7 @@ export function IdToSlug(slug: string): string {
 /**
  * Versão assíncrona de IdToSlug que espera o carregamento de CryptoJS.
  * Ideal para uso em contextos não-críticos onde a espera é aceitável.
- * 
+ *
  * @param slug - O slug de entrada.
  * @returns Uma Promise com o slug hasheado ou o slug bruto.
  */

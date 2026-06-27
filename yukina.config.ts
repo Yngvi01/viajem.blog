@@ -6,11 +6,13 @@ const YukinaConfig: Configuration = {
   subTitle: "A direção para sua viagem inesquecível! ",
   brandTitle: "Guia de Viagem",
 
-  description: "A direção para sua viagem inesquecível! Dicas, roteiros e experiências para planejar sua próxima aventura.",
+  description:
+    "A direção para sua viagem inesquecível! Dicas, roteiros e experiências para planejar sua próxima aventura.",
 
   site: "https://guiadeviagem.blog",
-  
-  keywords: "viagem, turismo, dicas de viagem, roteiros de viagem, destinos turísticos, guia de viagem, melhores lugares para visitar, planejamento de viagem, férias, hospedagem, passeios, aventura, Brasil, internacional",
+
+  keywords:
+    "viagem, turismo, dicas de viagem, roteiros de viagem, destinos turísticos, guia de viagem, melhores lugares para visitar, planejamento de viagem, férias, hospedagem, passeios, aventura, Brasil, internacional",
 
   locale: "pt-BR", // set for website language and date format
 
@@ -50,31 +52,31 @@ const YukinaConfig: Configuration = {
       url: "/images/banner/banner1.png",
       alt: "Ilustração em estilo low poly do Rio de Janeiro, com o Pão de Açúcar e a Baía de Guanabara sob um pôr do sol caloroso em tons dourados e alaranjados",
       width: 1920,
-      height: 1080
+      height: 1080,
     },
     {
       url: "/images/banner/banner2.png",
       alt: "Ilustração em estilo low poly das Cataratas do Iguaçu, destacando as quedas d'água majestosas e um suave arco-íris sob a luz do entardecer",
       width: 1920,
-      height: 1080
+      height: 1080,
     },
     {
       url: "/images/banner/banner3.png",
       alt: "Ilustração em estilo low poly dos Lençóis Maranhenses, retratando as dunas de areia branca e lagoas azul-turquesa sob o brilho de um pôr do sol aconchegante",
       width: 1920,
-      height: 1080
+      height: 1080,
     },
     {
       url: "/images/banner/banner4.png",
       alt: "Ilustração em estilo low poly da Chapada Diamantina, destacando o Morro do Pai Inácio banhado pela luz dourada e rústica do entardecer",
       width: 1920,
-      height: 1080
+      height: 1080,
     },
     {
       url: "/images/banner/banner5.png",
       alt: "Ilustração em estilo low poly do centro histórico de Ouro Preto, mostrando ladeiras e igrejas coloniais barrocas iluminadas pelo brilho acolhedor de fim de tarde",
       width: 1920,
-      height: 1080
+      height: 1080,
     },
   ],
 

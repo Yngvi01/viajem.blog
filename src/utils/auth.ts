@@ -5,7 +5,8 @@
 
 import { createHmac, timingSafeEqual, randomBytes } from "crypto";
 
-const SESSION_SECRET = import.meta.env.SESSION_SECRET ?? "dev-secret-inseguro-troque-em-producao";
+const SESSION_SECRET =
+  import.meta.env.SESSION_SECRET ?? "dev-secret-inseguro-troque-em-producao";
 const ADMIN_USERNAME = import.meta.env.ADMIN_USERNAME ?? "";
 const ADMIN_PASSWORD_HASH = import.meta.env.ADMIN_PASSWORD_HASH ?? "";
 
@@ -21,20 +22,27 @@ const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
  *
  * Para usar bcrypt real: instale `bcryptjs` e substitua esta função.
  */
-export async function verifyCredentials(username: string, password: string): Promise<boolean> {
+export async function verifyCredentials(
+  username: string,
+  password: string,
+): Promise<boolean> {
   if (!ADMIN_USERNAME || !ADMIN_PASSWORD_HASH) return false;
 
   const usernameMatch = username === ADMIN_USERNAME;
 
   // Gera HMAC da senha informada com o SESSION_SECRET como chave
-  const inputHash = createHmac("sha256", SESSION_SECRET).update(password).digest("hex");
+  const inputHash = createHmac("sha256", SESSION_SECRET)
+    .update(password)
+    .digest("hex");
   const storedHash = ADMIN_PASSWORD_HASH;
 
   // Comparação segura contra timing attacks
   try {
     const inputBuf = Buffer.from(inputHash, "hex");
     const storedBuf = Buffer.from(storedHash, "hex");
-    const passwordMatch = inputBuf.length === storedBuf.length && timingSafeEqual(inputBuf, storedBuf);
+    const passwordMatch =
+      inputBuf.length === storedBuf.length &&
+      timingSafeEqual(inputBuf, storedBuf);
     return usernameMatch && passwordMatch;
   } catch {
     return false;
@@ -53,7 +61,9 @@ export function createSessionToken(): string {
   });
 
   const encoded = Buffer.from(payload).toString("base64url");
-  const sig = createHmac("sha256", SESSION_SECRET).update(encoded).digest("base64url");
+  const sig = createHmac("sha256", SESSION_SECRET)
+    .update(encoded)
+    .digest("base64url");
   return `${encoded}.${sig}`;
 }
 
@@ -66,13 +76,21 @@ export function validateSessionToken(token: string): boolean {
     if (!encoded || !sig) return false;
 
     // Verifica assinatura
-    const expectedSig = createHmac("sha256", SESSION_SECRET).update(encoded).digest("base64url");
+    const expectedSig = createHmac("sha256", SESSION_SECRET)
+      .update(encoded)
+      .digest("base64url");
     const sigBuf = Buffer.from(sig);
     const expectedBuf = Buffer.from(expectedSig);
-    if (sigBuf.length !== expectedBuf.length || !timingSafeEqual(sigBuf, expectedBuf)) return false;
+    if (
+      sigBuf.length !== expectedBuf.length ||
+      !timingSafeEqual(sigBuf, expectedBuf)
+    )
+      return false;
 
     // Verifica expiração
-    const payload = JSON.parse(Buffer.from(encoded, "base64url").toString("utf-8"));
+    const payload = JSON.parse(
+      Buffer.from(encoded, "base64url").toString("utf-8"),
+    );
     if (Date.now() > payload.exp) return false;
 
     return true;

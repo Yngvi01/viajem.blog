@@ -50,13 +50,21 @@ const breadcrumbs = generateBreadcrumbs(Astro.url.pathname, title);
   breadcrumbs.length > 1 && (
     <>
       <nav aria-label="Breadcrumb" class="breadcrumbs-container">
-        <ol itemscope itemtype="https://schema.org/BreadcrumbList" class="breadcrumbs">
+        <ol
+          itemscope
+          itemtype="https://schema.org/BreadcrumbList"
+          class="breadcrumbs"
+        >
           {breadcrumbs.map((crumb, index) => (
             <li
               itemprop="itemListElement"
               itemscope
               itemtype="https://schema.org/ListItem"
-              class={index === breadcrumbs.length - 1 ? "breadcrumb-item current" : "breadcrumb-item"}
+              class={
+                index === breadcrumbs.length - 1
+                  ? "breadcrumb-item current"
+                  : "breadcrumb-item"
+              }
             >
               {index < breadcrumbs.length - 1 ? (
                 <a itemprop="item" href={crumb.url}>
@@ -66,7 +74,9 @@ const breadcrumbs = generateBreadcrumbs(Astro.url.pathname, title);
                 <span itemprop="name">{crumb.name}</span>
               )}
               <meta itemprop="position" content={`${index + 1}`} />
-              {index < breadcrumbs.length - 1 && <span class="separator"> / </span>}
+              {index < breadcrumbs.length - 1 && (
+                <span class="separator"> / </span>
+              )}
             </li>
           ))}
         </ol>
@@ -84,7 +94,7 @@ const breadcrumbs = generateBreadcrumbs(Astro.url.pathname, title);
             item: new URL(crumb.url, YukinaConfig.site).href,
           })),
         })}
-      ></script>
+      />
     </>
   )
 }
@@ -93,23 +103,23 @@ const breadcrumbs = generateBreadcrumbs(Astro.url.pathname, title);
   .breadcrumbs-container {
     @apply mb-4 mt-2 px-2;
   }
-  
+
   .breadcrumbs {
     @apply flex flex-wrap items-center text-sm;
   }
-  
+
   .breadcrumb-item {
     @apply flex items-center;
   }
-  
+
   .breadcrumb-item a {
     @apply text-[var(--primary-color)] hover:underline;
   }
-  
+
   .breadcrumb-item.current {
     @apply font-medium text-[var(--text-color)];
   }
-  
+
   .separator {
     @apply mx-2 text-[var(--text-color-lighten)];
   }

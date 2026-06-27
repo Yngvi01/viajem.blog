@@ -37,7 +37,11 @@ export const offerType = defineType({
       name: "finalUrl",
       title: "URL final afiliada",
       type: "url",
-      validation: (Rule) => Rule.required().uri({ allowRelative: false, scheme: ["http", "https"] }),
+      validation: (Rule) =>
+        Rule.required().uri({
+          allowRelative: false,
+          scheme: ["http", "https"],
+        }),
     }),
     defineField({
       name: "ctaText",

@@ -162,7 +162,8 @@ export const postType = defineType({
       title: "Paths de imagens legadas",
       type: "array",
       of: [defineArrayMember({ type: "string" })],
-      description: "Lista de caminhos antigos para facilitar migração de mídia.",
+      description:
+        "Lista de caminhos antigos para facilitar migração de mídia.",
     }),
   ],
   preview: {

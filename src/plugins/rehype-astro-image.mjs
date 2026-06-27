@@ -1,6 +1,6 @@
 /**
  * Plugin rehype para processar imagens em arquivos Astro/MDX
- * 
+ *
  * Este plugin permite o processamento de imagens em arquivos Markdown/MDX
  * para otimização e responsividade.
  */

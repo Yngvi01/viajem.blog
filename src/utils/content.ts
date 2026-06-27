@@ -79,7 +79,9 @@ async function GetSanityPostEntries(): Promise<BlogPostEntry[]> {
     data: {
       title: post.title,
       published: toDate(post.published),
-      lastModified: post.lastModified ? toDate(post.lastModified) : toDate(post.published),
+      lastModified: post.lastModified
+        ? toDate(post.lastModified)
+        : toDate(post.published),
       draft: post.draft,
       legacySlugs: post.legacySlugs,
       description: post.description,
@@ -123,7 +125,8 @@ async function GetAllPostEntries(): Promise<BlogPostEntry[]> {
 
 const SortPostsByPublishedDesc = (entries: BlogPostEntry[]): BlogPostEntry[] =>
   [...entries].sort(
-    (a, b) => toDate(b.data.published).getTime() - toDate(a.data.published).getTime(),
+    (a, b) =>
+      toDate(b.data.published).getTime() - toDate(a.data.published).getTime(),
   );
 
 export async function GetSortedPosts(): Promise<BlogPostEntry[]> {
@@ -131,7 +134,9 @@ export async function GetSortedPosts(): Promise<BlogPostEntry[]> {
   return SortPostsByPublishedDesc(allBlogPosts);
 }
 
-export async function GetPostBySlug(slug: string): Promise<BlogPostEntry | undefined> {
+export async function GetPostBySlug(
+  slug: string,
+): Promise<BlogPostEntry | undefined> {
   const allBlogPosts = await GetAllPostEntries();
   return allBlogPosts.find((post) => IdToSlug(post.id) === slug);
 }
@@ -143,7 +148,8 @@ export async function GetCategories(): Promise<Map<string, Category>> {
   for (const post of allBlogPosts) {
     if (!post.data.category) continue;
 
-    const categorySlug = post.data.categorySlug || NormalizeSlug(post.data.category);
+    const categorySlug =
+      post.data.categorySlug || NormalizeSlug(post.data.category);
 
     if (!categorias.has(categorySlug)) {
       categorias.set(categorySlug, {
@@ -154,8 +160,7 @@ export async function GetCategories(): Promise<Map<string, Category>> {
           post.data.image ||
           "/images/default-category.jpg",
         posts: [],
-        description:
-          post.data.categoryDescription || post.data.category,
+        description: post.data.categoryDescription || post.data.category,
       });
     }
 

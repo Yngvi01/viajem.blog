@@ -3,7 +3,10 @@ export const prerender = false;
 
 import AdminLayout from "../../../layouts/AdminLayout.astro";
 import MdxEditor from "../../../components/MdxEditor.svelte";
-import { sanityWriteClient, isSanityWriteEnabled } from "../../../utils/sanityAdminClient";
+import {
+  sanityWriteClient,
+  isSanityWriteEnabled,
+} from "../../../utils/sanityAdminClient";
 
 let error = "";
 const sanityOk = isSanityWriteEnabled();
@@ -11,18 +14,21 @@ const sanityOk = isSanityWriteEnabled();
 // Buscar categorias e tags existentes para exibição no formulário
 const categories = sanityOk
   ? await sanityWriteClient.fetch<{ _id: string; title: string }[]>(
-      `*[_type == "category"] | order(title asc) { _id, title }`
+      `*[_type == "category"] | order(title asc) { _id, title }`,
     )
   : [];
 
 const tags = sanityOk
   ? await sanityWriteClient.fetch<{ _id: string; title: string }[]>(
-      `*[_type == "tag"] | order(title asc) { _id, title }`
+      `*[_type == "tag"] | order(title asc) { _id, title }`,
     )
   : [];
 
 const createBodyBlocks = (body: string, fallback: string) => {
-  const paragraphs = body.split("\n\n").map((paragraph) => paragraph.trim()).filter(Boolean);
+  const paragraphs = body
+    .split("\n\n")
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
   const blocks = paragraphs.length ? paragraphs : [fallback];
 
   return blocks.map((paragraph, i) => ({
@@ -52,7 +58,10 @@ if (Astro.request.method === "POST" && sanityOk) {
       .filter(Boolean);
 
     const categoryId = String(form.get("category") ?? "").trim();
-    const selectedTagIds = form.getAll("tags").map((t) => String(t).trim()).filter(Boolean);
+    const selectedTagIds = form
+      .getAll("tags")
+      .map((t) => String(t).trim())
+      .filter(Boolean);
 
     // Helpers para slug e criação on-the-fly
     const toSlug = (text: string): string => {
@@ -71,7 +80,9 @@ if (Astro.request.method === "POST" && sanityOk) {
     let finalCategoryId = categoryId;
     const newCategory = String(form.get("new_category") ?? "").trim();
     if (newCategory) {
-      const match = categories.find((c) => c.title.toLowerCase() === newCategory.toLowerCase());
+      const match = categories.find(
+        (c) => c.title.toLowerCase() === newCategory.toLowerCase(),
+      );
       if (match) {
         finalCategoryId = match._id;
       } else {
@@ -88,9 +99,14 @@ if (Astro.request.method === "POST" && sanityOk) {
     const finalTagIds = [...selectedTagIds];
     const newTagsRaw = String(form.get("new_tags") ?? "").trim();
     if (newTagsRaw) {
-      const newTagTitles = newTagsRaw.split(",").map((t) => t.trim()).filter(Boolean);
+      const newTagTitles = newTagsRaw
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
       for (const newTagTitle of newTagTitles) {
-        const match = tags.find((t) => t.title.toLowerCase() === newTagTitle.toLowerCase());
+        const match = tags.find(
+          (t) => t.title.toLowerCase() === newTagTitle.toLowerCase(),
+        );
         if (match) {
           if (!finalTagIds.includes(match._id)) {
             finalTagIds.push(match._id);
@@ -107,13 +123,15 @@ if (Astro.request.method === "POST" && sanityOk) {
     }
 
     if (!title || !slug) throw new Error("Título e slug são obrigatórios.");
-    if (!body && !draft) throw new Error("O conteúdo do post é obrigatório para publicar.");
+    if (!body && !draft)
+      throw new Error("O conteúdo do post é obrigatório para publicar.");
     if (description && (description.length < 80 || description.length > 180)) {
       throw new Error("A descrição SEO deve ter entre 80 e 180 caracteres.");
     }
 
     const publishedDate = publishedRaw ? new Date(publishedRaw) : new Date();
-    if (Number.isNaN(publishedDate.getTime())) throw new Error("Data de publicação inválida.");
+    if (Number.isNaN(publishedDate.getTime()))
+      throw new Error("Data de publicação inválida.");
 
     // Processar upload de imagem de capa
     const coverImageFile = form.get("cover_image") as File;
@@ -122,9 +140,9 @@ if (Astro.request.method === "POST" && sanityOk) {
     if (coverImageFile && coverImageFile.size > 0) {
       const arrayBuffer = await coverImageFile.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
-      const asset = await sanityWriteClient.assets.upload('image', buffer, {
+      const asset = await sanityWriteClient.assets.upload("image", buffer, {
         filename: coverImageFile.name,
-        contentType: coverImageFile.type
+        contentType: coverImageFile.type,
       });
       coverAssetRef = asset._id;
     }
@@ -144,18 +162,24 @@ if (Astro.request.method === "POST" && sanityOk) {
       legacySlugs: [],
       legacyMdx: body,
       body: bodyBlocks,
-      category: finalCategoryId ? { _type: "reference", _ref: finalCategoryId } : undefined,
-      tags: finalTagIds.length > 0
-        ? finalTagIds.map((tagId) => ({
-            _type: "reference",
-            _ref: tagId,
-            _key: tagId,
-          }))
+      category: finalCategoryId
+        ? { _type: "reference", _ref: finalCategoryId }
         : undefined,
+      tags:
+        finalTagIds.length > 0
+          ? finalTagIds.map((tagId) => ({
+              _type: "reference",
+              _ref: tagId,
+              _key: tagId,
+            }))
+          : undefined,
     };
 
     if (coverAssetRef) {
-      const imageRef = { _type: "image", asset: { _type: "reference", _ref: coverAssetRef } };
+      const imageRef = {
+        _type: "image",
+        asset: { _type: "reference", _ref: coverAssetRef },
+      };
       postDoc.cover = imageRef;
       postDoc.image = imageRef;
       postDoc.attractionImage = imageRef;
@@ -177,7 +201,7 @@ if (Astro.request.method === "POST" && sanityOk) {
   <style>
     .form-card {
       background: #161922;
-      border: 1px solid rgba(255,255,255,0.07);
+      border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 12px;
       padding: 28px;
       max-width: 800px;
@@ -189,8 +213,12 @@ if (Astro.request.method === "POST" && sanityOk) {
       gap: 18px;
     }
 
-    .form-group { margin-bottom: 18px; }
-    .form-group.full { grid-column: 1 / -1; }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
 
     label {
       display: flex;
@@ -204,29 +232,43 @@ if (Astro.request.method === "POST" && sanityOk) {
       margin-bottom: 7px;
     }
 
-    .required { color: #f87171; }
+    .required {
+      color: #f87171;
+    }
 
-    input, textarea, select {
+    input,
+    textarea,
+    select {
       width: 100%;
       padding: 10px 13px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 8px;
       color: #e2e8f0;
       font-size: 13px;
       font-family: inherit;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition:
+        border-color 0.15s,
+        box-shadow 0.15s;
       outline: none;
     }
 
-    textarea { resize: vertical; line-height: 1.6; }
-
-    input:focus, textarea:focus, select:focus {
-      border-color: rgba(99,102,241,0.5);
-      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+    textarea {
+      resize: vertical;
+      line-height: 1.6;
     }
 
-    input::placeholder, textarea::placeholder { color: #475569; }
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: rgba(99, 102, 241, 0.5);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #475569;
+    }
 
     .char-count {
       font-size: 11px;
@@ -235,8 +277,12 @@ if (Astro.request.method === "POST" && sanityOk) {
       margin-top: 4px;
     }
 
-    .char-count.warn { color: #fbbf24; }
-    .char-count.ok   { color: #4ade80; }
+    .char-count.warn {
+      color: #fbbf24;
+    }
+    .char-count.ok {
+      color: #4ade80;
+    }
 
     .switch-row {
       display: flex;
@@ -251,28 +297,38 @@ if (Astro.request.method === "POST" && sanityOk) {
       flex-shrink: 0;
     }
 
-    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
 
     .switch-slider {
       position: absolute;
       inset: 0;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 22px;
       cursor: pointer;
       transition: background 0.2s;
     }
 
     .switch-slider::before {
-      content: '';
+      content: "";
       position: absolute;
-      width: 16px; height: 16px;
-      left: 3px; top: 3px;
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      top: 3px;
       background: #94a3b8;
       border-radius: 50%;
-      transition: transform 0.2s, background 0.2s;
+      transition:
+        transform 0.2s,
+        background 0.2s;
     }
 
-    .switch input:checked + .switch-slider { background: rgba(99,102,241,0.5); }
+    .switch input:checked + .switch-slider {
+      background: rgba(99, 102, 241, 0.5);
+    }
     .switch input:checked + .switch-slider::before {
       transform: translateX(18px);
       background: #818cf8;
@@ -296,16 +352,21 @@ if (Astro.request.method === "POST" && sanityOk) {
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
-      transition: opacity 0.15s, transform 0.1s;
-      box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+      transition:
+        opacity 0.15s,
+        transform 0.1s;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
     }
 
-    .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-save:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
 
     .btn-cancel {
       padding: 10px 20px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 9px;
       color: #94a3b8;
       font-size: 13px;
@@ -317,7 +378,10 @@ if (Astro.request.method === "POST" && sanityOk) {
       align-items: center;
     }
 
-    .btn-cancel:hover { background: rgba(255,255,255,0.08); color: #e2e8f0; }
+    .btn-cancel:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+    }
 
     .alert {
       padding: 13px 16px;
@@ -330,18 +394,22 @@ if (Astro.request.method === "POST" && sanityOk) {
     }
 
     .alert-error {
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.25);
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.25);
       color: #f87171;
     }
 
     .alert-warning {
-      background: rgba(245,158,11,0.1);
-      border: 1px solid rgba(245,158,11,0.25);
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.25);
       color: #fbbf24;
     }
 
-    .hint { font-size: 11px; color: #475569; margin-top: 5px; }
+    .hint {
+      font-size: 11px;
+      color: #475569;
+      margin-top: 5px;
+    }
 
     select option {
       background: #161922;
@@ -353,8 +421,8 @@ if (Astro.request.method === "POST" && sanityOk) {
       flex-wrap: wrap;
       gap: 10px;
       padding: 14px;
-      background: rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 10px;
       max-height: 160px;
       overflow-y: auto;
@@ -365,19 +433,22 @@ if (Astro.request.method === "POST" && sanityOk) {
       align-items: center;
       gap: 8px;
       padding: 6px 12px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 20px;
       cursor: pointer;
       font-size: 13px;
       color: #cbd5e1;
       user-select: none;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      transition:
+        background 0.15s,
+        border-color 0.15s,
+        color 0.15s;
     }
 
     .tag-checkbox-item:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.15);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
       color: #f1f5f9;
     }
 
@@ -395,7 +466,9 @@ if (Astro.request.method === "POST" && sanityOk) {
       border: 1.5px solid #64748b;
       border-radius: 3px;
       position: relative;
-      transition: background 0.15s, border-color 0.15s;
+      transition:
+        background 0.15s,
+        border-color 0.15s;
       flex-shrink: 0;
     }
 
@@ -429,8 +502,12 @@ if (Astro.request.method === "POST" && sanityOk) {
     }
 
     @media (max-width: 640px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .form-group.full { grid-column: 1; }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-group.full {
+        grid-column: 1;
+      }
     }
 
     /* Estilos para Upload de Markdown */
@@ -441,7 +518,9 @@ if (Astro.request.method === "POST" && sanityOk) {
       padding: 24px;
       text-align: center;
       margin-bottom: 28px;
-      transition: border-color 0.15s, background-color 0.15s;
+      transition:
+        border-color 0.15s,
+        background-color 0.15s;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -449,7 +528,8 @@ if (Astro.request.method === "POST" && sanityOk) {
       gap: 12px;
     }
 
-    .markdown-upload-zone:hover, .markdown-upload-zone.dragover {
+    .markdown-upload-zone:hover,
+    .markdown-upload-zone.dragover {
       border-color: rgba(99, 102, 241, 0.6);
       background: rgba(99, 102, 241, 0.08);
     }
@@ -495,7 +575,10 @@ if (Astro.request.method === "POST" && sanityOk) {
       font-size: 12px;
       font-weight: 500;
       text-decoration: none;
-      transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+      transition:
+        background-color 0.15s,
+        color 0.15s,
+        border-color 0.15s;
     }
 
     .btn-download-example:hover {
@@ -530,7 +613,9 @@ if (Astro.request.method === "POST" && sanityOk) {
       border-radius: 10px;
       padding: 22px;
       text-align: center;
-      transition: border-color 0.15s, background-color 0.15s;
+      transition:
+        border-color 0.15s,
+        background-color 0.15s;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -538,7 +623,8 @@ if (Astro.request.method === "POST" && sanityOk) {
       gap: 10px;
     }
 
-    .image-dropzone:hover, .image-dropzone.dragover {
+    .image-dropzone:hover,
+    .image-dropzone.dragover {
       border-color: rgba(99, 102, 241, 0.4);
       background: rgba(99, 102, 241, 0.04);
     }
@@ -593,7 +679,9 @@ if (Astro.request.method === "POST" && sanityOk) {
       font-size: 12px;
       font-weight: 500;
       cursor: pointer;
-      transition: background 0.15s, color 0.15s;
+      transition:
+        background 0.15s,
+        color 0.15s;
     }
 
     .btn-remove-image:hover {
@@ -602,29 +690,76 @@ if (Astro.request.method === "POST" && sanityOk) {
     }
   </style>
 
-  {!sanityOk && (
-    <div class="alert alert-warning">
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-      </svg>
-      <span>Sanity não configurado. Preencha as variáveis de ambiente antes de criar posts.</span>
-    </div>
-  )}
+  {
+    !sanityOk && (
+      <div class="alert alert-warning">
+        <svg
+          width="16"
+          height="16"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          style="flex-shrink:0;margin-top:1px"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          />
+        </svg>
+        <span>
+          Sanity não configurado. Preencha as variáveis de ambiente antes de
+          criar posts.
+        </span>
+      </div>
+    )
+  }
 
-  {error && (
-    <div class="alert alert-error">
-      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-      </svg>
-      {error}
-    </div>
-  )}
+  {
+    error && (
+      <div class="alert alert-error">
+        <svg
+          width="16"
+          height="16"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          style="flex-shrink:0;margin-top:1px"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        {error}
+      </div>
+    )
+  }
 
-  <form method="POST" class="form-card" id="novo-post-form" enctype="multipart/form-data">
+  <form
+    method="POST"
+    class="form-card"
+    id="novo-post-form"
+    enctype="multipart/form-data"
+  >
     <!-- Banner de notificação de upload bem-sucedido -->
     <div id="import-notification" class="notification-banner">
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      <svg
+        width="18"
+        height="18"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2.5"
+        style="flex-shrink:0;"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
       </svg>
       <span id="notification-message"></span>
     </div>
@@ -632,19 +767,52 @@ if (Astro.request.method === "POST" && sanityOk) {
     <!-- Dropzone de Upload de Markdown -->
     <div class="markdown-upload-zone" id="upload-zone">
       <div class="upload-inner">
-        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: #818cf8; opacity: 0.85;">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+        <svg
+          width="28"
+          height="28"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+          style="color: #818cf8; opacity: 0.85;"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+          ></path>
         </svg>
         <div class="upload-text">
           <strong>Importar Post via arquivo Markdown (.md)</strong>
           <span>Arraste e solte o arquivo aqui ou clique para selecionar</span>
         </div>
-        <input type="file" id="markdown-file" accept=".md" style="display: none;" />
+        <input
+          type="file"
+          id="markdown-file"
+          accept=".md"
+          style="display: none;"
+        />
       </div>
       <div class="upload-actions">
-        <a href="/admin/exemplo-post.md" download="exemplo-post.md" class="btn-download-example" id="btn-download-example">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+        <a
+          href="/admin/exemplo-post.md"
+          download="exemplo-post.md"
+          class="btn-download-example"
+          id="btn-download-example"
+        >
+          <svg
+            width="12"
+            height="12"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+            ></path>
           </svg>
           Baixar Post de Exemplo (.md)
         </a>
@@ -652,7 +820,6 @@ if (Astro.request.method === "POST" && sanityOk) {
     </div>
 
     <div class="form-grid">
-
       <div class="form-group full">
         <label for="novo-title">Título <span class="required">*</span></label>
         <input
@@ -665,7 +832,8 @@ if (Astro.request.method === "POST" && sanityOk) {
       </div>
 
       <div class="form-group">
-        <label for="novo-slug">Slug (URL) <span class="required">*</span></label>
+        <label for="novo-slug">Slug (URL) <span class="required">*</span></label
+        >
         <input
           id="novo-slug"
           type="text"
@@ -673,53 +841,90 @@ if (Astro.request.method === "POST" && sanityOk) {
           placeholder="ex: destinos-incriveis-brasil-2025"
           required
         />
-        <div class="hint">Gerado automaticamente a partir do título. Minúsculas e hífens.</div>
+        <div class="hint">
+          Gerado automaticamente a partir do título. Minúsculas e hífens.
+        </div>
       </div>
 
       <div class="form-group">
         <label for="novo-published">Data de Publicação</label>
-        <input
-          id="novo-published"
-          type="datetime-local"
-          name="published"
-        />
+        <input id="novo-published" type="datetime-local" name="published" />
       </div>
 
       <!-- Campo de Upload de Imagem de Capa -->
       <div class="form-group full">
         <label>Imagem de Capa / Card / Abertura</label>
         <div class="image-upload-wrapper">
-          <div class="image-preview-box" id="image-preview-box" style="display: none;">
+          <div
+            class="image-preview-box"
+            id="image-preview-box"
+            style="display: none;"
+          >
             <img id="image-preview" src="" alt="Prévia da imagem de capa" />
-            <button type="button" class="btn-remove-image" id="btn-remove-image">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            <button
+              type="button"
+              class="btn-remove-image"
+              id="btn-remove-image"
+            >
+              <svg
+                width="14"
+                height="14"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"></path>
               </svg>
               Remover Imagem
             </button>
           </div>
           <div class="image-dropzone" id="image-dropzone">
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="color: #818cf8; opacity: 0.85;">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            <svg
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+              style="color: #818cf8; opacity: 0.85;"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              ></path>
             </svg>
             <div class="dropzone-text">
               <strong>Selecionar Imagem de Capa</strong>
-              <span>Arraste e solte ou clique para navegar (PNG, JPG, WEBP)</span>
+              <span
+                >Arraste e solte ou clique para navegar (PNG, JPG, WEBP)</span
+              >
             </div>
-            <input type="file" id="cover-image-input" name="cover_image" accept="image/*" style="display: none;" />
+            <input
+              type="file"
+              id="cover-image-input"
+              name="cover_image"
+              accept="image/*"
+              style="display: none;"
+            />
           </div>
         </div>
       </div>
 
       <div class="form-group full">
-        <label for="novo-description">Descrição SEO <span class="required">*</span></label>
+        <label for="novo-description"
+          >Descrição SEO <span class="required">*</span></label
+        >
         <textarea
           id="novo-description"
           name="description"
           rows="3"
           placeholder="Descrição para mecanismos de busca (80–180 caracteres)"
-          maxlength="180"
-        ></textarea>
+          maxlength="180"></textarea>
         <div class="char-count" id="desc-count">0 / 180</div>
       </div>
 
@@ -729,8 +934,7 @@ if (Astro.request.method === "POST" && sanityOk) {
           id="novo-excerpt"
           name="excerpt"
           rows="3"
-          placeholder="Resumo exibido nos cards do blog"
-        ></textarea>
+          placeholder="Resumo exibido nos cards do blog"></textarea>
       </div>
 
       <div class="form-group">
@@ -747,12 +951,13 @@ if (Astro.request.method === "POST" && sanityOk) {
         <label for="novo-category">Categoria</label>
         <select id="novo-category" name="category">
           <option value="">Selecione uma categoria...</option>
-          {categories.map((c) => (
-            <option value={c._id}>{c.title}</option>
-          ))}
+          {categories.map((c) => <option value={c._id}>{c.title}</option>)}
         </select>
         <div style="margin-top: 10px;">
-          <span style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 5px;">Ou crie uma nova categoria:</span>
+          <span
+            style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 5px;"
+            >Ou crie uma nova categoria:</span
+          >
           <input type="text" name="new_category" placeholder="Ex: Ecoturismo" />
         </div>
       </div>
@@ -760,36 +965,65 @@ if (Astro.request.method === "POST" && sanityOk) {
       <div class="form-group full">
         <label>Tags</label>
         <div class="tags-checkbox-container">
-          {tags.length === 0 ? (
-            <span class="no-tags-text">Nenhuma tag cadastrada.</span>
-          ) : (
-            tags.map((t) => (
-              <label class="tag-checkbox-item">
-                <input type="checkbox" name="tags" value={t._id} />
-                <span class="tag-checkbox-box"></span>
-                <span class="tag-label-text">{t.title}</span>
-              </label>
-            ))
-          )}
+          {
+            tags.length === 0 ? (
+              <span class="no-tags-text">Nenhuma tag cadastrada.</span>
+            ) : (
+              tags.map((t) => (
+                <label class="tag-checkbox-item">
+                  <input type="checkbox" name="tags" value={t._id} />
+                  <span class="tag-checkbox-box" />
+                  <span class="tag-label-text">{t.title}</span>
+                </label>
+              ))
+            )
+          }
         </div>
         <div style="margin-top: 12px;">
-          <span style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 5px;">Ou adicione novas tags (separadas por vírgula):</span>
-          <input type="text" name="new_tags" placeholder="Ex: aventura, trilhas, natureza" />
+          <span
+            style="font-size: 11px; color: #64748b; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 5px;"
+            >Ou adicione novas tags (separadas por vírgula):</span
+          >
+          <input
+            type="text"
+            name="new_tags"
+            placeholder="Ex: aventura, trilhas, natureza"
+          />
         </div>
       </div>
 
       <div class="form-group full">
-        <label for="novo-body">Conteúdo do Post <span class="required">*</span></label>
-        <MdxEditor client:load name="body" value="" placeholder="Escreva seu conteúdo em Markdown..." rows={16} />
+        <label for="novo-body"
+          >Conteúdo do Post <span class="required">*</span></label
+        >
+        <MdxEditor
+          client:load
+          name="body"
+          value=""
+          placeholder="Escreva seu conteúdo em Markdown..."
+          rows={16}
+        />
       </div>
-
     </div>
 
     <div class="actions-row">
-      <button type="submit" name="status" value="published" class="btn-save" id="novo-post-submit" disabled={!sanityOk}>
+      <button
+        type="submit"
+        name="status"
+        value="published"
+        class="btn-save"
+        id="novo-post-submit"
+        disabled={!sanityOk}
+      >
         Publicar no Blog
       </button>
-      <button type="submit" name="status" value="draft" class="btn-cancel" disabled={!sanityOk}>
+      <button
+        type="submit"
+        name="status"
+        value="draft"
+        class="btn-cancel"
+        disabled={!sanityOk}
+      >
         Salvar Rascunho
       </button>
       <a href="/admin" class="btn-cancel">Cancelar</a>
@@ -798,44 +1032,52 @@ if (Astro.request.method === "POST" && sanityOk) {
 
   <script>
     // Auto-gerar slug a partir do título
-    const titleInput = document.getElementById('novo-title') as HTMLInputElement;
-    const slugInput = document.getElementById('novo-slug') as HTMLInputElement;
+    const titleInput = document.getElementById(
+      "novo-title",
+    ) as HTMLInputElement;
+    const slugInput = document.getElementById("novo-slug") as HTMLInputElement;
     let slugEdited = false;
 
     function toSlug(text: string): string {
       return text
         .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/[^a-z0-9\s-]/g, '')
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s-]/g, "")
         .trim()
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
         .slice(0, 120);
     }
 
-    titleInput?.addEventListener('input', () => {
+    titleInput?.addEventListener("input", () => {
       if (!slugEdited) slugInput.value = toSlug(titleInput.value);
     });
 
-    slugInput?.addEventListener('input', () => {
+    slugInput?.addEventListener("input", () => {
       slugEdited = slugInput.value.length > 0;
     });
 
     // Contador de caracteres da descrição
-    const descTextarea = document.getElementById('novo-description') as HTMLTextAreaElement;
-    const descCount = document.getElementById('desc-count');
+    const descTextarea = document.getElementById(
+      "novo-description",
+    ) as HTMLTextAreaElement;
+    const descCount = document.getElementById("desc-count");
 
-    descTextarea?.addEventListener('input', () => {
+    descTextarea?.addEventListener("input", () => {
       const len = descTextarea.value.length;
       if (descCount) {
         descCount.textContent = `${len} / 180`;
-        descCount.className = 'char-count' + (len >= 80 && len <= 180 ? ' ok' : len > 0 ? ' warn' : '');
+        descCount.className =
+          "char-count" +
+          (len >= 80 && len <= 180 ? " ok" : len > 0 ? " warn" : "");
       }
     });
 
     // Definir data atual no campo published
-    const publishedInput = document.getElementById('novo-published') as HTMLInputElement;
+    const publishedInput = document.getElementById(
+      "novo-published",
+    ) as HTMLInputElement;
     if (publishedInput && !publishedInput.value) {
       const now = new Date();
       now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -843,40 +1085,42 @@ if (Astro.request.method === "POST" && sanityOk) {
     }
 
     // ── Lógica de Upload e Parse de Markdown ────────────────────────
-    const uploadZone = document.getElementById('upload-zone');
-    const fileInput = document.getElementById('markdown-file') as HTMLInputElement;
-    const downloadExampleBtn = document.getElementById('btn-download-example');
-    const notificationBanner = document.getElementById('import-notification');
-    const notificationMessage = document.getElementById('notification-message');
+    const uploadZone = document.getElementById("upload-zone");
+    const fileInput = document.getElementById(
+      "markdown-file",
+    ) as HTMLInputElement;
+    const downloadExampleBtn = document.getElementById("btn-download-example");
+    const notificationBanner = document.getElementById("import-notification");
+    const notificationMessage = document.getElementById("notification-message");
 
     // Impedir que o clique no botão de exemplo dispare a seleção de arquivo
-    downloadExampleBtn?.addEventListener('click', (e) => {
+    downloadExampleBtn?.addEventListener("click", (e) => {
       e.stopPropagation();
     });
 
-    uploadZone?.addEventListener('click', () => {
+    uploadZone?.addEventListener("click", () => {
       fileInput?.click();
     });
 
-    uploadZone?.addEventListener('dragover', (e) => {
+    uploadZone?.addEventListener("dragover", (e) => {
       e.preventDefault();
-      uploadZone.classList.add('dragover');
+      uploadZone.classList.add("dragover");
     });
 
-    uploadZone?.addEventListener('dragleave', () => {
-      uploadZone.classList.remove('dragover');
+    uploadZone?.addEventListener("dragleave", () => {
+      uploadZone.classList.remove("dragover");
     });
 
-    uploadZone?.addEventListener('drop', (e) => {
+    uploadZone?.addEventListener("drop", (e) => {
       e.preventDefault();
-      uploadZone.classList.remove('dragover');
+      uploadZone.classList.remove("dragover");
       const files = e.dataTransfer?.files;
       if (files && files.length > 0) {
         handleMarkdownFile(files[0]);
       }
     });
 
-    fileInput?.addEventListener('change', (e) => {
+    fileInput?.addEventListener("change", (e) => {
       const files = (e.target as HTMLInputElement).files;
       if (files && files.length > 0) {
         handleMarkdownFile(files[0]);
@@ -886,24 +1130,27 @@ if (Astro.request.method === "POST" && sanityOk) {
     function showNotification(message: string) {
       if (notificationBanner && notificationMessage) {
         notificationMessage.textContent = message;
-        notificationBanner.style.display = 'flex';
-        
+        notificationBanner.style.display = "flex";
+
         // Rolagem suave até a notificação
-        notificationBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        notificationBanner.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
 
         setTimeout(() => {
-          notificationBanner.style.opacity = '0';
+          notificationBanner.style.opacity = "0";
           setTimeout(() => {
-            notificationBanner.style.display = 'none';
-            notificationBanner.style.opacity = '1';
+            notificationBanner.style.display = "none";
+            notificationBanner.style.opacity = "1";
           }, 300);
         }, 5000);
       }
     }
 
     function handleMarkdownFile(file: File) {
-      if (!file.name.endsWith('.md')) {
-        alert('Por favor, selecione apenas arquivos Markdown (.md)');
+      if (!file.name.endsWith(".md")) {
+        alert("Por favor, selecione apenas arquivos Markdown (.md)");
         return;
       }
 
@@ -914,7 +1161,7 @@ if (Astro.request.method === "POST" && sanityOk) {
 
         // Expressão regular para extrair Frontmatter (--- ... ---) e Corpo (body)
         const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
-        let frontmatterText = '';
+        let frontmatterText = "";
         let body = text;
 
         if (match) {
@@ -925,20 +1172,23 @@ if (Astro.request.method === "POST" && sanityOk) {
         // Parse simples do Frontmatter (YAML-like)
         const frontmatter: Record<string, any> = {};
         if (frontmatterText) {
-          const lines = frontmatterText.split('\n');
+          const lines = frontmatterText.split("\n");
           lines.forEach((line) => {
-            const colonIdx = line.indexOf(':');
+            const colonIdx = line.indexOf(":");
             if (colonIdx !== -1) {
               const key = line.substring(0, colonIdx).trim();
               let val = line.substring(colonIdx + 1).trim();
 
               // Remover aspas simples ou duplas ao redor do valor
-              if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+              if (
+                (val.startsWith('"') && val.endsWith('"')) ||
+                (val.startsWith("'") && val.endsWith("'"))
+              ) {
                 val = val.substring(1, val.length - 1);
               }
 
-              if (val === 'true') frontmatter[key] = true;
-              else if (val === 'false') frontmatter[key] = false;
+              if (val === "true") frontmatter[key] = true;
+              else if (val === "false") frontmatter[key] = false;
               else frontmatter[key] = val;
             }
           });
@@ -947,7 +1197,7 @@ if (Astro.request.method === "POST" && sanityOk) {
         // 1. Título
         if (frontmatter.title) {
           titleInput.value = frontmatter.title;
-          titleInput.dispatchEvent(new Event('input'));
+          titleInput.dispatchEvent(new Event("input"));
         }
 
         // 2. Slug
@@ -959,48 +1209,62 @@ if (Astro.request.method === "POST" && sanityOk) {
         // 3. Descrição SEO
         if (frontmatter.description) {
           descTextarea.value = frontmatter.description;
-          descTextarea.dispatchEvent(new Event('input'));
+          descTextarea.dispatchEvent(new Event("input"));
         }
 
         // 4. Resumo (Excerpt)
         if (frontmatter.excerpt) {
-          const excerptTextarea = document.getElementById('novo-excerpt') as HTMLTextAreaElement;
+          const excerptTextarea = document.getElementById(
+            "novo-excerpt",
+          ) as HTMLTextAreaElement;
           if (excerptTextarea) excerptTextarea.value = frontmatter.excerpt;
         }
 
         // 5. Palavras-chave
         if (frontmatter.keywords) {
-          const keywordsInput = document.getElementById('novo-keywords') as HTMLInputElement;
+          const keywordsInput = document.getElementById(
+            "novo-keywords",
+          ) as HTMLInputElement;
           if (keywordsInput) keywordsInput.value = frontmatter.keywords;
         }
 
         // 6. Data de Publicação (Formatar para datetime-local)
         if (frontmatter.published) {
-          const pubInput = document.getElementById('novo-published') as HTMLInputElement;
+          const pubInput = document.getElementById(
+            "novo-published",
+          ) as HTMLInputElement;
           if (pubInput) {
             try {
               const d = new Date(frontmatter.published);
               if (!isNaN(d.getTime())) {
                 const tzOffset = d.getTimezoneOffset() * 60000;
-                const localISODate = new Date(d.getTime() - tzOffset).toISOString().slice(0, 16);
+                const localISODate = new Date(d.getTime() - tzOffset)
+                  .toISOString()
+                  .slice(0, 16);
                 pubInput.value = localISODate;
               }
             } catch (err) {
-              console.error('Erro ao converter data:', err);
+              console.error("Erro ao converter data:", err);
             }
           }
         }
 
         // 7. Categoria
         if (frontmatter.category) {
-          const categorySelect = document.getElementById('novo-category') as HTMLSelectElement;
-          const newCategoryInput = document.querySelector('input[name="new_category"]') as HTMLInputElement;
+          const categorySelect = document.getElementById(
+            "novo-category",
+          ) as HTMLSelectElement;
+          const newCategoryInput = document.querySelector(
+            'input[name="new_category"]',
+          ) as HTMLInputElement;
 
           let matchedOption = false;
           if (categorySelect) {
             for (let i = 0; i < categorySelect.options.length; i++) {
               const opt = categorySelect.options[i];
-              if (opt.text.toLowerCase() === frontmatter.category.toLowerCase()) {
+              if (
+                opt.text.toLowerCase() === frontmatter.category.toLowerCase()
+              ) {
                 categorySelect.selectedIndex = i;
                 matchedOption = true;
                 break;
@@ -1012,40 +1276,51 @@ if (Astro.request.method === "POST" && sanityOk) {
             newCategoryInput.value = frontmatter.category;
             if (categorySelect) categorySelect.selectedIndex = 0;
           } else if (matchedOption && newCategoryInput) {
-            newCategoryInput.value = '';
+            newCategoryInput.value = "";
           }
         }
 
         // 8. Tags
         if (frontmatter.tags) {
           let tagsList: string[] = [];
-          if (typeof frontmatter.tags === 'string') {
+          if (typeof frontmatter.tags === "string") {
             const tVal = frontmatter.tags.trim();
-            if (tVal.startsWith('[') && tVal.endsWith(']')) {
-              tagsList = tVal.substring(1, tVal.length - 1).split(',').map(t => t.trim().replace(/^["']|["']$/g, ''));
+            if (tVal.startsWith("[") && tVal.endsWith("]")) {
+              tagsList = tVal
+                .substring(1, tVal.length - 1)
+                .split(",")
+                .map((t) => t.trim().replace(/^["']|["']$/g, ""));
             } else {
-              tagsList = tVal.split(',').map((t) => t.trim());
+              tagsList = tVal.split(",").map((t) => t.trim());
             }
           } else if (Array.isArray(frontmatter.tags)) {
             tagsList = frontmatter.tags;
           }
 
-          const checkboxes = document.querySelectorAll('input[name="tags"]') as NodeListOf<HTMLInputElement>;
-          const newTagsInput = document.querySelector('input[name="new_tags"]') as HTMLInputElement;
+          const checkboxes = document.querySelectorAll(
+            'input[name="tags"]',
+          ) as NodeListOf<HTMLInputElement>;
+          const newTagsInput = document.querySelector(
+            'input[name="new_tags"]',
+          ) as HTMLInputElement;
           const unmatchedTags: string[] = [];
 
           checkboxes.forEach((cb) => {
             cb.checked = false;
-            cb.closest('.tag-checkbox-item')?.classList.remove('checked');
+            cb.closest(".tag-checkbox-item")?.classList.remove("checked");
           });
 
           tagsList.forEach((tag) => {
             let found = false;
             checkboxes.forEach((cb) => {
-              const labelText = cb.closest('.tag-checkbox-item')?.querySelector('.tag-label-text')?.textContent?.trim() || '';
+              const labelText =
+                cb
+                  .closest(".tag-checkbox-item")
+                  ?.querySelector(".tag-label-text")
+                  ?.textContent?.trim() || "";
               if (labelText.toLowerCase() === tag.toLowerCase()) {
                 cb.checked = true;
-                cb.closest('.tag-checkbox-item')?.classList.add('checked');
+                cb.closest(".tag-checkbox-item")?.classList.add("checked");
                 found = true;
               }
             });
@@ -1056,70 +1331,79 @@ if (Astro.request.method === "POST" && sanityOk) {
           });
 
           if (newTagsInput) {
-            newTagsInput.value = unmatchedTags.join(', ');
+            newTagsInput.value = unmatchedTags.join(", ");
           }
         }
 
         // 9. Enviar o corpo do Markdown para o editor Svelte
-        window.dispatchEvent(new CustomEvent('mdx-editor-update-value', { detail: body.trim() }));
+        window.dispatchEvent(
+          new CustomEvent("mdx-editor-update-value", { detail: body.trim() }),
+        );
 
         // Mostrar notificação premium de sucesso
-        showNotification('Arquivo Markdown carregado! Todos os campos foram preenchidos.');
+        showNotification(
+          "Arquivo Markdown carregado! Todos os campos foram preenchidos.",
+        );
       };
 
       reader.readAsText(file);
     }
 
     // ── Lógica de Upload e Prévia de Imagem de Capa ─────────────────
-    const imageDropzone = document.getElementById('image-dropzone');
-    const coverImageInput = document.getElementById('cover-image-input') as HTMLInputElement;
-    const imagePreviewBox = document.getElementById('image-preview-box');
-    const imagePreview = document.getElementById('image-preview') as HTMLImageElement;
-    const btnRemoveImage = document.getElementById('btn-remove-image');
+    const imageDropzone = document.getElementById("image-dropzone");
+    const coverImageInput = document.getElementById(
+      "cover-image-input",
+    ) as HTMLInputElement;
+    const imagePreviewBox = document.getElementById("image-preview-box");
+    const imagePreview = document.getElementById(
+      "image-preview",
+    ) as HTMLImageElement;
+    const btnRemoveImage = document.getElementById("btn-remove-image");
 
-    imageDropzone?.addEventListener('click', () => {
+    imageDropzone?.addEventListener("click", () => {
       coverImageInput?.click();
     });
 
-    imageDropzone?.addEventListener('dragover', (e) => {
+    imageDropzone?.addEventListener("dragover", (e) => {
       e.preventDefault();
-      imageDropzone.classList.add('dragover');
+      imageDropzone.classList.add("dragover");
     });
 
-    imageDropzone?.addEventListener('dragleave', () => {
-      imageDropzone.classList.remove('dragover');
+    imageDropzone?.addEventListener("dragleave", () => {
+      imageDropzone.classList.remove("dragover");
     });
 
-    imageDropzone?.addEventListener('drop', (e) => {
+    imageDropzone?.addEventListener("drop", (e) => {
       e.preventDefault();
-      imageDropzone.classList.remove('dragover');
+      imageDropzone.classList.remove("dragover");
       const files = e.dataTransfer?.files;
       if (files && files.length > 0) {
         if (coverImageInput) {
           coverImageInput.files = files;
-          coverImageInput.dispatchEvent(new Event('change'));
+          coverImageInput.dispatchEvent(new Event("change"));
         }
       }
     });
 
-    coverImageInput?.addEventListener('change', () => {
+    coverImageInput?.addEventListener("change", () => {
       const file = coverImageInput.files?.[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
           if (imagePreview && e.target?.result) {
             imagePreview.src = e.target.result as string;
-            if (imagePreviewBox) imagePreviewBox.style.display = 'flex';
-            if (imageDropzone) imageDropzone.style.display = 'none';
+            if (imagePreviewBox) imagePreviewBox.style.display = "flex";
+            if (imageDropzone) imageDropzone.style.display = "none";
           }
         };
         reader.readAsDataURL(file);
       }
     });
 
-    btnRemoveImage?.addEventListener('click', () => {
-      if (coverImageInput) coverImageInput.value = '';
-      if (imagePreviewBox) imagePreviewBox.style.display = 'none';
-      if (imageDropzone) imageDropzone.style.display = 'flex';
+    btnRemoveImage?.addEventListener("click", () => {
+      if (coverImageInput) coverImageInput.value = "";
+      if (imagePreviewBox) imagePreviewBox.style.display = "none";
+      if (imageDropzone) imageDropzone.style.display = "flex";
     });
   </script>
+</AdminLayout>

@@ -30,7 +30,8 @@ export async function getStaticPaths() {
 
     for (const rawLegacySlug of offer.legacySlugs || []) {
       const legacySlug = rawLegacySlug.trim().replace(/^\/+|\/+$/g, "");
-      if (!legacySlug || seen.has(legacySlug) || legacySlug === offer.slug) continue;
+      if (!legacySlug || seen.has(legacySlug) || legacySlug === offer.slug)
+        continue;
       paths.push({
         params: { slug: legacySlug },
         props: { offer, isLegacySlug: true },
@@ -56,7 +57,11 @@ const redirectTarget = isLegacySlug ? canonicalUrl : destination;
     <meta http-equiv="refresh" content={`0;url=${redirectTarget}`} />
     <link rel="canonical" href={canonicalUrl} />
     <title>Redirecionando...</title>
-    <script is:inline>{`window.location.replace(${JSON.stringify(redirectTarget)});`}</script>
+    <script is:inline>
+      {
+        `window.location.replace(${JSON.stringify(redirectTarget)});`;
+      }
+    </script>
   </head>
   <body>
     <p>

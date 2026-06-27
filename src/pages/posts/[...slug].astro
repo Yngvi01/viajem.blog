@@ -63,7 +63,8 @@ const postBanner = {
     : entry.data.attraction_image || DEFAULT_BANNER,
 };
 
-const hasSanityContent = entry.source === "sanity" && Boolean(entry.contentHtml);
+const hasSanityContent =
+  entry.source === "sanity" && Boolean(entry.contentHtml);
 ---
 
 {
@@ -75,7 +76,9 @@ const hasSanityContent = entry.source === "sanity" && Boolean(entry.contentHtml)
         <meta http-equiv="refresh" content={`0;url=${redirectDestination}`} />
         <link rel="canonical" href={redirectDestination} />
         <title>Redirecionando...</title>
-        <script is:inline>{`window.location.replace(${JSON.stringify(redirectDestination)});`}</script>
+        <script
+          is:inline
+        >{`window.location.replace(${JSON.stringify(redirectDestination)});`}</script>
       </head>
       <body>
         <p>
@@ -90,7 +93,12 @@ const hasSanityContent = entry.source === "sanity" && Boolean(entry.contentHtml)
       subTitle={postBanner.subTitle}
       bannerImage={postBanner.bannerImage}
       description={entry.data.description}
-      image={entry.data.meta_image || entry.data.attraction_image || entry.data.cover || entry.data.image}
+      image={
+        entry.data.meta_image ||
+        entry.data.attraction_image ||
+        entry.data.cover ||
+        entry.data.image
+      }
       attractionImage={entry.data.attraction_image}
       keywords={entry.data.keywords}
       published={entry.data.published}
@@ -108,13 +116,11 @@ const hasSanityContent = entry.source === "sanity" && Boolean(entry.contentHtml)
       </div>
 
       <div data-pagefind-body>
-        {
-          hasSanityContent ? (
-            <div set:html={entry.contentHtml} />
-          ) : (
-            <p>Conteúdo em atualização.</p>
-          )
-        }
+        {hasSanityContent ? (
+          <div set:html={entry.contentHtml} />
+        ) : (
+          <p>Conteúdo em atualização.</p>
+        )}
       </div>
     </PostLayout>
   )

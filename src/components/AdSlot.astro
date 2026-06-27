@@ -25,9 +25,9 @@ const slot = slots[0] as SanityAdSlot | undefined;
     >
       <p class="ad-label">Publicidade</p>
       {slot.scriptUrl && (
-        <script async={slot.scriptAsync} src={slot.scriptUrl}></script>
+        <script async={slot.scriptAsync} src={slot.scriptUrl} />
       )}
-      {slot.htmlCode && <div class="ad-content" set:html={slot.htmlCode}></div>}
+      {slot.htmlCode && <div class="ad-content" set:html={slot.htmlCode} />}
     </section>
   )
 }

@@ -54,7 +54,9 @@ if (import.meta.env.DEV) {
             <li
               class={`item ${index === 0 ? "first-banner" : ""}`}
               style={{
-                animationDelay: `${index * 6}s`,
+                // Item 0 usa delay negativo para começar já na fase visível da animação
+                // evitando que o keyframe 0% {opacity:0} sobrescreva a visibilidade inicial
+                animationDelay: index === 0 ? `-1s` : `${index * 6}s`,
               }}
               data-index={index}
               role="img"
@@ -246,12 +248,10 @@ if (import.meta.env.DEV) {
     private loadCarouselImages(): void {
       if (!this.carouselImgs || this.carouselImgs.children.length === 0) return;
 
-      Array.from(this.carouselImgs.children).forEach((item, index) => {
+      Array.from(this.carouselImgs.children).forEach((item) => {
         const imgElement = item as HTMLElement;
         imgElement.classList.add("loaded");
-        if (index === 0) {
-          imgElement.classList.add("active");
-        }
+        // A animação controla o opacity — não é necessária a classe active
       });
     }
   }
@@ -287,8 +287,8 @@ if (import.meta.env.DEV) {
 
   .carousel .item {
     @apply absolute left-0 top-0 z-0 h-full w-full origin-center opacity-0;
-    animation: carousel-animation var(--carouselAnimationTime) linear infinite
-      0s;
+    animation: carousel-animation var(--carouselAnimationTime) linear infinite;
+    animation-fill-mode: both;
     transform: translateZ(0);
     will-change: transform, opacity;
     visibility: hidden;
@@ -298,9 +298,6 @@ if (import.meta.env.DEV) {
     visibility: visible;
   }
 
-  .carousel .item.active {
-    opacity: 1;
-  }
 
   .banner-image {
     @apply h-full w-full object-cover;

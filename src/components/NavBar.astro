@@ -361,45 +361,4 @@ const navCount = YukinaConfig.navigators.length;
   });
 </script>
 
-<script is:inline>
-  let pagefindLoaded = false;
 
-  async function loadPagefind() {
-    if (pagefindLoaded) return window.pagefind;
-
-    try {
-      const pagefind = await import("/pagefind/pagefind.js");
-      await pagefind.options({
-        excerptLength: 20,
-      });
-      pagefind.init();
-      window.pagefind = pagefind;
-      pagefindLoaded = true;
-      return pagefind;
-    } catch (error) {
-      console.error("Erro ao carregar pagefind:", error);
-      return null;
-    }
-  }
-
-  // Exporta a função para o objeto window
-  window.loadPagefind = loadPagefind;
-
-  // Inicializar pagefind quando o usuário interage com os inputs de busca
-  document.addEventListener("DOMContentLoaded", () => {
-    // Carregar pagefind quando o usuário interage com qualquer campo de busca
-    document.addEventListener("click", (e) => {
-      const target = e.target;
-      if (
-        target &&
-        (target.id === "search-bar-input" ||
-          target.id === "search-bar-input-mobile" ||
-          (target.closest &&
-            (target.closest('[for="search-bar-input"]') ||
-              target.closest('[for="search-bar-input-mobile"]'))))
-      ) {
-        loadPagefind();
-      }
-    });
-  });
-</script>
